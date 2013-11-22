@@ -474,7 +474,7 @@ function g023(userid, htmlId) {
                 
                 $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
-                }, 400);  
+                }, 400); 
             });
             
             $(pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
