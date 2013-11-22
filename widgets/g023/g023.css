@@ -6,7 +6,7 @@
   src: local('The Girl Next Door'), local('TheGirlNextDoor'), url(http://themes.googleusercontent.com/static/fonts/thegirlnextdoor/v4/cWRA4JVGeEcHGcPl5hmX7p-yoK3Kl6E6RmvAncM23y8.woff) format('woff');
 }
 
-body {
+div#g023 {
     font-family: 'The Girl Next Door', cursive;
 }
 
@@ -84,11 +84,18 @@ div.widget_page {
 }
 
 .g023_overflow_wrapper {
-    height: 280px;
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
+}
+
+.g023_content#g023_restaListContent .g023_overflow_wrapper {
+    height: 280px;
     width: 90%;
+}
+
+.g023_content#g023_restaOfferingsContent .g023_overflow_wrapper {
+    
 }
 
 .g023_sectionContent {
