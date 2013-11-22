@@ -461,14 +461,27 @@ function g023(userid, htmlId) {
             
             $(pageObj).append(templates.restaListBaseHtml); // loading the base html into DOM
             
-            $(pageObj).find('.g023_left_arrow').bind('click', function() {
-                $(this).parent().find('.g023_overflow_wrapper').stop().animate({
+            $(pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
+                
+                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400);
             });
             
-            $(pageObj).find('.g023_right_arrow').bind('click', function() {
-                $(this).parent().find('.g023_overflow_wrapper').stop().animate({
+            $(pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
+                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+                    scrollLeft: "+=208px"
+                }, 400);
+            });
+
+            $(pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
+                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+                    scrollLeft: "-=208px"
+                }, 400);
+            });
+            
+            $(pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
+                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });

@@ -207,10 +207,17 @@ div.g023_arrow {
     height: 40px;
     opacity: 0.5;
     position: absolute;
-    top: 118px;
     width: 40px;
     background-size: 100% 100%;
     transition: all 0.4s;
+}
+
+div.g023_arrow.g023_upper_row {
+    top: 118px;
+}
+
+div.g023_arrow.g023_lower_row {
+    top: 430px;
 }
 
 div.g023_arrow:hover {
@@ -227,3 +234,4 @@ div.g023_arrow.g023_right_arrow {
     background-image: url("right_arrow.png");
     right: 55px;
 }
+
