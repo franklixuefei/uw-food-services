@@ -142,8 +142,8 @@ function g023(userid, htmlId) {
                             that._parseData(locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
-                        that._restaInfoWithMenu = [];
-                        that._restaInfoWithoutMenu = [];
+//                        that._restaInfoWithMenu = [];
+//                        that._restaInfoWithoutMenu = [];
                         that.updateViews("error");
                     }
                     
@@ -216,6 +216,8 @@ function g023(userid, htmlId) {
             
             var counter = 0;
             var MAX_COUNTER = 2;
+            var outletsdAjaxSuccessObj = [];
+            var menuAjaxSuccessObj = [];
             
             $.ajax({
                 type :'GET',
@@ -224,15 +226,16 @@ function g023(userid, htmlId) {
                 dataType : 'json', 
                 timeout : 30000,
                 success : function(d) {
-                    if (j.meta.status === 200) {
+                    if (d.meta.status === 200) {
                         counter++;
+                        
                         if (counter === MAX_COUNTER) {
                             counter = 0;
-                            this._parseData(callback, that);
+                            this._parseData(outletsdAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
-                        that._restaInfoWithMenu = [];
-                        that._restaInfoWithoutMenu = [];
+//                        that._restaInfoWithMenu = [];
+//                        that._restaInfoWithoutMenu = [];
                         that.updateViews("error");
                     }
                 }, 
@@ -250,10 +253,16 @@ function g023(userid, htmlId) {
                 success : function(d) {
                     console.log("data retrieved from outlets API:");
                     console.log(d);
-                    counter++;
-                    if (counter === MAX_COUNTER) {
-                        counter = 0;
-                        this._parseData(callback, that);
+                    if (d.meta.status === 200) {
+                        counter++;
+                        if (counter === MAX_COUNTER) {
+                            counter = 0;
+                            this._parseData(outletsdAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
+                        }
+                    } else {
+                        //
+                        //
+                        that.updateView("error");
                     }
                 }, 
                 error : function(xhr, type){

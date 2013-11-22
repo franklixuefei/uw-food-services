@@ -30,8 +30,10 @@
 		"</div>"
 	],
         "restaOfferingsBaseHtml": [
-		"<div class='g023_header'></div>",
-                "<div class='g023_content' id='g023_restaOfferingsContent'>SECOND PAGE",
+		"<div class='g023_header'>Menu of </div>",
+                "<div class='g023_content' id='g023_restaOfferingsContent'>",
+                    "<div class='g023_left_panel'>",
+                    "</div>",
                 "</div>",
 		"<div class='g023_footer'></div>"
 	],
