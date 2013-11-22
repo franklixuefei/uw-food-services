@@ -228,7 +228,7 @@ div.g023_arrow:hover {
 div.g023_arrow.g023_left_arrow {
     background-image: url("left_arrow.png");
     left: 46px;
-}
+} 
 
 div.g023_arrow.g023_right_arrow {
     background-image: url("right_arrow.png");
