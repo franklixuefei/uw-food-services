@@ -30,9 +30,15 @@
 		"</div>"
 	],
         "restaOfferingsBaseHtml": [
-		"<div class='g023_header'>Menu of </div>",
+		"<div class='g023_header'>Menu of <span class='g023_header_dynamic g023_resta_name'></span> @ <span class='g023_header_dynamic g023_resta_day'></span></div>",
                 "<div class='g023_content' id='g023_restaOfferingsContent'>",
-                    "<div class='g023_left_panel'>",
+                    "<div class='g023_sectionHeader'>lunch: </div>",
+                    "<div class='g023_overflow_wrapper g023_overflow_upper'>",
+                        "<div class='g023_sectionContent' id='lunch'></div>",
+                    "</div>",
+                    "<div class='g023_sectionHeader'>dinner: </div>",
+                    "<div class='g023_overflow_wrapper g023_overflow_upper'>",
+                        "<div class='g023_sectionContent' id='dinner'></div>",
                     "</div>",
                 "</div>",
 		"<div class='g023_footer'></div>"
