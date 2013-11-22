@@ -80,17 +80,7 @@ function g023(userid, htmlId) {
             that._restaInfoWithoutMenu.sort(function(a, b) {
                 return a.outlet_name > b.outlet_name;
             });
-            
-//            for (var objLocIndex in locationObj) {
-//                for (var objMenuIndex in menuObj.outlets) {
-//                    if (locationObj[objLocIndex].outlet_id !== menuObj.outlets[objMenuIndex].outlet_id) { // has menu (dup)
-////                        if ($.inArray(locationObj[objLocIndex].outlet_id, outletIDTracker) === -1) { // not in array yet
-////                            outletIDTracker.push(locationObj[objLocIndex].outlet_id);
-//                            that._restaInfoWithoutMenu.push(locationObj[objLocIndex]);
-////                        }
-//                    }
-//                }
-//            }
+
             console.log("kasdfjlkasdfkdsjlkfj");
             that.updateViews("");//success
             if (callback) callback();
