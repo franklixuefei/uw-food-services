@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+    	<meta charset="utf-8"/>
+        <title>CS349 A Portal</title>
+
+        <script src="js/jquery-1.9.0.min.js" type="text/javascript"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" media="screen" href="css/bootstrap.css">
+        <link rel="stylesheet" media="screen" href="css/bootstrap-theme.css">
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        
+        <script src="js/mustache.js" type="text/javascript"></script>
+        <script src="js/portal.js" type="text/javascript"></script>
+        
+        
+        <link rel="stylesheet" media="screen" href="css/main.css">
+        <!-- <link rel="shortcut icon" type="image/png" href="images/favicon.png"> -->
+    </head>
+    <body>
+            <h1>CS349 Portal</h1>
+    <p></p>
+    <div class="row">
+        <!-- Copy this DIV to serve your widget.  Change all instances of
+            "sample1" to your own userid.  Change "col-md-4" to either 
+            "col-md-8" or "col-md-12" for a wider display for your widget. -->        
+        <div class="col-md-12 cell" >
+        <link rel="stylesheet" media="screen" href="widgets/g023/g023.css">
+            <script src="widgets/g023/g023.js"
+                        type="text/javascript"></script>
+          <div id="g023"></div>
+        </div>
+        <div class="col-md-4 cell">
+        <link rel="stylesheet" 
+                    media="screen" 
+                    href="widgets/sample1/sample1.css">
+            <script src="widgets/sample1/sample1.js"
+                        type="text/javascript"></script>
+          <div id="sample1"></div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        sample1("sample1", "#sample1");
+        g023("g023", "#g023");
+    });
+    </script>
+    </body>
+</html>

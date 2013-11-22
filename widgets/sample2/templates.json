@@ -1,0 +1,17 @@
+
+
+{
+	"bio":	"<h4>{{firstName}} {{lastName}}'s Courses</h4>",
+
+	"courses": [
+		"<ul>{{#terms}}",
+			"<li> {{term}}", 
+        		"<ul>",
+					"{{#courses}}",
+        				"<li>{{courseId}} {{subjectCode}} {{catalog}}",
+        			"{{/courses}}",
+        		"</ul>",
+        	"</li>",
+		"{{/terms}}</ul>"
+		]
+}
