@@ -33,8 +33,6 @@ div#g023 * {
 
 
 .cell {
-    /*height: 750px !important;*/
-    /*width: 66.67%;*/
     float: none;
 }
 
@@ -71,8 +69,8 @@ div.widget_page {
 
 }
 
-#g023_restaListContent.g023_content {
-    height: 100%;
+.g023_content {
+    /*height: 100%;*/
     margin-top: 10px;
     padding: 0 50px 34px 40px;
     position: relative;
@@ -108,8 +106,9 @@ div.widget_page {
     height: 220px;
     width: 90%;
 }
-.g023_content#g023_restaOfferingsContent .g023_overflow_wrapper {
 
+.g023_content#g023_restaOfferingsContent .g023_overflow_wrapper {
+    
 }
 
 .g023_sectionHeader, .g023_sectionHeader .g023_sectionHeaderBacking > * {
@@ -140,6 +139,10 @@ div.widget_page {
     padding-right: 3px;
     margin: 4px 10px;
 }
+
+/*.g023_sectionHeaderBacking span img {
+    height: 10px;
+}*/
 
 .sticky0 {
     transform: rotate(-3.5deg);
@@ -264,7 +267,7 @@ div.g023_arrow {
 }
 
 div.g023_arrow.g023_upper_row, div.g023_arrow.g023_lower_row {
-    top: 100px;
+    top: 80px;
 }
 
 div.g023_arrow:hover {

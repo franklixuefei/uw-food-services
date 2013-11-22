@@ -48,8 +48,7 @@ function g023(userid, htmlId) {
             }
         },
         
-        _parseData: function(locationObj, menuObj, callback, that) {
-            var outletIDTracker = [];
+        _parseData: function(outletsObj, locationObj, menuObj, callback, that) {
             
             for (var objLocIndex in locationObj) {
                 var found = false;
@@ -75,6 +74,18 @@ function g023(userid, htmlId) {
                     }
                 }
             }
+            
+            for (var withMenuIndex in that._restaInfoWithMenu) {
+                for (var objMenuIndex in outletsObj) {
+                    if (that._restaInfoWithMenu[withMenuIndex].outlet_id === outletsObj[objMenuIndex].outlet_id) {
+                        that._restaInfoWithMenu[withMenuIndex].has_breakfast = outletsObj[objMenuIndex].has_breakfast;
+                        that._restaInfoWithMenu[withMenuIndex].has_dinner = outletsObj[objMenuIndex].has_dinner;
+                        that._restaInfoWithMenu[withMenuIndex].has_lunch = outletsObj[objMenuIndex].has_lunch;
+                        break;
+                    }
+                }
+            }
+            
             that._restaInfoWithMenu.sort(function(a, b) {
                 return a.outlet_name > b.outlet_name;
             });
@@ -94,9 +105,10 @@ function g023(userid, htmlId) {
                 "key": "d47fe3afb19f506f5a95e89e99527595"
             };
             var counter = 0;
-            var MAX_COUNTER = 2;
+            var MAX_COUNTER = 3;
             var locationAjaxSuccessObj = [];
             var menuAjaxSuccessObj = [];
+            var outletsAjaxSuccessObj = [];
             $.ajax({
                 type :'GET',
                 url : wsServer + 'foodservices/locations.json',
@@ -112,7 +124,7 @@ function g023(userid, htmlId) {
                         counter++;
                         if (counter === MAX_COUNTER) {
                             counter = 0;
-                            that._parseData(locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
+                            that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
                         that._restaInfoWithMenu = [];
@@ -140,7 +152,35 @@ function g023(userid, htmlId) {
                         that._restaMenus = j.data.outlets;
                         if (counter === MAX_COUNTER) {
                             counter = 0;
-                            that._parseData(locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
+                            that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
+                        }
+                    } else {
+//                        that._restaInfoWithMenu = [];
+//                        that._restaInfoWithoutMenu = [];
+                        that.updateViews("error");
+                    }
+                    
+                }, 
+                error : function(xhr, type){
+
+                }
+            });
+            
+            $.ajax({
+                type :'GET',
+                url : wsServer + 'foodservices/outlets.json',
+                data : key,
+                dataType : 'json', 
+                timeout : 30000,
+                success : function(j) {
+                    console.log("data retrieved from outlets API:");
+                    console.log(j);
+                    if (j.meta.status === 200) {
+                        counter++;
+                        outletsAjaxSuccessObj = j.data;
+                        if (counter === MAX_COUNTER) {
+                            counter = 0;
+                            that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
 //                        that._restaInfoWithMenu = [];
@@ -218,35 +258,15 @@ function g023(userid, htmlId) {
             }
             
             var counter = 0;
-            var MAX_COUNTER = 1;
-            var outletsdAjaxSuccessObj = [];
-            
-            $.ajax({
-                type :'GET',
-                url : wsServer + 'foodservices/outlets.json',
-                data : data,
-                dataType : 'json', 
-                timeout : 30000,
-                success : function(d) {
-                    console.log("outlets API:")
-                    console.log(d);
-                    if (d.meta.status === 200) {
-                        counter++;
-                        outletsdAjaxSuccessObj = d.data;
-                        if (counter === MAX_COUNTER) {
-                            counter = 0;
-                            that._parseData(outletsdAjaxSuccessObj, callback, that);
-                        }
-                    } else {
-                        that.updateViews("error");
-                    }
-                }, 
-                error : function(xhr, type){
-                    that.updateViews("error");
-                }
-            });
-            
-            
+            var MAX_COUNTER = 0;
+//            var outletsdAjaxSuccessObj = [];
+//                   
+            // ajax here if any [remember to change MAX_COUNTER accordingly]
+                    
+            if (counter === MAX_COUNTER) {
+                counter = 0;
+                that._parseData([], callback, that);
+            }
         },
         
         getData: function() {
