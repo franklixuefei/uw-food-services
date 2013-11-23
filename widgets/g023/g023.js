@@ -248,7 +248,7 @@ function g023(userid, htmlId) {
             
             // TODO: combine _thisRestaMenu with outlets
             
-            console.log("currentRestaMenuList:");
+            console.log("currentRestaMenu:");
             console.log(this._thisRestaMenu);
             that.updateViews("");//success
             if(callback) callback();
@@ -376,6 +376,7 @@ function g023(userid, htmlId) {
     }
 
     var restaListView = { // each view belongs to one model, a model can have many views
+        _pageObj: null,
         _generateRestaItem: function(item, type, i) { // return jQuery Obj
             if (type === "menu") {
                 var rand = (Math.random()*15-7.5);
@@ -450,14 +451,14 @@ function g023(userid, htmlId) {
                 var resta = this._generateRestaItem(restaInfoWithMenu[i], "menu", i);
 //                console.log("myDiv");
 //                console.log($('#g023').find('#g023_restaListContent'));
-                $('#g023_restaListContent').find('.g023_sectionContent#with_menu').append(resta);
+                $(this._pageObj).find('.g023_sectionContent#with_menu').append(resta);
             }
             var restaInfoWithoutMenu = restaListModel.getData().restaInfoWithoutMenu;
             for (var i = 0; i < restaInfoWithoutMenu.length; ++i) {
                 var resta = this._generateRestaItem(restaInfoWithoutMenu[i], "no_menu", i);
 //                console.log("myDiv");
 //                console.log($('#g023').find('#g023_restaListContent'));
-                $('#g023_restaListContent').find('.g023_sectionContent#without_menu').append(resta);
+                $(this._pageObj).find('.g023_sectionContent#without_menu').append(resta);
             }
             
             
@@ -485,34 +486,37 @@ function g023(userid, htmlId) {
 
 
         initView: function(pageObj, ajaxDoneCallback) {
+            
+            this._pageObj = pageObj;
+            
             console.log("Initializing restaListView");
             console.log($(templates.restaListBaseHtml));
             
-            $(pageObj).append(templates.restaListBaseHtml); // loading the base html into DOM
+            $(this._pageObj).append(templates.restaListBaseHtml); // loading the base html into DOM
             
             // TODO: FIXME: fix scollLeft displacement
             
-            $(pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
+            $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
                 
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400); 
             });
             
-            $(pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+            $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
 
-            $(pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400);
             });
             
-            $(pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
@@ -521,7 +525,7 @@ function g023(userid, htmlId) {
   		 * Get the subject and catalog from the input fields and
   		 * then tell the model to get the corresponding course.
   		 */
-            $(pageObj).find("#someButton").click(function() { // static button press maybe
+            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
 //                var subject = $("#subject").val();
 //                var catalog = $("#catalog").val();
 //                console.log("Go clicked: " + subject + " " + catalog);
@@ -593,6 +597,7 @@ function g023(userid, htmlId) {
     }
     
     var restaOfferingsView = {
+        _pageObj: null,
         _menuOfDay: {},
         _selectedDay: utils.getWeekdayString(),
         _generateOfferingItem: function(item, type) { // return jQuery Obj
@@ -643,7 +648,7 @@ function g023(userid, htmlId) {
                 var dinnerOffering = this._generateOfferingItem(this._menuOfDay.meals.dinner[i], "dinner");
 //                console.log("myDiv");
 //                console.log($('#g023').find('#g023_restaListContent'));
-                $('#g023_restaOfferingsContent').find('.g023_sectionContent#without_menu').append(dinnerOffering);
+                $(this._pageObj).find('.g023_sectionContent#without_menu').append(dinnerOffering);
             }
               
         },
@@ -679,6 +684,7 @@ function g023(userid, htmlId) {
                 console.log("restaOfferingsModel Data");
                 console.log(restaOfferingsModel.getData());
                 restaOfferingsView._autoSelectDayMenu();
+                $(restaOfferingsView._pageObj).find('.g023_resta_day').text(restaOfferingsView._selectedDay);
                 restaOfferingsView._generateOfferingList();
             }
             
@@ -687,50 +693,38 @@ function g023(userid, htmlId) {
 
         initView: function(pageObj, ajaxDoneCallback) {
             
-            
-            
+            this._pageObj = pageObj;
 
-            $(pageObj).find("#someButton").click(function() { // static button press maybe
-//                var subject = $("#subject").val();
-//                var catalog = $("#catalog").val();
-//                console.log("Go clicked: " + subject + " " + catalog);
-////                restaListModel.loadCourseData(subject.toLowerCase(), catalog);
-//                $(pageObj).find("#subject").val("");
-//                $(pageObj).find("#catalog").val("");
-            });
-            
-            
-            
-            
-            
             console.log("Initializing restaOfferingsView");
             console.log($(templates.restaOfferingsBaseHtml));
             
-            $(pageObj).append(templates.restaOfferingsBaseHtml); // loading the base html into DOM
+            $(this._pageObj).append(templates.restaOfferingsBaseHtml); // loading the base html into DOM
+            
+            $(this._pageObj).find('.g023_resta_name').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name);
             
             // FIXME: fix scrollLeft displacement
             
-            $(pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_upper_row').bind('click', function() {
+            $(this._pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_upper_row').bind('click', function() {
                 
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400); 
             });
             
-            $(pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_upper_row').bind('click', function() {
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+            $(this._pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_upper_row').bind('click', function() {
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
 
-            $(pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_lower_row').bind('click', function() {
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            $(this._pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_lower_row').bind('click', function() {
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400);
             });
             
-            $(pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_lower_row').bind('click', function() {
-                $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            $(this._pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_lower_row').bind('click', function() {
+                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
@@ -739,7 +733,7 @@ function g023(userid, htmlId) {
   		 * Get the subject and catalog from the input fields and
   		 * then tell the model to get the corresponding course.
   		 */
-            $(pageObj).find("#someButton").click(function() { // static button press maybe
+            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
 //                var subject = $("#subject").val();
 //                var catalog = $("#catalog").val();
 //                console.log("Go clicked: " + subject + " " + catalog);
