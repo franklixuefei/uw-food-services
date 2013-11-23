@@ -30,6 +30,7 @@ function g023(userid, htmlId) {
         _restaInfoWithMenu:[], // This object contains a list of all outlets and their operating hour data and basic info
         _restaInfoWithoutMenu:[],
         _restaMenus:[],
+        _restaMenusDateInfo:{},
         /**
 		 * Add a new view to be notified when the model changes.
 		 */
@@ -150,13 +151,16 @@ function g023(userid, htmlId) {
                         counter++;
                         menuAjaxSuccessObj = j.data;
                         that._restaMenus = j.data.outlets;
+                        that._restaMenusDateInfo = j.data.date;
                         if (counter === MAX_COUNTER) {
                             counter = 0;
                             that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
-//                        that._restaInfoWithMenu = [];
-//                        that._restaInfoWithoutMenu = [];
+//                      _restaInfoWithMenu:[], // This object contains a list of all outlets and their operating hour data and basic info
+                        that._restaInfoWithoutMenu = [];
+                        that._restaMenus = [];
+                        that._restaMenusDateInfo = {};
                         that.updateViews("error");
                     }
                     
@@ -205,6 +209,7 @@ function g023(userid, htmlId) {
             dataObj.restaInfoWithMenu = this._restaInfoWithMenu;
             dataObj.restaInfoWithoutMenu = this._restaInfoWithoutMenu;
             dataObj.restaMenus = this._restaMenus;
+            dataObj.restaMenusDateInfo = this._restaMenusDateInfo;
             return dataObj;
         }
         
@@ -445,14 +450,14 @@ function g023(userid, htmlId) {
                 var resta = this._generateRestaItem(restaInfoWithMenu[i], "menu", i);
 //                console.log("myDiv");
 //                console.log($('#g023').find('#g023_restaListContent'));
-                $('#g023').find('.g023_sectionContent#with_menu').append(resta);
+                $('#g023_restaListContent').find('.g023_sectionContent#with_menu').append(resta);
             }
             var restaInfoWithoutMenu = restaListModel.getData().restaInfoWithoutMenu;
             for (var i = 0; i < restaInfoWithoutMenu.length; ++i) {
                 var resta = this._generateRestaItem(restaInfoWithoutMenu[i], "no_menu", i);
 //                console.log("myDiv");
 //                console.log($('#g023').find('#g023_restaListContent'));
-                $('#g023').find('.g023_sectionContent#without_menu').append(resta);
+                $('#g023_restaListContent').find('.g023_sectionContent#without_menu').append(resta);
             }
             
             
@@ -588,67 +593,93 @@ function g023(userid, htmlId) {
     }
     
     var restaOfferingsView = {
-        _generateRestaItem: function(item, type) { // return jQuery Obj
+        _menuOfDay: {},
+        _selectedDay: utils.getWeekdayString(),
+        _generateOfferingItem: function(item, type) { // return jQuery Obj
             var rand = (Math.random()*12-6);
             var offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note sticky' + (i%6))
                                 .css('transform', 'rotate('+rand+'deg)')
                                 .css('-moz-transform', 'rotate('+rand+'deg)')
                                 .css('-webkit-transform', 'rotate('+rand+'deg)')
                                 .append($('<div>').attr('class', 'pin'))
-                                .append($('<div>').attr('class', 'g023_restaIconHolder')
-                                    .append($('<img>').attr('src', item.logo)
-                                )
-                                .append($("<div>").attr('class', 'g023_restaDetail')
-                                    .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + item.opening_hours[utils.getWeekdayString()].opening_hour 
-                                        + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour + "</span>"))
-                                )
-                            );
-            restaItem.bind('click', function() {
-                var restaMenus = restaListModel.getData().restaMenus;
-                var thisRestaOfferings = {};
-                for (var i = 0; i < restaMenus.length; ++i) {
-                    if (restaMenus[i].outlet_id === item.outlet_id) {
-                        thisRestaOfferings = restaMenus[i];
-                        break;
-                    }
-                }
-                restaOfferingsModel.initWithRestaInfo(thisRestaOfferings);
-                restaOfferingsViewController.addView(restaOfferingsView);
-                restaOfferingsViewController.initViews(restaListModel, function() {
-                    navigationController.pushPage(restaOfferingsViewController);
-                }); // construct viewController and init its views
-
-            });
-            return restaItem;
+                                .append($('<div>').attr('class', 'g023_offering')
+                                    .append($('<span>').text(item.product_name))
+                                );
+//            restaItem.bind('click', function() {
+//                var restaMenus = restaListModel.getData().restaMenus;
+//                var thisRestaOfferings = {};
+//                for (var i = 0; i < restaMenus.length; ++i) {
+//                    if (restaMenus[i].outlet_id === item.outlet_id) {
+//                        thisRestaOfferings = restaMenus[i];
+//                        break;
+//                    }
+//                }
+//                restaOfferingsModel.initWithRestaInfo(thisRestaOfferings);
+//                restaOfferingsViewController.addView(restaOfferingsView);
+//                restaOfferingsViewController.initViews(restaListModel, function() {
+//                    navigationController.pushPage(restaOfferingsViewController);
+//                }); // construct viewController and init its views
+//
+//            });
+            return offeringItem;
         },
         
-        _generateRestaList: function() {
-//            var restaInfoWithMenu = restaListModel.getData().restaInfoWithMenu;
-//            for (var i = 0; i < restaInfoWithMenu.length; ++i) {
-//                var resta = this._generateRestaItem(restaInfoWithMenu[i], "menu");
-////                console.log("myDiv");
-////                console.log($('#g023').find('#g023_restaListContent'));
-//                $('#g023').find('.g023_sectionContent#with_menu').append(resta);
+        _generateOfferingList: function() {
+//            if (menuOfDay.day.toLowerCase() !== this._selectedDay) {
+//                menuOfDay = {};
+//                console.log("restaurant closed today");
+//                return;
 //            }
-//            var restaInfoWithoutMenu = restaListModel.getData().restaInfoWithoutMenu;
-//            for (var i = 0; i < restaInfoWithoutMenu.length; ++i) {
-//                var resta = this._generateRestaItem(restaInfoWithoutMenu[i], "no_menu");
-////                console.log("myDiv");
-////                console.log($('#g023').find('#g023_restaListContent'));
-//                $('#g023').find('.g023_sectionContent#without_menu').append(resta);
-//            }
+            console.log("selectedDay: " + this._selectedDay);
+            console.log("menuOfDay: ");
+            console.log(this._menuOfDay);
+            for (var i = 0; i < this._menuOfDay.meals.lunch.length; ++i) {
+                var lunchOffering = this._generateOfferingItem(this._menuOfDay.meals.lunch[i], "lunch");
+//                console.log("myDiv");
+//                console.log($('#g023').find('#g023_restaListContent'));
+                $('#g023_restaOfferingsContent').find('.g023_sectionContent#lunch').append(lunchOffering);
+            }
+            for (var i = 0; i < this._menuOfDay.meals.dinner.length; ++i) {
+                var dinnerOffering = this._generateOfferingItem(this._menuOfDay.meals.dinner[i], "dinner");
+//                console.log("myDiv");
+//                console.log($('#g023').find('#g023_restaListContent'));
+                $('#g023_restaOfferingsContent').find('.g023_sectionContent#without_menu').append(dinnerOffering);
+            }
               
         },
         
+        _handleDayChange: function() { // called when > or < is pressed, and change this._selectedDay
+            
+        },
+        
+        _autoSelectDayMenu: function() {
+            console.log("menus date info:");
+            console.log(restaListModel.getData().restaMenusDateInfo);
+            var currentRestaMenu = restaOfferingsModel.getData().currentRestaMenu;
+            if (/*dateOfToday is within restaListModel.getData().restaMenusDateInfo.start and end*/1) {
+                console.log("today is still within current week"); // TODO: show "This week"
+                for (var i = 0; i < currentRestaMenu.menu.length; ++i) { // auto select menu of today
+                    this._menuOfDay = currentRestaMenu.menu[i];
+                    if (this._menuOfDay.day.toLowerCase() === this._selectedDay) {
+                        break;
+                    }
+                }
+            } else { // this week has passed, the menu shows next week or later dates
+                console.log("this week has passed, showing menu of later dates"); // TODO: show "Upcoming week" or ("MM/DD - MM/DD" if more than 1 week later)
+                this._selectedDay = currentRestaMenu.menu[0].day.toLowerCase();
+                this._menuOfDay = currentRestaMenu.menu[0]; // auto select menu of first day of provided range
+            }
+        },
         
         updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
             if (msg === "error") {
                 t = templates.restaOfferingsError;
             } else {
                 // create resta list using restaModel._outlets
-                restaOfferingsView._generateRestaList();
                 console.log("restaOfferingsModel Data");
                 console.log(restaOfferingsModel.getData());
+                restaOfferingsView._autoSelectDayMenu();
+                restaOfferingsView._generateOfferingList();
             }
             
         },
