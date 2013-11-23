@@ -3,7 +3,7 @@
     font-family: 'The Girl Next Door';
     font-style: normal;
     font-weight: 400;
-    src: local('The Girl Next Door'), local('TheGirlNextDoor'), url(http://themes.googleusercontent.com/static/fonts/thegirlnextdoor/v4/cWRA4JVGeEcHGcPl5hmX7p-yoK3Kl6E6RmvAncM23y8.woff) format('woff');
+    src: local('The Girl Next Door'), local('TheGirlNextDoor'), url(https://themes.googleusercontent.com/static/fonts/thegirlnextdoor/v4/cWRA4JVGeEcHGcPl5hmX7p-yoK3Kl6E6RmvAncM23y8.woff) format('woff');
 }
 
 div#g023 {
@@ -13,7 +13,7 @@ div#g023 {
 div#g023 {
     width: 1000px;
     min-width: 1000px;
-    height: 100%;
+    height: 600px;
     margin-left: auto;
     margin-right: auto;
     background-image: url("cork-board.png");
@@ -31,11 +31,6 @@ div#g023 * {
 }
 
 
-
-.cell {
-    float: none;
-}
-
 div.g023_header {
     text-align: center;
 }
@@ -44,25 +39,22 @@ div.g023_header img {
     margin-top: 2px;
 }
 
-div.g023_restaItemWrapper {
+div.g023_restaItemWrapper, div.g023_offeringItemWrapper {
     display: inline-block;
     text-align: center;
 }
 
-div.g023_restaItemWrapper div.pin {
+div.g023_restaItemWrapper div.pin, div.g023_offeringItemWrapper div.pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 50%, black 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, black);
     background-image: radial-gradient(yellow 50%, black 100%);
 }
 
 div.widget_page {
-    /*background-color: #FFFFFF;*/
     display: none;
     height: 100%;
     position: absolute;
     width: 1000px;
-    /*    left: 50%;
-        margin-left: -500px;*/
 }
 
 #g023_restaListWrapper {
@@ -70,10 +62,16 @@ div.widget_page {
 }
 
 .g023_content {
-    /*height: 100%;*/
-    margin-top: 10px;
     padding: 0 50px 34px 40px;
     position: relative;
+}
+
+.g023_content#g023_restaListContent {
+    margin-top: 10px;
+}
+
+.g023_content#g023_restaOfferingsContent {
+    
 }
 
 .g023_scrollable_list_wrapper {
@@ -81,7 +79,7 @@ div.widget_page {
 }
 
 
-#g023_restaListWrapper div.g023_restaItemWrapper.note {
+#g023_restaListWrapper div.g023_restaItemWrapper.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper.note {
     -transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out; 
     -webkit-transition: all .2s ease-in-out; 
@@ -89,7 +87,7 @@ div.widget_page {
     display: block;
 }
 
-#g023_restaListWrapper div.g023_restaItemWrapper:hover.note {
+#g023_restaListWrapper div.g023_restaItemWrapper:hover.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper.note {
     border: 1px solid rgba(0,0,0,.75);
     -webkit-transform: scale(1.1) !important;
     -moz-transform: scale(1.1) !important;
@@ -108,7 +106,8 @@ div.widget_page {
 }
 
 .g023_content#g023_restaOfferingsContent .g023_overflow_wrapper {
-    
+    height: 150px;
+    width: 90%;
 }
 
 .g023_sectionHeader, .g023_sectionHeader .g023_sectionHeaderBacking > * {
@@ -216,27 +215,29 @@ div.widget_page {
     background-image: radial-gradient(orange 50%, black 100%);
 }
 
-div.g023_restaItemWrapper:nth-child(1n) .pin {
+div.g023_restaItemWrapper:nth-child(1n) .pin, div.g023_offeringItemWrapper:nth-child(1n) .pin {
     background-image: -moz-radial-gradient(35px 35px 35deg, circle cover, red 50%, black 100%);
     background-image: -webkit-radial-gradient(35px 35px, circle cover, red, black);
     background-image: radial-gradient(red 50%, black 100%);
 
 }
 
-div.g023_restaItemWrapper:nth-child(6n) .pin {
+div.g023_restaItemWrapper:nth-child(6n) .pin, div.g023_offeringItemWrapper:nth-child(6n) .pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, orange 50%, black 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
     background-image: radial-gradient(orange 50%, black 100%);
 }
 
-div.g023_restaItemWrapper:nth-child(3n) .pin {
+div.g023_restaItemWrapper:nth-child(3n) .pin, div.g023_offeringItemWrapper:nth-child(3n) .pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 50%, black 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, black);
     background-image: radial-gradient(yellow 50%, black 100%);
 }
 
 div.g023_restaItemWrapper:nth-child(5n+3) .pin,
-div.g023_restaItemWrapper:last-child .pin {
+div.g023_restaItemWrapper:last-child .pin,
+div.g023_offeringItemWrapper:nth-child(5n+3) .pin,
+div.g023_offeringItemWrapper:last-child .pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, blue 50%, white 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, blue, white);
     background-image: radial-gradient(blue 50%, white 100%);
@@ -266,8 +267,12 @@ div.g023_arrow {
     transition: all 0.4s;
 }
 
-div.g023_arrow.g023_upper_row, div.g023_arrow.g023_lower_row {
+#g023_restaListWrapper div.g023_arrow.g023_upper_row, #g023_restaListWrapper div.g023_arrow.g023_lower_row {
     top: 80px;
+}
+
+#g023_restaOfferingsWrapper div.g023_arrow.g023_upper_row, #g023_restaOfferingsWrapper div.g023_arrow.g023_lower_row {
+    top: 40px;
 }
 
 div.g023_arrow:hover {
@@ -285,3 +290,59 @@ div.g023_arrow.g023_right_arrow {
     right: 2px;
 }
 
+.g023_day_selector {
+    position: relative;
+}
+
+.g023_day_selector .g023_selector_arrows {
+    background-image: url("day_selector_arrows_backing.png");
+    background-size: 100% 100%;
+    height: 110px;
+    position: absolute;
+    top: -20px;
+    width: 51px;
+}
+
+.g023_selector_arrows#left {
+    left: 110px;
+}
+
+.g023_selector_arrows#right {
+    right :110px;
+}
+
+
+.g023_selector_arrows img {
+    left: 50%;
+    margin-left: -13px;
+    opacity: 0.5;
+    position: absolute;
+    top: 22px;
+    transition: all 0.4s ease 0s;
+    width: 25px;
+}
+
+.g023_selector_arrows:hover {
+    cursor: pointer;
+}
+
+.g023_selector_arrows:hover img {
+    opacity: 0.8;
+}
+
+.g023_day_selector .g023_selector_display {
+    background-image: url("blue_ribbon.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 51px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    text-align: center;
+    width: 451px;
+}
+
+#g023_restaOfferingsContent .g023_offeringsContent {
+    margin-top: 60px;
+}

@@ -589,7 +589,37 @@ function g023(userid, htmlId) {
     
     var restaOfferingsView = {
         _generateRestaItem: function(item, type) { // return jQuery Obj
-            return null;
+            var rand = (Math.random()*12-6);
+            var offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note sticky' + (i%6))
+                                .css('transform', 'rotate('+rand+'deg)')
+                                .css('-moz-transform', 'rotate('+rand+'deg)')
+                                .css('-webkit-transform', 'rotate('+rand+'deg)')
+                                .append($('<div>').attr('class', 'pin'))
+                                .append($('<div>').attr('class', 'g023_restaIconHolder')
+                                    .append($('<img>').attr('src', item.logo)
+                                )
+                                .append($("<div>").attr('class', 'g023_restaDetail')
+                                    .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + item.opening_hours[utils.getWeekdayString()].opening_hour 
+                                        + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour + "</span>"))
+                                )
+                            );
+            restaItem.bind('click', function() {
+                var restaMenus = restaListModel.getData().restaMenus;
+                var thisRestaOfferings = {};
+                for (var i = 0; i < restaMenus.length; ++i) {
+                    if (restaMenus[i].outlet_id === item.outlet_id) {
+                        thisRestaOfferings = restaMenus[i];
+                        break;
+                    }
+                }
+                restaOfferingsModel.initWithRestaInfo(thisRestaOfferings);
+                restaOfferingsViewController.addView(restaOfferingsView);
+                restaOfferingsViewController.initViews(restaListModel, function() {
+                    navigationController.pushPage(restaOfferingsViewController);
+                }); // construct viewController and init its views
+
+            });
+            return restaItem;
         },
         
         _generateRestaList: function() {
@@ -649,26 +679,26 @@ function g023(userid, htmlId) {
             
             // FIXME: fix scrollLeft displacement
             
-            $(pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
+            $(pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_upper_row').bind('click', function() {
                 
                 $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400); 
             });
             
-            $(pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
+            $(pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_upper_row').bind('click', function() {
                 $(pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
 
-            $(pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
+            $(pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_lower_row').bind('click', function() {
                 $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400);
             });
             
-            $(pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
+            $(pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_lower_row').bind('click', function() {
                 $(pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
@@ -722,8 +752,10 @@ function g023(userid, htmlId) {
    */
     console.log("Initializing sample(" + userid + ", " + htmlId + ")");
     portal.loadTemplates("widgets/g023/templates.json", 
-        function(t) { 
+        function(t) {
             templates = t;
+            myDiv.append(templates.foodServicesHeaderHtml);
+            
             restaListViewController.addView(restaListView);
             restaListViewController.initViews(restaListModel, function() {
                 navigationController.pushPage(restaListViewController);
@@ -733,10 +765,10 @@ function g023(userid, htmlId) {
 //            offeringDetailView.initView();
 //            mapView.initView();
         });
-        if (!Date.prototype.getWeek) {
-            Date.prototype.getWeek = function() {
-                var onejan = new Date(this.getFullYear(),0,1);
-                return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
-            }
+    if (!Date.prototype.getWeek) {
+        Date.prototype.getWeek = function() {
+            var onejan = new Date(this.getFullYear(),0,1);
+            return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
         }
+    }
 }
