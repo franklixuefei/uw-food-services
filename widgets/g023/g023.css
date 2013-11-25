@@ -1,10 +1,11 @@
-
 @font-face {
     font-family: 'The Girl Next Door';
     font-style: normal;
     font-weight: 400;
     src: local('The Girl Next Door'), local('TheGirlNextDoor'), url(https://themes.googleusercontent.com/static/fonts/thegirlnextdoor/v4/cWRA4JVGeEcHGcPl5hmX7p-yoK3Kl6E6RmvAncM23y8.woff) format('woff');
 }
+
+/*@import url(http://fonts.googleapis.com/css?family=Dancing+Script:400,700);*/
 
 div#g023 {
     font-family: 'The Girl Next Door', cursive;
@@ -78,6 +79,28 @@ div.widget_page {
     position: relative;
 }
 
+div.g023_offeringItemWrapper div.g023_offering {
+    height: 74px;
+    margin-top: 10px;
+    overflow: auto;
+}
+
+div.g023_offering span {
+    line-height: 0px;
+}
+
+div.g023_offering span.no_meal {
+    color: gray;
+}
+
+div.g023_offering span.meal_no_detail {
+    color: green;
+}
+
+div.g023_offering span.normal {
+    color: black;
+    font-size: 16px;
+}
 
 #g023_restaListWrapper div.g023_restaItemWrapper.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper.note {
     -transition: all .2s ease-in-out;
@@ -85,9 +108,11 @@ div.widget_page {
     -webkit-transition: all .2s ease-in-out; 
     cursor: pointer;
     display: block;
+    max-width: 140px;
+    min-width: 110px;
 }
 
-#g023_restaListWrapper div.g023_restaItemWrapper:hover.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper.note {
+#g023_restaListWrapper div.g023_restaItemWrapper:hover.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper:hover.note {
     border: 1px solid rgba(0,0,0,.75);
     -webkit-transform: scale(1.1) !important;
     -moz-transform: scale(1.1) !important;
@@ -142,6 +167,20 @@ div.widget_page {
 /*.g023_sectionHeaderBacking span img {
     height: 10px;
 }*/
+
+.stickyGray {
+    transform: rotate(-3.5deg);
+    -webkit-transform: rotate(-3.5deg);
+    -moz-transform: rotate(-3.5deg);
+    background-color: #dfdfdf;
+}
+
+.stickyBlue {
+    transform: rotate(-3.5deg);
+    -webkit-transform: rotate(-3.5deg);
+    -moz-transform: rotate(-3.5deg);
+    background-color: #CBFAFA;
+}
 
 .sticky0 {
     transform: rotate(-3.5deg);
@@ -272,7 +311,7 @@ div.g023_arrow {
 }
 
 #g023_restaOfferingsWrapper div.g023_arrow.g023_upper_row, #g023_restaOfferingsWrapper div.g023_arrow.g023_lower_row {
-    top: 40px;
+    top: 56px;
 }
 
 div.g023_arrow:hover {
@@ -335,10 +374,13 @@ div.g023_arrow.g023_right_arrow {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    font-family: 'Great Vibes',cursive;
+    font-size: 25px;
     height: 51px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+    padding-top: 9px;
     text-align: center;
     width: 451px;
 }

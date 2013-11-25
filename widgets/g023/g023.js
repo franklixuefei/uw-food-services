@@ -18,7 +18,13 @@ function g023(userid, htmlId) {
             weekday[5]="friday";
             weekday[6]="saturday";
             return weekday[d.getDay()]; 
+        },
+        
+        firstLetterCapitalizer: function(str) {
+            if (str.length === 0) return str;
+            return str[0].toUpperCase() + str.substr(1);
         }
+        
     }
 
     var restaListModel = {
@@ -44,7 +50,7 @@ function g023(userid, htmlId) {
 		 * Update all of the views that are observing us.
 		 */
         updateViews: function(msg) {
-            for(i=0; i<this._viewUpdaters.length; i++) {
+            for(var i=0; i<this._viewUpdaters.length; i++) {
                 this._viewUpdaters[i](msg);
             }
         },
@@ -82,6 +88,16 @@ function g023(userid, htmlId) {
                         that._restaInfoWithMenu[withMenuIndex].has_breakfast = outletsObj[objMenuIndex].has_breakfast;
                         that._restaInfoWithMenu[withMenuIndex].has_dinner = outletsObj[objMenuIndex].has_dinner;
                         that._restaInfoWithMenu[withMenuIndex].has_lunch = outletsObj[objMenuIndex].has_lunch;
+                        break;
+                    }
+                }
+            }
+            for (var withMenuIndex in that._restaInfoWithoutMenu) { // FIXME: for some resta such as Tim Horton's, there is no outlet_id...'
+                for (var objMenuIndex in outletsObj) {
+                    if (that._restaInfoWithoutMenu[withMenuIndex].outlet_id === outletsObj[objMenuIndex].outlet_id) {
+                        that._restaInfoWithoutMenu[withMenuIndex].has_breakfast = outletsObj[objMenuIndex].has_breakfast;
+                        that._restaInfoWithoutMenu[withMenuIndex].has_dinner = outletsObj[objMenuIndex].has_dinner;
+                        that._restaInfoWithoutMenu[withMenuIndex].has_lunch = outletsObj[objMenuIndex].has_lunch;
                         break;
                     }
                 }
@@ -221,10 +237,11 @@ function g023(userid, htmlId) {
     var restaOfferingsModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _thisRestaMenu: [],
+        _thisRestaInfo: {},
 
-
-        initWithRestaInfo: function(restaInfo) {
-            this._thisRestaMenu = restaInfo;
+        initWithRestaInfo: function(restaInfo, restaMenu) {
+            this._thisRestaInfo = restaInfo;
+            this._thisRestaMenu = restaMenu;
         },
 
         /**
@@ -239,7 +256,7 @@ function g023(userid, htmlId) {
 		 * Update all of the views that are observing us.
 		 */
         updateViews: function(msg) {
-            for(i=0; i<this._viewUpdaters.length; i++) {
+            for(var i=0; i<this._viewUpdaters.length; i++) {
                 this._viewUpdaters[i](msg);
             }
         },
@@ -277,6 +294,7 @@ function g023(userid, htmlId) {
         getData: function() {
             var dataObj = new Object();
             dataObj.currentRestaMenu = this._thisRestaMenu;
+            dataObj.currentRestaInfo = this._thisRestaInfo;
             return dataObj;
         }
 
@@ -378,22 +396,23 @@ function g023(userid, htmlId) {
     var restaListView = { // each view belongs to one model, a model can have many views
         _pageObj: null,
         _generateRestaItem: function(item, type, i) { // return jQuery Obj
-            if (type === "menu") {
-                var rand = (Math.random()*15-7.5);
-                var restaItem = $('<div>').attr('class', 'g023_restaItemWrapper note sticky' + (i%6))
-                                    .css('transform', 'rotate('+rand+'deg)')
-                                    .css('-moz-transform', 'rotate('+rand+'deg)')
-                                    .css('-webkit-transform', 'rotate('+rand+'deg)')
-                                    .append($('<div>').attr('class', 'pin'))
-                                    .append($('<div>').attr('class', 'g023_restaIconHolder')
-                                        .append($('<img>').attr('src', item.logo)
-                                    )
-                                    .append($("<div>").attr('class', 'g023_restaDetail')
-                                        .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + item.opening_hours[utils.getWeekdayString()].opening_hour 
-                                            + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour + "</span>"))
-                                    )
-                                );
-                restaItem.bind('click', function() {
+            var rand = (Math.random()*15-7.5);
+            var restaItem = $('<div>').attr('class', 'g023_restaItemWrapper note sticky' + (i%6))
+                            .css('transform', 'rotate('+rand+'deg)')
+                            .css('-moz-transform', 'rotate('+rand+'deg)')
+                            .css('-webkit-transform', 'rotate('+rand+'deg)')
+                            .append($('<div>').attr('class', 'pin'))
+                            .append($('<div>').attr('class', 'g023_restaIconHolder')
+                                .append($('<img>').attr('src', item.logo)
+                            )
+                            .append($("<div>").attr('class', 'g023_restaDetail')
+                                .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + item.opening_hours[utils.getWeekdayString()].opening_hour 
+                                    + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour + "</span>"))
+                            )
+                        );   
+                
+            restaItem.bind('click', function() {
+                if (type === "menu") {
                     var restaMenus = restaListModel.getData().restaMenus;
                     var thisRestaOfferings = {};
                     for (var i = 0; i < restaMenus.length; ++i) {
@@ -402,47 +421,17 @@ function g023(userid, htmlId) {
                             break;
                         }
                     }
-                    restaOfferingsModel.initWithRestaInfo(thisRestaOfferings);
+                    restaOfferingsModel.initWithRestaInfo(item, thisRestaOfferings);
                     restaOfferingsViewController.addView(restaOfferingsView);
                     restaOfferingsViewController.initViews(restaListModel, function() {
                         navigationController.pushPage(restaOfferingsViewController);
                     }); // construct viewController and init its views
-                    
-                });
-                return restaItem;
-            } else { // TODO: redo this 
-                var rand = (Math.random()*15-7.5);
-                var restaItem = $('<div>').attr('class', 'g023_restaItemWrapper note sticky' + (i%6))
-                                    .css('transform', 'rotate('+rand+'deg)')
-                                    .css('-moz-transform', 'rotate('+rand+'deg)')
-                                    .css('-webkit-transform', 'rotate('+rand+'deg)')
-                                    .append($('<div>').attr('class', 'pin'))
-                                    .append($('<div>').attr('class', 'g023_restaIconHolder')
-                                        .append($('<img>').attr('src', item.logo)
-                                    )
-                                    .append($("<div>").attr('class', 'g023_restaDetail')
-                                        .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + item.opening_hours[utils.getWeekdayString()].opening_hour 
-                                            + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour + "</span>"))
-                                    )
-                                );
-                restaItem.bind('click', function() {
-                    var restaMenus = restaListModel.getData().restaMenus;
-                    var thisRestaOfferings = {};
-                    for (var i = 0; i < restaMenus.length; ++i) {
-                        if (restaMenus[i].outlet_id === item.outlet_id) {
-                            thisRestaOfferings = restaMenus[i];
-                            break;
-                        }
-                    }
-                    restaOfferingsModel.initWithRestaInfo(thisRestaOfferings);
-                    restaOfferingsViewController.addView(restaOfferingsView);
-                    restaOfferingsViewController.initViews(restaListModel, function() {
-                        navigationController.pushPage(restaOfferingsViewController);
-                    }); // construct viewController and init its views
-                    
-                });
-                return restaItem;
-            }
+                } else {
+                    // TODO: define behaviour here
+                } 
+            });
+                
+            return restaItem;
         },
         
         _generateRestaList: function() {
@@ -495,28 +484,31 @@ function g023(userid, htmlId) {
             $(this._pageObj).append(templates.restaListBaseHtml); // loading the base html into DOM
             
             // TODO: FIXME: fix scollLeft displacement
-            
+            console.log("1231212312312123");
+            console.log($(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper'));
+            var that = this;
             $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
-                
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+//                alert("working");
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400); 
             });
             
             $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+//                alert("working");
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
 
             $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400);
             });
             
             $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
@@ -600,17 +592,38 @@ function g023(userid, htmlId) {
         _pageObj: null,
         _menuOfDay: {},
         _selectedDay: utils.getWeekdayString(),
-        _generateOfferingItem: function(item, type) { // return jQuery Obj
+        _generateOfferingItem: function(item, type, i) { // return jQuery Obj
             var rand = (Math.random()*12-6);
-            var offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note sticky' + (i%6))
+            var offeringItem = null;
+            if (type === "no_lunch" || type === "no_dinner") {
+                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note stickyGray')
                                 .css('transform', 'rotate('+rand+'deg)')
                                 .css('-moz-transform', 'rotate('+rand+'deg)')
                                 .css('-webkit-transform', 'rotate('+rand+'deg)')
                                 .append($('<div>').attr('class', 'pin'))
                                 .append($('<div>').attr('class', 'g023_offering')
-                                    .append($('<span>').text(item.product_name))
+                                    .append($('<span class="no_meal">').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name + " does not provide "+ (type==="no_lunch"?"lunch":"dinner") +" on " + this._menuOfDay.day))
                                 );
-//            restaItem.bind('click', function() {
+            } else if (type === "lunch_no_detail" || type === "dinner_no_detail") {
+                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note stickyBlue')
+                                .css('transform', 'rotate('+rand+'deg)')
+                                .css('-moz-transform', 'rotate('+rand+'deg)')
+                                .css('-webkit-transform', 'rotate('+rand+'deg)')
+                                .append($('<div>').attr('class', 'pin'))
+                                .append($('<div>').attr('class', 'g023_offering')
+                                    .append($('<span class="meal_no_detail">').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name + " provides "+ (type==="lunch_no_detail"?"lunch":"dinner") +" on " + this._menuOfDay.day + ". Go check it out!"))
+                                );
+            } else {
+                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note sticky' + (i%6))
+                                .css('transform', 'rotate('+rand+'deg)')
+                                .css('-moz-transform', 'rotate('+rand+'deg)')
+                                .css('-webkit-transform', 'rotate('+rand+'deg)')
+                                .append($('<div>').attr('class', 'pin'))
+                                .append($('<div>').attr('class', 'g023_offering')
+                                    .append($('<span class="normal">').text(item.product_name))
+                                );
+            }
+            offeringItem.bind('click', function() {
 //                var restaMenus = restaListModel.getData().restaMenus;
 //                var thisRestaOfferings = {};
 //                for (var i = 0; i < restaMenus.length; ++i) {
@@ -625,7 +638,7 @@ function g023(userid, htmlId) {
 //                    navigationController.pushPage(restaOfferingsViewController);
 //                }); // construct viewController and init its views
 //
-//            });
+            });
             return offeringItem;
         },
         
@@ -638,17 +651,35 @@ function g023(userid, htmlId) {
             console.log("selectedDay: " + this._selectedDay);
             console.log("menuOfDay: ");
             console.log(this._menuOfDay);
-            for (var i = 0; i < this._menuOfDay.meals.lunch.length; ++i) {
-                var lunchOffering = this._generateOfferingItem(this._menuOfDay.meals.lunch[i], "lunch");
-//                console.log("myDiv");
-//                console.log($('#g023').find('#g023_restaListContent'));
-                $('#g023_restaOfferingsContent').find('.g023_sectionContent#lunch').append(lunchOffering);
+            if (!restaOfferingsModel.getData().currentRestaInfo.has_lunch) {
+                var noLunch = this._generateOfferingItem(null, "no_lunch");
+                $(this._pageObj).find('.g023_sectionContent#lunch').append(noLunch);
+            } else {
+                for (var i = 0; i < this._menuOfDay.meals.lunch.length; ++i) {
+                    var lunchOffering = this._generateOfferingItem(this._menuOfDay.meals.lunch[i], "lunch", i);
+    //                console.log("myDiv");
+    //                console.log($('#g023').find('#g023_restaListContent'));
+                    $(this._pageObj).find('.g023_sectionContent#lunch').append(lunchOffering);
+                }
+                if (this._menuOfDay.meals.lunch.length === 0) {
+                    var noDetail = this._generateOfferingItem(null, "lunch_no_detail");
+                    $(this._pageObj).find('.g023_sectionContent#lunch').append(noDetail);
+                }
             }
-            for (var i = 0; i < this._menuOfDay.meals.dinner.length; ++i) {
-                var dinnerOffering = this._generateOfferingItem(this._menuOfDay.meals.dinner[i], "dinner");
-//                console.log("myDiv");
-//                console.log($('#g023').find('#g023_restaListContent'));
-                $(this._pageObj).find('.g023_sectionContent#without_menu').append(dinnerOffering);
+            if (!restaOfferingsModel.getData().currentRestaInfo.has_dinner) {
+                var noDinner = this._generateOfferingItem(null, "no_dinner");
+                $(this._pageObj).find('.g023_sectionContent#dinner').append(noDinner);
+            } else {
+                for (var i = 0; i < this._menuOfDay.meals.dinner.length; ++i) {
+                    var dinnerOffering = this._generateOfferingItem(this._menuOfDay.meals.dinner[i], "dinner", i);
+    //                console.log("myDiv");
+    //                console.log($('#g023').find('#g023_restaListContent'));
+                    $(this._pageObj).find('.g023_sectionContent#dinner').append(dinnerOffering);
+                }
+                if (this._menuOfDay.meals.dinner.length === 0) {
+                    var noDetail = this._generateOfferingItem(null, "dinner_no_detail");
+                    $(this._pageObj).find('.g023_sectionContent#dinner').append(noDetail);
+                }
             }
               
         },
@@ -661,7 +692,11 @@ function g023(userid, htmlId) {
             console.log("menus date info:");
             console.log(restaListModel.getData().restaMenusDateInfo);
             var currentRestaMenu = restaOfferingsModel.getData().currentRestaMenu;
-            if (/*dateOfToday is within restaListModel.getData().restaMenusDateInfo.start and end*/1) {
+            var t = (new Date()).getTime();
+            var start = (new Date(restaListModel.getData().restaMenusDateInfo.start)).getTimeWithCurrentTimezone();
+            var end = (new Date(restaListModel.getData().restaMenusDateInfo.end)).getTimeWithCurrentTimezone() + 24*60*60*1000;
+            
+            if (t >= start && t < end) {
                 console.log("today is still within current week"); // TODO: show "This week"
                 for (var i = 0; i < currentRestaMenu.menu.length; ++i) { // auto select menu of today
                     this._menuOfDay = currentRestaMenu.menu[i];
@@ -669,11 +704,16 @@ function g023(userid, htmlId) {
                         break;
                     }
                 }
+                this._selectedDay = this._menuOfDay.day.toLowerCase();
+                return true;
             } else { // this week has passed, the menu shows next week or later dates
                 console.log("this week has passed, showing menu of later dates"); // TODO: show "Upcoming week" or ("MM/DD - MM/DD" if more than 1 week later)
                 this._selectedDay = currentRestaMenu.menu[0].day.toLowerCase();
                 this._menuOfDay = currentRestaMenu.menu[0]; // auto select menu of first day of provided range
+                return false;
             }
+            console.log("impossible to reach here!!!");
+            return false;
         },
         
         updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
@@ -683,8 +723,8 @@ function g023(userid, htmlId) {
                 // create resta list using restaModel._outlets
                 console.log("restaOfferingsModel Data");
                 console.log(restaOfferingsModel.getData());
-                restaOfferingsView._autoSelectDayMenu();
-                $(restaOfferingsView._pageObj).find('.g023_resta_day').text(restaOfferingsView._selectedDay);
+                var isWithinCurrentWeek = restaOfferingsView._autoSelectDayMenu();
+                $(restaOfferingsView._pageObj).find('.g023_resta_day').text((isWithinCurrentWeek?"":"next ") + utils.firstLetterCapitalizer(restaOfferingsView._selectedDay));
                 restaOfferingsView._generateOfferingList();
             }
             
@@ -704,27 +744,29 @@ function g023(userid, htmlId) {
             
             // FIXME: fix scrollLeft displacement
             
-            $(this._pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_upper_row').bind('click', function() {
+            var that = this;
+            
+            $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
                 
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400); 
             });
             
-            $(this._pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_upper_row').bind('click', function() {
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+            $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
 
-            $(this._pageObj).find('#g023_restaListWrapper .g023_left_arrow.g023_lower_row').bind('click', function() {
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "-=208px"
                 }, 400);
             });
             
-            $(this._pageObj).find('#g023_restaListWrapper .g023_right_arrow.g023_lower_row').bind('click', function() {
-                $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
+                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
                     scrollLeft: "+=208px"
                 }, 400);
             });
@@ -789,11 +831,23 @@ function g023(userid, htmlId) {
 //            restaOfferingsView.initView();
 //            offeringDetailView.initView();
 //            mapView.initView();
+
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            link.setAttribute('type', 'text/css');
+            link.setAttribute('href', 'http://fonts.googleapis.com/css?family=Great+Vibes');
+            document.getElementById('g023').appendChild(link);
+
         });
     if (!Date.prototype.getWeek) {
         Date.prototype.getWeek = function() {
             var onejan = new Date(this.getFullYear(),0,1);
             return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+        }
+    }
+    if (!Date.prototype.getTimeWithCurrentTimezone) {
+        Date.prototype.getTimeWithCurrentTimezone = function() {
+            return this.getTime() + this.getTimezoneOffset()*60*1000;
         }
     }
 }
