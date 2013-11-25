@@ -137,10 +137,13 @@ div.g023_offering span.normal {
 
 .g023_sectionHeader, .g023_sectionHeader .g023_sectionHeaderBacking > * {
     display: inline-block;
-    line-height: 0px;
-    vertical-align: middle;
+    line-height: 10px;
 }
 
+#g023_restaOfferingsContent .g023_sectionHeaderBacking span {
+    font-family: 'Great Vibes',cursive;
+    font-size: 20px;
+}
 .g023_sectionContent {
     display: inline-flex;
     margin-top: 4px;

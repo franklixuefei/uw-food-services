@@ -19,7 +19,7 @@ function g023(userid, htmlId) {
             weekday[6]="saturday";
             return weekday[d.getDay()]; 
         },
-        
+          
         firstLetterCapitalizer: function(str) {
             if (str.length === 0) return str;
             return str[0].toUpperCase() + str.substr(1);
@@ -261,17 +261,18 @@ function g023(userid, htmlId) {
             }
         },
         
-        _parseData: function(outlets, callback, that) {
+        _parseData: function(outlets, callfront, callback, that) {
             
             // TODO: combine _thisRestaMenu with outlets
             
             console.log("currentRestaMenu:");
             console.log(this._thisRestaMenu);
+            if (callfront) callfront();
             that.updateViews("");//success
-            if(callback) callback();
+            if (callback) callback();
         },
 
-        loadOfferingDetailData: function(callback) { // call only once!!!!
+        loadOfferingDetailData: function(callfront, callback) { // call only once!!!!
             var that = this;
             // getJSON can fail silently.  It may be better (and only slightly more work)
             // to use $.ajax -- or write your own version of getJSON that does not fail silently.
@@ -287,7 +288,7 @@ function g023(userid, htmlId) {
                     
             if (counter === MAX_COUNTER) {
                 counter = 0;
-                that._parseData([], callback, that);
+                that._parseData([], callfront, callback, that);
             }
         },
         
@@ -592,6 +593,9 @@ function g023(userid, htmlId) {
         _pageObj: null,
         _menuOfDay: {},
         _selectedDay: utils.getWeekdayString(),
+        _selectedDayIndex: 0,
+        _weekdayArray: [],
+        _withinCurrentWeek: false,
         _generateOfferingItem: function(item, type, i) { // return jQuery Obj
             var rand = (Math.random()*12-6);
             var offeringItem = null;
@@ -643,11 +647,7 @@ function g023(userid, htmlId) {
         },
         
         _generateOfferingList: function() {
-//            if (menuOfDay.day.toLowerCase() !== this._selectedDay) {
-//                menuOfDay = {};
-//                console.log("restaurant closed today");
-//                return;
-//            }
+            
             console.log("selectedDay: " + this._selectedDay);
             console.log("menuOfDay: ");
             console.log(this._menuOfDay);
@@ -684,8 +684,31 @@ function g023(userid, htmlId) {
               
         },
         
-        _handleDayChange: function() { // called when > or < is pressed, and change this._selectedDay
-            
+        _clearMenu: function() {
+            $(this._pageObj).find('.g023_sectionContent').children().remove();
+        },
+        
+        _handleDayChange: function(direction) { // called when > or < is pressed, and change this._selectedDay and this._menuOfDay
+            this._clearMenu();
+            if (direction) { // right arrow clicked
+                this._selectedDayIndex = (this._selectedDayIndex + 1) % this._weekdayArray.length;
+            } else { // left arrow clicked
+                this._selectedDayIndex = ((this._selectedDayIndex - 1) % this._weekdayArray.length + this._weekdayArray.length) % this._weekdayArray.length;
+            }
+            this._selectedDay = this._weekdayArray[this._selectedDayIndex];
+            this._menuOfDay = restaOfferingsModel.getData().currentRestaMenu.menu[this._selectedDayIndex];
+            this.updateView("");
+        },
+        
+        _setWeekdayArray: function(menu) {
+//            this._weekdayArray.clear();
+            var len = this._weekdayArray.length;
+            this._weekdayArray.splice(0,len);
+            for (var i = 0; i < menu.length; ++i) {
+                this._weekdayArray.push(menu[i].day);
+            }
+            console.log("weekday array:");
+            console.log(this._weekdayArray);
         },
         
         _autoSelectDayMenu: function() {
@@ -701,15 +724,17 @@ function g023(userid, htmlId) {
                 for (var i = 0; i < currentRestaMenu.menu.length; ++i) { // auto select menu of today
                     this._menuOfDay = currentRestaMenu.menu[i];
                     if (this._menuOfDay.day.toLowerCase() === this._selectedDay) {
+                        this._selectedDayIndex = i;
                         break;
                     }
                 }
-                this._selectedDay = this._menuOfDay.day.toLowerCase();
+//                this._selectedDay = this._menuOfDay.day.toLowerCase();
                 return true;
             } else { // this week has passed, the menu shows next week or later dates
                 console.log("this week has passed, showing menu of later dates"); // TODO: show "Upcoming week" or ("MM/DD - MM/DD" if more than 1 week later)
                 this._selectedDay = currentRestaMenu.menu[0].day.toLowerCase();
                 this._menuOfDay = currentRestaMenu.menu[0]; // auto select menu of first day of provided range
+                this._selectedDayIndex = 0;
                 return false;
             }
             console.log("impossible to reach here!!!");
@@ -723,8 +748,10 @@ function g023(userid, htmlId) {
                 // create resta list using restaModel._outlets
                 console.log("restaOfferingsModel Data");
                 console.log(restaOfferingsModel.getData());
-                var isWithinCurrentWeek = restaOfferingsView._autoSelectDayMenu();
-                $(restaOfferingsView._pageObj).find('.g023_resta_day').text((isWithinCurrentWeek?"":"next ") + utils.firstLetterCapitalizer(restaOfferingsView._selectedDay));
+                $(restaOfferingsView._pageObj).find('.g023_resta_name').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name);
+                console.log("with current week?");
+                console.log(restaOfferingsView._withinCurrentWeek);
+                $(restaOfferingsView._pageObj).find('.g023_resta_day').text((restaOfferingsView._withinCurrentWeek?"":"next ") + utils.firstLetterCapitalizer(restaOfferingsView._selectedDay));
                 restaOfferingsView._generateOfferingList();
             }
             
@@ -740,7 +767,6 @@ function g023(userid, htmlId) {
             
             $(this._pageObj).append(templates.restaOfferingsBaseHtml); // loading the base html into DOM
             
-            $(this._pageObj).find('.g023_resta_name').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name);
             
             // FIXME: fix scrollLeft displacement
             
@@ -770,22 +796,24 @@ function g023(userid, htmlId) {
                     scrollLeft: "+=208px"
                 }, 400);
             });
-            /*
+                /*
   		 * Set the controller for the "Go" button.
   		 * Get the subject and catalog from the input fields and
   		 * then tell the model to get the corresponding course.
   		 */
-            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
-//                var subject = $("#subject").val();
-//                var catalog = $("#catalog").val();
-//                console.log("Go clicked: " + subject + " " + catalog);
-////                restaListModel.loadCourseData(subject.toLowerCase(), catalog);
-//                $(pageObj).find("#subject").val("");
-//                $(pageObj).find("#catalog").val("");
+            $(this._pageObj).find(".g023_selector_arrows#right").click(function() { // static button press maybe
+                that._handleDayChange(true);
+            });
+            $(this._pageObj).find(".g023_selector_arrows#left").click(function() { // static button press maybe
+                that._handleDayChange(false);
             });
             // TODO: dynamically append all restaurants
             restaOfferingsModel.addViewUpdater(restaOfferingsView.updateView); // register view updater
-            restaOfferingsModel.loadOfferingDetailData(ajaxDoneCallback); // trigger retrieving data and update views
+            restaOfferingsModel.loadOfferingDetailData(function() { // called before updateView is called
+                console.log("callfront");
+                that._setWeekdayArray(restaOfferingsModel.getData().currentRestaMenu.menu); // set current week weekdays
+                that._withinCurrentWeek = that._autoSelectDayMenu();
+            }, ajaxDoneCallback); // trigger retrieving data and update views
         }
     }
     
@@ -850,4 +878,5 @@ function g023(userid, htmlId) {
             return this.getTime() + this.getTimezoneOffset()*60*1000;
         }
     }
+
 }
