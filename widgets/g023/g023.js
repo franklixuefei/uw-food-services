@@ -921,7 +921,7 @@ function g023(userid, htmlId) {
             var link = document.createElement('link');
             link.setAttribute('rel', 'stylesheet');
             link.setAttribute('type', 'text/css');
-            link.setAttribute('href', 'http://fonts.googleapis.com/css?family=Great+Vibes');
+            link.setAttribute('href', 'https://fonts.googleapis.com/css?family=Great+Vibes');
             document.getElementById('g023').appendChild(link);
 
         });
