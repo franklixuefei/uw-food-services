@@ -48,10 +48,6 @@ function g023(userid, htmlId) {
 
     var restaListModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
-//        _timer: null, // TODO: do a timely reloading data
-        //storage variable in the future (each one of this corresponds to one view in this page)
-//        _outlets: {},// This object contains a list of all outlets and their unique IDs, 
-                     //names and breakfast/lunch/dinner meal service indicators
         _restaInfoWithMenu:[], // This object contains a list of all outlets and their operating hour data and basic info
         _restaInfoWithoutMenu:[],
         _restaMenus:[],
@@ -783,6 +779,12 @@ function g023(userid, htmlId) {
                 console.log("restaOfferingsModel Data");
                 console.log(restaOfferingsModel.getData());
                 $(restaOfferingsView._pageObj).find('.g023_resta_name').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name);
+                if (restaOfferingsView._menuOfDay.notes) {
+                    $(restaOfferingsView._pageObj).find('.g023_info_content').find('.g023_notes').show();
+                    $(restaOfferingsView._pageObj).find('.g023_info_content').find('.g023_notes').html(restaOfferingsView._menuOfDay.notes);
+                } else {
+                    $(restaOfferingsView._pageObj).find('.g023_info_content').find('.g023_notes').hide();
+                }
                 console.log("with current week?");
                 console.log(restaOfferingsView._withinCurrentWeek);
                 $(restaOfferingsView._pageObj).find('.g023_resta_day').text((restaOfferingsView._withinCurrentWeek?"":"next ") + utils.firstLetterCapitalizer(restaOfferingsView._selectedDay));
@@ -865,7 +867,36 @@ function g023(userid, htmlId) {
                 console.log("callfront");
                 that._setWeekdayArray(restaOfferingsModel.getData().currentRestaMenu.menu); // set current week weekdays
                 that._withinCurrentWeek = that._autoSelectDayMenu();
-                $(that._pageObj).find('.g023_info_content').html(restaOfferingsModel.getData().currentRestaInfo.description);
+                $(that._pageObj).find('.g023_info_content').find('.g023_desc').html(restaOfferingsModel.getData().currentRestaInfo.description);
+                var notice = restaOfferingsModel.getData().currentRestaInfo.notice;
+                if (notice) {
+                    $(that._pageObj).find('.g023_info_content').find('.g023_notice').show();
+                    $(that._pageObj).find('.g023_info_content').find('.g023_notice').html(notice);
+                } else {
+                    $(that._pageObj).find('.g023_info_content').find('.g023_notice').hide();
+                }
+                var special_hours = restaOfferingsModel.getData().currentRestaInfo.special_hours;
+                if (special_hours.length) {
+                    $(that._pageObj).find('.g023_info_content').find('.g023_special_hours').show();
+                    $(that._pageObj).find('.g023_info_content').find('.g023_special_hours').append($('<div>').attr('class', 'g023_special_hours_title').text('Special Hours:'));
+                    for (var i = 0; i < special_hours.length; ++i) {
+                        var special_hour = $('<div>').attr('class', 'g023_special_hour').text(special_hours[i].opening_hour + ' - ' + special_hours[i].closing_hour + ' @ ' + special_hours[i].date);
+                        $(that._pageObj).find('.g023_info_content').find('.g023_special_hours').append(special_hour);
+                    }
+                } else {
+                    $(that._pageObj).find('.g023_info_content').find('.g023_special_hours').hide();
+                }
+                var dates_closed = restaOfferingsModel.getData().currentRestaInfo.dates_closed;
+                if (dates_closed.length) {
+                    $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').show();
+                    $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').append($('<div>').attr('class', 'g023_dates_closed_title').text('Dates Closed:'));
+                    for (var i = 0; i < dates_closed.length; ++i) {
+                        var date_closed = $('<div>').attr('class', 'g023_date_closed').text(dates_closed[i].date);
+                        $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').append(date_closed);
+                    }
+                } else {
+                    $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').hide();
+                }
                 setTimeout(function() {
                     height = $(that._pageObj).find('.g023_info.note').height();
                     $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));

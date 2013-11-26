@@ -514,3 +514,30 @@ div.g023_arrow.g023_right_arrow {
 .g023_info_wrapper .g023_info .g023_info_handle:hover {
     cursor:pointer;
 }
+
+.g023_info_content .g023_desc {
+    
+}
+
+.g023_info_content .g023_notice, 
+.g023_info_content .g023_notes, 
+.g023_info_content .g023_special_hours, 
+.g023_info_content .g023_dates_closed {
+    transition: all ease-in-out 0.2s;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    display: block;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
+.g023_info_content .g023_notice:hover, 
+.g023_info_content .g023_notes:hover, 
+.g023_info_content .g023_special_hours:hover, 
+.g023_info_content .g023_dates_closed:hover {
+    -webkit-transform: scale(1.2) !important;
+    -moz-transform: scale(1.2) !important;
+    transform: scale(1.2) !important;
+}
