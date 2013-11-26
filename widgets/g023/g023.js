@@ -23,6 +23,25 @@ function g023(userid, htmlId) {
         firstLetterCapitalizer: function(str) {
             if (str.length === 0) return str;
             return str[0].toUpperCase() + str.substr(1);
+        },
+        
+        showAlert: function(parentView, title, content, buttonText) {
+            var alertHtml = $(templates.alertHtml);
+            var mask = $('<div>').attr('class','g023_mask g023_restaList');
+            $(parentView).append(mask);
+            $(parentView).append(alertHtml);
+            alertHtml.find('.g023_alert_header').text(title);
+            alertHtml.find('.g023_alert_content').text(content);
+            alertHtml.find('button').text(buttonText)
+                .bind('click', function() {
+                    alertHtml.fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                    mask.fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                });
+            
         }
         
     }
@@ -56,7 +75,7 @@ function g023(userid, htmlId) {
         },
         
         _parseData: function(outletsObj, locationObj, menuObj, callback, that) {
-            
+                        
             for (var objLocIndex in locationObj) {
                 var found = false;
                 for (var objMenuIndex in menuObj.outlets) {
@@ -109,8 +128,11 @@ function g023(userid, htmlId) {
             that._restaInfoWithoutMenu.sort(function(a, b) {
                 return a.outlet_name > b.outlet_name;
             });
-
-            that.updateViews("");//success
+            if (menuObj.outlets.length === 0) { // vacations
+                that.updateViews("vacation");//success
+            } else {
+                that.updateViews("");//success
+            }
             if (callback) callback();
         },
 
@@ -465,6 +487,18 @@ function g023(userid, htmlId) {
 //            $(htmlId + " #cDescr").html(t);
             if (msg === "error") {
                 t = templates.restaListError;
+            } else if (msg === "vacation") {
+                console.log("VACATION TIME!!!!");
+                var restaInfoWithoutMenu = restaListModel.getData().restaInfoWithoutMenu;
+                var restasWrapper = $('<div>').attr('class', 'g023_vacation_restas_wrapper');
+                $(restaListView._pageObj).find('#g023_restaListContent').children().remove();
+                $(restaListView._pageObj).find('#g023_restaListContent').append(restasWrapper);
+                for (var i = 0; i < restaInfoWithoutMenu.length; ++i) {
+                    var resta = restaListView._generateRestaItem(restaInfoWithoutMenu[i], "no_menu", i);
+                    restasWrapper.append(resta);
+                }
+                var contentString = "School is closed due to vacation or holidays. But feel free to explore all restaurants!";
+                utils.showAlert(restaListView._pageObj, "Notice", contentString, "OK");
             } else {
                 // create resta list using restaModel._outlets
                 restaListView._generateRestaList();
@@ -761,7 +795,8 @@ function g023(userid, htmlId) {
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
-
+            var height = 0;
+            var toggle = false;
             console.log("Initializing restaOfferingsView");
             console.log($(templates.restaOfferingsBaseHtml));
             
@@ -807,12 +842,35 @@ function g023(userid, htmlId) {
             $(this._pageObj).find(".g023_selector_arrows#left").click(function() { // static button press maybe
                 that._handleDayChange(false);
             });
+            
+            $(this._pageObj).find(".g023_info_handle").click(function() {
+                if (!toggle) {
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25);
+                } else {
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));
+                }
+                toggle = !toggle;
+            });
+            $(this._pageObj).click(function(e) {
+                if (toggle) {
+                    if (e.target.className !== "g023_info note" && e.target.className !== "g023_info_content" && e.target.className !== "g023_info_handle") {
+                        $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));
+                        toggle = false;
+                    }
+                }
+            })
             // TODO: dynamically append all restaurants
             restaOfferingsModel.addViewUpdater(restaOfferingsView.updateView); // register view updater
-            restaOfferingsModel.loadOfferingDetailData(function() { // called before updateView is called
+            restaOfferingsModel.loadOfferingDetailData(function() { // called before updateView is called and after data are ready
                 console.log("callfront");
                 that._setWeekdayArray(restaOfferingsModel.getData().currentRestaMenu.menu); // set current week weekdays
                 that._withinCurrentWeek = that._autoSelectDayMenu();
+                $(that._pageObj).find('.g023_info_content').html(restaOfferingsModel.getData().currentRestaInfo.description);
+                setTimeout(function() {
+                    height = $(that._pageObj).find('.g023_info.note').height();
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));
+                });
+                
             }, ajaxDoneCallback); // trigger retrieving data and update views
         }
     }

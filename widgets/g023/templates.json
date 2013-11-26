@@ -1,5 +1,14 @@
 
 {
+        "alertHtml": [
+            "<div class='g023_popup g023_alert'>",
+                "<div class='g023_popup_header g023_alert_header'></div>",
+                "<div class='g023_popup_content g023_alert_content'></div>",
+                "<div class='g023_popup_footer g023_alert_footer'>",
+                    "<button type='button' class='btn btn-info'></button>",
+                "</div>",
+            "</div>"
+        ],
         "foodServicesHeaderHtml": [
             "<div class='g023_header'>",
                 "<img src='widgets/g023/uw-food-services.png' />",
@@ -59,6 +68,12 @@
                         "</div>",
                         "<div class='g023_selector_arrows' id='right'>",
                             "<img src='widgets/g023/day_selector_arrow_right.png' />",
+                        "</div>",
+                    "</div>",
+                    "<div class='g023_info_wrapper'>",
+                        "<div class='g023_info note'>",
+                            "<div class='g023_info_content'></div>",
+                            "<div class='g023_info_handle'></div>",
                         "</div>",
                     "</div>",
                     "<div class='g023_offeringsContent'>",

@@ -65,14 +65,21 @@ div.widget_page {
 .g023_content {
     padding: 0 50px 34px 40px;
     position: relative;
+    overflow: hidden;
 }
 
 .g023_content#g023_restaListContent {
     margin-top: 10px;
 }
 
-.g023_content#g023_restaOfferingsContent {
-    
+#g023_restaListContent.g023_content .g023_vacation_restas_wrapper {
+    height: 510px;
+    margin-left: 40px;
+    overflow: auto;
+}
+
+#g023_restaOfferingsContent.g023_content {
+    margin-top: 20px;
 }
 
 .g023_scrollable_list_wrapper {
@@ -106,6 +113,7 @@ div.g023_offering span.normal {
     -transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out; 
     -webkit-transition: all .2s ease-in-out; 
+    -o-transition: all .2s ease-in-out; 
     cursor: pointer;
     display: block;
     max-width: 140px;
@@ -302,11 +310,18 @@ div.g023_restaIconHolder div.g023_restaDetail {
 
 div.g023_arrow {
     height: 40px;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
     opacity: 0.5;
     position: absolute;
     width: 40px;
     background-size: 100% 100%;
-    transition: all 0.4s;
+    transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
 }
 
 #g023_restaListWrapper div.g023_arrow.g023_upper_row, #g023_restaListWrapper div.g023_arrow.g023_lower_row {
@@ -318,6 +333,10 @@ div.g023_arrow {
 }
 
 div.g023_arrow:hover {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.8;
+    -khtml-opacity: 0.8;
     opacity: 0.8;
     cursor: pointer;
 }
@@ -334,34 +353,44 @@ div.g023_arrow.g023_right_arrow {
 
 .g023_day_selector {
     position: relative;
+    z-index: 2;
 }
 
 .g023_day_selector .g023_selector_arrows {
-    background-image: url("day_selector_arrows_backing.png");
+    
     background-size: 100% 100%;
-    height: 110px;
+    height: 51px;
     position: absolute;
-    top: -20px;
-    width: 51px;
+    top: 0px;
+    width: 101px;
 }
 
 .g023_selector_arrows#left {
-    left: 110px;
+    left: 100px;
+    background-image: url("day_selector_arrows_backing_left.png");
 }
 
 .g023_selector_arrows#right {
-    right :110px;
+    right :100px;
+    background-image: url("day_selector_arrows_backing_right.png");
 }
 
 
 .g023_selector_arrows img {
     left: 50%;
     margin-left: -13px;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
     opacity: 0.5;
     position: absolute;
-    top: 22px;
-    transition: all 0.4s ease 0s;
-    width: 25px;
+    top: 9px;
+    transition: all ease-in-out 0.4s;
+    -webkit-transition: all ease-in-out 0.4s;
+    -moz-transition: all ease-in-out 0.4s;
+    -o-transition: all ease-in-out 0.4s;
+    width: 20px;
 }
 
 .g023_selector_arrows:hover {
@@ -369,6 +398,10 @@ div.g023_arrow.g023_right_arrow {
 }
 
 .g023_selector_arrows:hover img {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.8;
+    -khtml-opacity: 0.8;
     opacity: 0.8;
 }
 
@@ -382,12 +415,102 @@ div.g023_arrow.g023_right_arrow {
     height: 51px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
     padding-top: 9px;
     text-align: center;
     width: 451px;
 }
 
 #g023_restaOfferingsContent .g023_offeringsContent {
-    margin-top: 60px;
+    margin-top: 40px;
+}
+
+.g023_mask {
+    height: 523px;
+    left: 36px;
+    top: -2px;
+    width: 921px;
+    z-index: 999;
+}
+
+.g023_mask.g023_restaList {
+    background-color: #000000;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+    filter: alpha(opacity=60);
+    -moz-opacity: 0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
+    position: absolute;
+}
+
+.g023_popup {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 16px;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.g023_alert {
+    background-color: #ADD8E6;
+    margin-left: -150px;
+    margin-top: -100px;
+    padding: 12px 20px;
+    width: 300px;
+}
+
+.g023_popup .g023_popup_header {
+    text-align:center;
+    font-weight: bold;
+}
+
+.g023_popup .g023_popup_content {
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.g023_alert .g023_alert_content {
+    max-height: 80px;
+    text-align: justify;
+}
+
+.g023_popup .g023_popup_footer {
+    text-align:center;
+    margin-top: 14px;
+}
+
+.g023_info_wrapper {
+    left: 50%;
+    margin-left: -175px;
+    position: absolute;
+    top: -25px;
+    transition: all ease-in-out 0.2s;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    z-index: 1;
+}
+
+.g023_info_wrapper .g023_info {
+    background-color: #ADD8E6;
+    font-size: 15px;
+    line-height: 24px;
+    padding: 30px 20px;
+    width: 300px;
+}
+
+.g023_info_wrapper .g023_info .g023_info_handle {
+    background-image: url("resta_info_pull_handle.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    bottom: -24px;
+    height: 44px;
+    left: 50%;
+    margin-left: -10px;
+    position: absolute;
+    width: 20px;
+}
+
+.g023_info_wrapper .g023_info .g023_info_handle:hover {
+    cursor:pointer;
 }
