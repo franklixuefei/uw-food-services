@@ -697,6 +697,8 @@ function g023(userid, htmlId) {
         _selectedDayIndex: 0,
         _weekdayArray: [],
         _withinCurrentWeek: false,
+        height: 0,
+        toggle: false,
         _generateOfferingItem: function(item, type, i) { // return jQuery Obj
             var rand = (Math.random()*12-6);
             var offeringItem = null;
@@ -860,6 +862,11 @@ function g023(userid, htmlId) {
                 console.log(restaOfferingsView._withinCurrentWeek);
                 $(restaOfferingsView._pageObj).find('.g023_resta_day').text((restaOfferingsView._withinCurrentWeek?"":"next ") + utils.firstLetterCapitalizer(restaOfferingsView._selectedDay));
                 restaOfferingsView._generateOfferingList();
+                
+                restaOfferingsView.toggle = false;
+                restaOfferingsView.height = $(restaOfferingsView._pageObj).find('.g023_info.note').height();
+                $(restaOfferingsView._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+restaOfferingsView.height));
+                
             }
             
         },
@@ -868,8 +875,6 @@ function g023(userid, htmlId) {
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
-            var height = 0;
-            var toggle = false;
             console.log("Initializing restaOfferingsView");
             console.log($(templates.restaOfferingsBaseHtml));
             
@@ -917,18 +922,18 @@ function g023(userid, htmlId) {
             });
             
             $(this._pageObj).find(".g023_info_handle").click(function() {
-                if (!toggle) {
+                if (!that.toggle) {
                     $(that._pageObj).find('.g023_info_wrapper').css('top', 25);
                 } else {
-                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+height));
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+that.height));
                 }
-                toggle = !toggle;
+                that.toggle = !that.toggle;
             });
             $(this._pageObj).click(function(e) {
-                if (toggle) {
+                if (that.toggle) {
                     if (e.target.className.indexOf("g023_desc") === -1 && e.target.className.indexOf("g023_notes") === -1 && e.target.className.indexOf("g023_notice") === -1 && e.target.className.indexOf("g023_special_hours") === -1 && e.target.className.indexOf("g023_dates_closed") === -1 && e.target.className.indexOf("g023_info_handle") === -1) {
-                        $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+height));
-                        toggle = false;
+                        $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+that.height));
+                        that.toggle = false;
                     }
                 }
             });
@@ -971,8 +976,8 @@ function g023(userid, htmlId) {
                     $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').hide();
                 }
                 setTimeout(function() {
-                    height = $(that._pageObj).find('.g023_info.note').height();
-                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+height));
+                    that.height = $(that._pageObj).find('.g023_info.note').height();
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+that.height));
                 });
                 
                 $(that._pageObj).find("#mapit").click(function() {

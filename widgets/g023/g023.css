@@ -623,7 +623,9 @@ div.g023_arrow.g023_right_arrow {
 }
 
 .g023_info_content .g023_desc {
-    
+    max-height: 132px;
+    overflow: auto;
+    margin-bottom: 10px;
 }
 
 .g023_info_content .g023_notice, 
@@ -650,11 +652,11 @@ div.g023_arrow.g023_right_arrow {
 }
 
 .g023_info_content .g023_special_hours {
-    max-height: 100px;
+    max-height: 95px;
 }
 
 .g023_info_content .g023_dates_closed {
-    max-height: 100px;
+    max-height: 95px;
 }
 
 .g023_info_content .g023_notice:hover, 
