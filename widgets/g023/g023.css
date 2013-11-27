@@ -638,8 +638,23 @@ div.g023_arrow.g023_right_arrow {
     box-shadow: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
-    max-height: 142px;
-    overflow: auto;
+    overflow:auto;
+}
+
+.g023_info_content .g023_notice {
+    max-height: 62px;
+}
+
+.g023_info_content .g023_notes {
+    max-height: 46px;
+}
+
+.g023_info_content .g023_special_hours {
+    max-height: 100px;
+}
+
+.g023_info_content .g023_dates_closed {
+    max-height: 100px;
 }
 
 .g023_info_content .g023_notice:hover, 
