@@ -1138,9 +1138,6 @@ function g023(userid, htmlId) {
         }
     }
 
-
-   * Initialize the widget.
-   */
     console.log("Initializing sample(" + userid + ", " + htmlId + ")");
     portal.loadTemplates("widgets/g023/templates.json", 
         function(t) {
