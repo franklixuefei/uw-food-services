@@ -1137,7 +1137,7 @@ function g023(userid, htmlId) {
     
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyDexCumNi0oj_HqehCixRwTfl-Ae2EIC8A&sensor=false";
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDexCumNi0oj_HqehCixRwTfl-Ae2EIC8A&sensor=false";
 //    setTimeout(function () {
 //          try{
 //              if (!google || !google.maps) {
