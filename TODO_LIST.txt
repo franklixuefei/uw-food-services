@@ -1,0 +1,45 @@
+************************************** TODO & FIXME *******************************************
+
+fix homepage arrow button stepsize
+
+disable arrow button when reaching end.
+
+add footer for each page
+
+indicate is_open_now for each restaurant at homepage and menu page [location API] 
+
+if is_closed is true for a restaurant, just show "today closed" at homepage hours, and hide is_open_now at homepage. [location API]
+
+remove all generated items before appending items (resta list and offerings list) -- done for offerings view
+
+while fading in, freeze all interactions
+
+when popping a page, also clear up its model content, view content and viewController content, as if that page were never entered. !!!!!! VERY IMPORTANT
+
+for "more restaurants", when clicked, only show has_breakfast/lunch/dinner and a google map
+
+************************************** Notice *******************************************
+in updateView(), don't use "this", because this function pointer is passed into an array and will be executed by another function
+fix problem of disappearing images for firefox after reloading
+
+************************************** Already Done ***************************************
+show "uw food services" for each page -- done
+alert popup -- done
+restaurant description at menu page [location API] -- done
+restaurant notes at menu page [menu API] "Daily Fish" -- done
+restaurant notice at menu page [location API] -- done
+integrate dates_closed into notice [location API] "Mudie's will be closed from ... to ..." -- done
+integrate special_hours into notice [location API] "Our special hours: ..." -- done
+handle vacation dates -- done
+
+
+
+
+TO SHOW
+
+vacation view
+
+all pages view
+
+error popup (google api is not loaded)
+

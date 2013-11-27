@@ -40,6 +40,31 @@ div.g023_header img {
     margin-top: 2px;
 }
 
+div.g023_header div.back {
+    font-size: 16px;
+    height: 26px;
+    left: 50%;
+    line-height: 20px;
+    margin-left: -456px;
+    padding: 4px 0;
+    position: absolute;
+    text-align: center;
+    top: 39px;
+    width: 69px;
+    display:none;
+    z-index: 4;
+}
+div.g023_header div.back:hover {
+    cursor: pointer;
+    -webkit-transform: scale(1.1) !important;
+    -moz-transform: scale(1.1) !important;
+    transform: scale(1.1) !important;
+}
+
+div.back > * {
+    display: inline-block;
+}
+
 div.g023_restaItemWrapper, div.g023_offeringItemWrapper {
     display: inline-block;
     text-align: center;
@@ -68,8 +93,8 @@ div.widget_page {
     overflow: hidden;
 }
 
-.g023_content#g023_restaListContent {
-    margin-top: 10px;
+#g023_restaListContent.g023_content {
+    margin-top: 5px;
 }
 
 #g023_restaListContent.g023_content .g023_vacation_restas_wrapper {
@@ -134,7 +159,7 @@ div.g023_offering span.normal {
 }
 
 #g023_restaListContent.g023_content .g023_overflow_wrapper {
-    height: 220px;
+    height: 214px;
     width: 90%;
 }
 
@@ -143,7 +168,8 @@ div.g023_offering span.normal {
     width: 90%;
 }
 
-.g023_sectionHeader, .g023_sectionHeader .g023_sectionHeaderBacking > * {
+.g023_sectionHeader, 
+.g023_sectionHeader .g023_sectionHeaderBacking > * {
     display: inline-block;
     line-height: 10px;
 }
@@ -165,6 +191,12 @@ div.g023_offering span.normal {
     margin: 8px 20px;
     border: 1px solid rgba(0,0,0,.25);
     padding: 8px 6px;
+}
+
+.g023_sectionHeaderBacking {
+    transform: rotate(0deg) !important;
+    -webkit-transform: rotate(0deg) !important;
+    -moz-transform: rotate(0deg) !important;
 }
 
 .g023_sectionHeaderBacking.note {
@@ -497,18 +529,44 @@ div.g023_arrow.g023_right_arrow {
     line-height: 24px;
     padding: 30px 20px;
     width: 300px;
+    position: relative;
 }
 
 .g023_info_wrapper .g023_info .g023_info_handle {
     background-image: url("resta_info_pull_handle.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    bottom: -24px;
+    bottom: -34px;
     height: 44px;
     left: 50%;
     margin-left: -10px;
     position: absolute;
     width: 20px;
+    transition: all ease-in-out 0.1s;
+    -webkit-transition: all ease 0.1s;
+    -moz-transition: all ease 0.1s;
+    -o-transition: all ease 0.1s;
+}
+
+.g023_info_wrapper .g023_info .g023_info_handle:hover {
+    bottom: -38px;
+}
+
+.g023_info_wrapper .g023_info .g023_info_buttons {
+    bottom: 0;
+    height: 34px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}
+
+.g023_info_buttons button {
+    display: block;
+    line-height: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4px;
 }
 
 .g023_info_wrapper .g023_info .g023_info_handle:hover {

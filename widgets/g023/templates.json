@@ -12,7 +12,12 @@
         "foodServicesHeaderHtml": [
             "<div class='g023_header'>",
                 "<img src='widgets/g023/uw-food-services.png' />",
-            "</div>"
+                "<div class='note sticky2 back'>",
+                    "<div class='pin left'></div>",
+                    "<span>&#8617</span>",
+                    "<div class='pin right'></div>",
+                    "</div>",
+                "</div>"
         ],
 	"restaListWrapperHtml": [
 		"<div class='widget_page' id='g023_restaListWrapper'>",
@@ -78,7 +83,9 @@
                                 "<div class='g023_notice note sticky0'></div>",
                                 "<div class='g023_special_hours note sticky1'></div>",
                                 "<div class='g023_dates_closed note sticky3'></div>",
-                                
+                            "</div>",
+                            "<div class='g023_info_buttons'>",
+                                "<button type='button' class='btn btn-primary' id='mapit'>Map It!</button>",
                             "</div>",
                             "<div class='g023_info_handle'></div>",
                         "</div>",
@@ -116,5 +123,16 @@
                 "</div>",
 		"<div class='g023_footer'></div>"
 	],
-	"restaOfferingsError": "<p>Offerings detail not found.</p>"
+	"restaOfferingsError": "<p>Offerings detail not found.</p>",
+        "restaMapWrapperHtml": [
+		"<div class='widget_page' id='g023_restaMapWrapper'>",
+		"</div>"
+	],
+        "restaMapBaseHtml": [
+		
+                "<div class='g023_content' id='g023_restaMapContent'>",
+                "</div>",
+		"<div class='g023_footer'></div>"
+	],
+	"restaMapError": "<p>Restaurant not found.</p>"
 }

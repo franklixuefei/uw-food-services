@@ -1,11 +1,9 @@
-
-
 function g023(userid, htmlId) {
     var myDiv = $("div" + htmlId); // IMPORTANT: only use in initView function
     var wsServer = "https://api.uwaterloo.ca/v2/";
     var templates = {};
     var curPage = null; // points to current page (model type)
-
+    
     var utils = {
         getWeekdayString: function() {
             var d=new Date();
@@ -324,7 +322,68 @@ function g023(userid, htmlId) {
         
     }
     
-    var mapModel = {
+    var restaMapModel = {
+        _viewUpdaters: [], // a list of updateView functions. Only for updating views.
+        _thisRestaInfo: {},
+        
+        initWithRestaInfo: function(restaInfo) {
+            this._thisRestaInfo = restaInfo;
+        },
+        
+        /**
+		 * Add a new view to be notified when the model changes.
+		 */        
+        addViewUpdater: function(view) {
+            this._viewUpdaters.push(view);
+//            view(""); // also refresh view
+        },
+		
+        /**
+		 * Update all of the views that are observing us.
+		 */
+        updateViews: function(msg) {
+            for(var i=0; i<this._viewUpdaters.length; i++) {
+                this._viewUpdaters[i](msg);
+            }
+        },
+        
+        _parseData: function(outlets, callback, that) {
+            
+            // TODO: combine _thisRestaMenu with outlets
+            
+            console.log("currentRestaInfo:");
+            console.log(this._thisRestaInfo);
+            that.updateViews("");//success
+            if (callback) callback();
+        },
+
+        loadMapData: function(callback) { // call only once!!!!
+            var that = this;
+            // getJSON can fail silently.  It may be better (and only slightly more work)
+            // to use $.ajax -- or write your own version of getJSON that does not fail silently.
+            var data = {
+                "key": "d47fe3afb19f506f5a95e89e99527595" // TODO: also add outlet_id to data.
+            }
+            
+            var counter = 0;
+            var MAX_COUNTER = 0;
+//            var outletsdAjaxSuccessObj = [];
+//                   
+            // ajax here if any [remember to change MAX_COUNTER accordingly]
+                    
+            if (counter === MAX_COUNTER) {
+                counter = 0;
+                that._parseData([], callback, that);
+            }
+        },
+        
+        getData: function() {
+            var dataObj = new Object();
+            dataObj.currentRestaInfo = this._thisRestaInfo;
+            return dataObj;
+        }
+        
+        
         
     }
     
@@ -340,15 +399,25 @@ function g023(userid, htmlId) {
                 curPage = page;
             }); 
             this._pageStack.push(page);
+            if (this._pageStack.length > 1) {
+                $('#g023').find('.back').fadeIn(400);
+            } else {
+                $('#g023').find('.back').fadeOut(400);
+            }
         },
         popPage: function() { // fadeout and remove top
-            if (this._pageStack.length === 0) return false; // pop failed
+            if (this._pageStack.length === 1) return false; // pop failed
             var poppedPage = this._pageStack.pop();
             curPage = this._pageStack[this._pageStack.length-1];
             curPage.fadeInPage();
             poppedPage.fadeOutPage(function() {
                 poppedPage.destroy();
             });
+            if (this._pageStack.length > 1) {
+                $('#g023').find('.back').fadeIn(400);
+            } else {
+                $('#g023').find('.back').fadeOut(400);
+            }
             return true; // pop succeeded
         }
     }
@@ -474,13 +543,7 @@ function g023(userid, htmlId) {
         
         
         updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
-//            var t = ""
-//            if (msg === "error") {
-//                t = templates.error;
-//            } else if (msg === "course") {
-//                t = Mustache.render(templates.courseD, model);
-//            }
-//            $(htmlId + " #cDescr").html(t);
+
             if (msg === "error") {
                 t = templates.restaListError;
             } else if (msg === "vacation") {
@@ -849,18 +912,19 @@ function g023(userid, htmlId) {
                 if (!toggle) {
                     $(that._pageObj).find('.g023_info_wrapper').css('top', 25);
                 } else {
-                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+height));
                 }
                 toggle = !toggle;
             });
             $(this._pageObj).click(function(e) {
                 if (toggle) {
-                    if (e.target.className !== "g023_info note" && e.target.className !== "g023_info_content" && e.target.className !== "g023_info_handle") {
-                        $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));
+                    if (e.target.className.indexOf("g023_desc") === -1 && e.target.className.indexOf("g023_notes") === -1 && e.target.className.indexOf("g023_notice") === -1 && e.target.className.indexOf("g023_special_hours") === -1 && e.target.className.indexOf("g023_dates_closed") === -1 && e.target.className.indexOf("g023_info_handle") === -1) {
+                        $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+height));
                         toggle = false;
                     }
                 }
-            })
+            });
+            
             // TODO: dynamically append all restaurants
             restaOfferingsModel.addViewUpdater(restaOfferingsView.updateView); // register view updater
             restaOfferingsModel.loadOfferingDetailData(function() { // called before updateView is called and after data are ready
@@ -899,7 +963,20 @@ function g023(userid, htmlId) {
                 }
                 setTimeout(function() {
                     height = $(that._pageObj).find('.g023_info.note').height();
-                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (46+height));
+                    $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+height));
+                });
+                
+                $(that._pageObj).find("#mapit").click(function() {
+                    console.log("Map It! clicked!");
+                    if (!google || !google.maps) {
+                        utils.showAlert(that._pageObj, "Error", "Google API has not been fully loaded. Please try again later.", "OK");
+                        return false;
+                    }
+                    restaMapModel.initWithRestaInfo(restaOfferingsModel.getData().currentRestaInfo);
+                    restaMapViewController.addView(restaMapView);
+                    restaMapViewController.initViews(restaMapModel, function() {
+                        navigationController.pushPage(restaMapViewController);
+                    }); // construct viewController and init its views
                 });
                 
             }, ajaxDoneCallback); // trigger retrieving data and update views
@@ -918,12 +995,103 @@ function g023(userid, htmlId) {
     
     /************************/
     
-    var mapViewController = {
+    var restaMapViewController = {
+        _views: [], // its view objects
+        _model: null, // for the use of navigationController
+        _pageWrapper: null, // jQuery Object for page wrapper
+//        _timer: null,
+        addView: function(view) {
+            this._views.push(view);
+        },
         
+        initViews: function(model, barrierCallback) { // constructor + initializer
+            var counter = 0;
+            this._model = model;
+            this._pageWrapper = $(templates.restaMapWrapperHtml);
+//            console.log("pageWrapper:");
+            myDiv.append(this._pageWrapper); // init superview
+            var that = this;
+            for (var i = 0; i < this._views.length; ++i) {
+                this._views[i].initView(this._pageWrapper, function() {
+                    counter++;
+                    if (counter === that._views.length) { // all async requests done
+                        barrierCallback();
+                    }
+                }); // init subviews
+            }
+        },
+        
+        getModel: function() {
+            return this._model;
+        },
+        
+        fadeInPage: function(callback) {
+            if (callback) {
+                this._pageWrapper.fadeIn(400, callback);
+            } else {
+                this._pageWrapper.fadeIn(400);
+            }
+        },
+        
+        fadeOutPage: function(callback) {
+            if (callback) {
+                this._pageWrapper.fadeOut(400, callback);
+            } else {
+                this._pageWrapper.fadeOut(400);
+            }
+        },
+        
+        destroy: function() {
+            this._pageWrapper.remove();
+//            this._model.stopRefresh();
+            // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
+        }
     }
     
-    var mapView = {
+    var restaMapView = {
+        _pageObj: null,
         
+        updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
+
+            if (msg === "error") {
+                t = templates.restaListError;
+            } else {
+                // create resta list using restaModel._outlets
+                console.log("restaMapModel Data");
+                console.log(restaMapModel.getData());
+            }
+            
+        },
+
+
+        initView: function(pageObj, ajaxDoneCallback) {
+            
+            this._pageObj = pageObj;
+            
+            console.log("Initializing restaMapView");
+            console.log($(templates.restaMapBaseHtml));
+            
+            $(this._pageObj).append(templates.restaMapBaseHtml); // loading the base html into DOM
+            
+            var that = this;
+            
+            /*
+  		 * Set the controller for the "Go" button.
+  		 * Get the subject and catalog from the input fields and
+  		 * then tell the model to get the corresponding course.
+  		 */
+            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
+//                var subject = $("#subject").val();
+//                var catalog = $("#catalog").val();
+//                console.log("Go clicked: " + subject + " " + catalog);
+////                restaListModel.loadCourseData(subject.toLowerCase(), catalog);
+//                $(pageObj).find("#subject").val("");
+//                $(pageObj).find("#catalog").val("");
+            });
+            // TODO: dynamically append all restaurants
+            restaMapModel.addViewUpdater(restaMapView.updateView); // register view updater
+            restaMapModel.loadMapData(ajaxDoneCallback); // trigger retrieving data and update views
+        }
     }
 
 
@@ -939,15 +1107,13 @@ function g023(userid, htmlId) {
         function(t) {
             templates = t;
             myDiv.append(templates.foodServicesHeaderHtml);
-            
+            $('#g023').find('.back').bind('click', function() {
+                navigationController.popPage();
+            });
             restaListViewController.addView(restaListView);
             restaListViewController.initViews(restaListModel, function() {
                 navigationController.pushPage(restaListViewController);
             }); // construct viewController and init its views
-            
-//            restaOfferingsView.initView();
-//            offeringDetailView.initView();
-//            mapView.initView();
 
             var link = document.createElement('link');
             link.setAttribute('rel', 'stylesheet');
@@ -967,5 +1133,22 @@ function g023(userid, htmlId) {
             return this.getTime() + this.getTimezoneOffset()*60*1000;
         }
     }
+    
+    
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyDexCumNi0oj_HqehCixRwTfl-Ae2EIC8A&sensor=false";
+//    setTimeout(function () {
+//          try{
+//              if (!google || !google.maps) {
+//                  //This will Throw the error if 'google' is not defined
+//              }
+//          }
+//          catch (e) {
+//              //You can write the code for error handling here
+//              //Something like alert('Ah...Error Occurred!');
+//          }
+//      }, 5000);
+    document.getElementById('g023').appendChild(script);
 
 }
