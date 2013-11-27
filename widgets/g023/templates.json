@@ -131,6 +131,10 @@
         "restaMapBaseHtml": [
 		
                 "<div class='g023_content' id='g023_restaMapContent'>",
+                    "<div class='pin mapPin_1'></div>",
+                    "<div class='pin mapPin_2'></div>",
+                    "<div class='pin mapPin_3'></div>",
+                    "<div id='g023_mapCanvas' class='note stickyMap'></div>",
                 "</div>",
 		"<div class='g023_footer'></div>"
 	],

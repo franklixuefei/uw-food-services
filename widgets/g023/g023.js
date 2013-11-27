@@ -3,6 +3,11 @@ function g023(userid, htmlId) {
     var wsServer = "https://api.uwaterloo.ca/v2/";
     var templates = {};
     var curPage = null; // points to current page (model type)
+    var gMapLoaded = false;
+    
+    window.g023_gMapInitialize = function() {
+        gMapLoaded = true;
+    }
     
     var utils = {
         getWeekdayString: function() {
@@ -325,7 +330,8 @@ function g023(userid, htmlId) {
     var restaMapModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _thisRestaInfo: {},
-        
+//        _dest: null,
+
         initWithRestaInfo: function(restaInfo) {
             this._thisRestaInfo = restaInfo;
         },
@@ -347,12 +353,13 @@ function g023(userid, htmlId) {
             }
         },
         
-        _parseData: function(outlets, callback, that) {
+        _parseData: function(callback, that) {
             
             // TODO: combine _thisRestaMenu with outlets
             
             console.log("currentRestaInfo:");
             console.log(this._thisRestaInfo);
+//            this._dest = new google.maps.LatLng(this._thisRestaInfo.latitude, this._thisRestaInfo.longitude);
             that.updateViews("");//success
             if (callback) callback();
         },
@@ -373,13 +380,14 @@ function g023(userid, htmlId) {
                     
             if (counter === MAX_COUNTER) {
                 counter = 0;
-                that._parseData([], callback, that);
+                that._parseData(callback, that);
             }
         },
         
         getData: function() {
             var dataObj = new Object();
             dataObj.currentRestaInfo = this._thisRestaInfo;
+//            dataObj.dest = this._dest;
             return dataObj;
         }
         
@@ -955,7 +963,8 @@ function g023(userid, htmlId) {
                     $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').show();
                     $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').append($('<div>').attr('class', 'g023_dates_closed_title').text('Dates Closed:'));
                     for (var i = 0; i < dates_closed.length; ++i) {
-                        var date_closed = $('<div>').attr('class', 'g023_date_closed').text(dates_closed[i].date);
+                        if (!dates_closed[i]) continue;
+                        var date_closed = $('<div>').attr('class', 'g023_date_closed').text(dates_closed[i]);
                         $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').append(date_closed);
                     }
                 } else {
@@ -968,7 +977,7 @@ function g023(userid, htmlId) {
                 
                 $(that._pageObj).find("#mapit").click(function() {
                     console.log("Map It! clicked!");
-                    if (!google || !google.maps) {
+                    if (!gMapLoaded) {
                         utils.showAlert(that._pageObj, "Error", "Google API has not been fully loaded. Please try again later.", "OK");
                         return false;
                     }
@@ -1054,11 +1063,46 @@ function g023(userid, htmlId) {
         updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
 
             if (msg === "error") {
-                t = templates.restaListError;
+                
             } else {
                 // create resta list using restaModel._outlets
                 console.log("restaMapModel Data");
                 console.log(restaMapModel.getData());
+                
+                var latitude = restaMapModel.getData().currentRestaInfo.latitude;
+                var longitude = restaMapModel.getData().currentRestaInfo.longitude;
+                var dest = new google.maps.LatLng(latitude, longitude);
+                // init google map
+                var mapOptions = {
+                    zoom: 18,
+                    center: dest
+                };
+
+                var map = new google.maps.Map(document.getElementById('g023_mapCanvas'), mapOptions);
+
+                var marker = new google.maps.Marker({
+                    map:map,
+                    position: dest,
+                    title: restaMapModel.getData().currentRestaInfo.outlet_name
+                });
+                var contentString = '<div id="content">'+
+                    '<div id="siteNotice">'+
+                    '</div>'+
+                    '<h3 id="firstHeading" class="firstHeading">'+ restaMapModel.getData().currentRestaInfo.outlet_name +'</h1>'+
+                    '<div id="bodyContent">'+
+                    '<img src="'+restaMapModel.getData().currentRestaInfo.logo+'" style="display:inline-block;"/>'+
+                    '<p style="display: inline-block; margin-left: 30px; max-width: 444px;">' + restaMapModel.getData().currentRestaInfo.description + '</p>'
+                    '</div>'+
+                    '</div>';
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map,marker);
+                });
+
             }
             
         },
@@ -1095,11 +1139,6 @@ function g023(userid, htmlId) {
     }
 
 
-
-    /************************
-     ************************
-     ************************/
-    /*
    * Initialize the widget.
    */
     console.log("Initializing sample(" + userid + ", " + htmlId + ")");
@@ -1114,13 +1153,18 @@ function g023(userid, htmlId) {
             restaListViewController.initViews(restaListModel, function() {
                 navigationController.pushPage(restaListViewController);
             }); // construct viewController and init its views
-
+            
+            // appending font css
             var link = document.createElement('link');
             link.setAttribute('rel', 'stylesheet');
             link.setAttribute('type', 'text/css');
             link.setAttribute('href', 'https://fonts.googleapis.com/css?family=Great+Vibes');
             document.getElementById('g023').appendChild(link);
-
+            // appending google map API
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDexCumNi0oj_HqehCixRwTfl-Ae2EIC8A&sensor=false&callback=g023_gMapInitialize";
+            document.getElementById('g023').appendChild(script);
         });
     if (!Date.prototype.getWeek) {
         Date.prototype.getWeek = function() {
@@ -1134,21 +1178,4 @@ function g023(userid, htmlId) {
         }
     }
     
-    
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDexCumNi0oj_HqehCixRwTfl-Ae2EIC8A&sensor=false";
-//    setTimeout(function () {
-//          try{
-//              if (!google || !google.maps) {
-//                  //This will Throw the error if 'google' is not defined
-//              }
-//          }
-//          catch (e) {
-//              //You can write the code for error handling here
-//              //Something like alert('Ah...Error Occurred!');
-//          }
-//      }, 5000);
-    document.getElementById('g023').appendChild(script);
-
 }
