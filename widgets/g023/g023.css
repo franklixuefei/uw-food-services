@@ -196,8 +196,9 @@ div.g023_offering span.normal {
     min-width: 110px;
 }
 
-#g023_restaListWrapper div.g023_restaItemWrapper:hover.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper:hover.note {
-    border: 1px solid rgba(0,0,0,.75);
+#g023_restaListWrapper div.g023_restaItemWrapper:hover.note, 
+#g023_restaOfferingsWrapper div.g023_offeringItemWrapper:hover.note,
+#g023_restaProdWrapper div.g023_prod_details:hover.note{
     -webkit-transform: scale(1.1) !important;
     -moz-transform: scale(1.1) !important;
     transform: scale(1.1) !important;
@@ -264,6 +265,10 @@ div.g023_offering span.normal {
 
 .g023_ingredients .note {
     margin: 10px 20px;
+    -transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out; 
+    -webkit-transition: all .2s ease-in-out; 
+    -o-transition: all .2s ease-in-out; 
 }
 
 
@@ -847,4 +852,5 @@ font-weight: bold;
 .g023_prod_details .g023_ingredients_title {
     font-weight: bold;
     margin-top: 4px;
+    text-decoration: underline;
 }

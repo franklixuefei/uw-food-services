@@ -33,7 +33,7 @@ integrate special_hours into notice [location API] "Our special hours: ..." -- d
 handle vacation dates -- done
 add footer for each page -- invalid
 mapPage -- done
-
+product page -- done
 
 
 ************************************** TO SHOW **************************************
