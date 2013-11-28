@@ -271,5 +271,29 @@
                 "</div>",
             "</div>"
         ],
+        "ingredients": [
+            "<div class='g023_ingredients'>",
+                "<div class='note sticky3 g023_meal_type g023_prod_details'>",
+                    "<div class='pin'></div>",
+                    "<div class='g023_ingredients_title'>Meal Type:</div>",
+                    "<p class='g023_ingredients_content'>{{currentProdInfo.diet_type}}</p>",
+                "</div>",
+                "<div class='note sticky1 g023_ingredients_list g023_prod_details'>",
+                    "<div class='pin'></div>",
+                    "<div class='g023_ingredients_title'>Ingredients:</div>",
+                    "<p class='g023_ingredients_content'>{{currentProdInfo.ingredients}}</p>",
+                "</div>",
+                "<div class='note sticky5 g023_micro_nutrients g023_prod_details'>",
+                    "<div class='pin'></div>",  
+                    "<div class='g023_ingredients_title'>Micro Nutrients</div>",
+                    "<p class='g023_ingredients_content'>{{currentProdInfo.micro_nutrients}}</p>",
+                "</div>",
+                "<div class='note sticky2 g023_tips g023_prod_details'>",
+                    "<div class='pin'></div>",
+                    "<div class='g023_ingredients_title'>Tips:</div>",
+                    "<p class='g023_ingredients_content'>{{currentProdInfo.tips}}</p>",
+                "</div>",
+            "</div>"
+        ],
 	"restaProdError": "<p>Restaurant not found.</p>"
 }

@@ -1145,12 +1145,26 @@ function g023(userid, htmlId) {
                 
             } else {
                 // create resta list using restaModel._outlets
+                var data = offeringDetailModel.getData();
                 console.log("offeringDetailModel Data");
-                console.log(offeringDetailModel.getData());
-                
+                console.log(data);
+                if (!data.currentProdInfo.diet_type) {
+                    data.currentProdInfo.diet_type = "Non Vegetarian";
+                }
                 // append value facts and ingredient and food kind here
-                var renderedHtml = Mustache.render(templates.valueFact, offeringDetailModel.getData());
-                $(offeringDetailView._pageObj).find('#g023_restaProdContent').append(renderedHtml);
+                var valueFactHtml = $(Mustache.render(templates.valueFact, data));
+                $(offeringDetailView._pageObj).find('#g023_restaProdContent').append(valueFactHtml);
+                var ingredientsHtml = $(Mustache.render(templates.ingredients, data));
+                if (!data.currentProdInfo.ingredients) {
+                    ingredientsHtml.find('.g023_ingredients_list').hide();
+                }
+                if (!data.currentProdInfo.micro_nutrients) {
+                    ingredientsHtml.find('.g023_micro_nutrients').hide();
+                }
+                if (!data.currentProdInfo.tips) {
+                    ingredientsHtml.find('.g023_tips').hide();
+                }
+                $(offeringDetailView._pageObj).find('#g023_restaProdContent').append(ingredientsHtml);
             }
             
         },
