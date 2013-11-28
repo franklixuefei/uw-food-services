@@ -75,6 +75,9 @@ function g023(userid, htmlId) {
         
         _parseData: function(outletsObj, locationObj, menuObj, callback, that) {
                         
+            this._restaMenus = menuObj.outlets;
+            this._restaMenusDateInfo = menuObj.date;
+                        
             for (var objLocIndex in locationObj) {
                 var found = false;
                 for (var objMenuIndex in menuObj.outlets) {
@@ -187,8 +190,6 @@ function g023(userid, htmlId) {
                     if (j.meta.status === 200) {
                         counter++;
                         menuAjaxSuccessObj = j.data;
-                        that._restaMenus = j.data.outlets;
-                        that._restaMenusDateInfo = j.data.date;
                         if (counter === MAX_COUNTER) {
                             counter = 0;
                             that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
@@ -302,7 +303,7 @@ function g023(userid, htmlId) {
             }
             
             var counter = 0;
-            var MAX_COUNTER = 0;
+            var MAX_COUNTER = 0;         
 //            var outletsdAjaxSuccessObj = [];
 //                   
             // ajax here if any [remember to change MAX_COUNTER accordingly]
@@ -324,6 +325,94 @@ function g023(userid, htmlId) {
     }
     
     var offeringDetailModel = {
+        _viewUpdaters: [], // a list of updateView functions. Only for updating views.
+        _thisProdInfo: {},
+
+        initWithProdInfo: function(prodInfo) {
+            this._thisProdInfo = prodInfo;
+        },
+        
+        /**
+		 * Add a new view to be notified when the model changes.
+		 */        
+        addViewUpdater: function(view) {
+            this._viewUpdaters.push(view);
+        },
+		
+        /**
+		 * Update all of the views that are observing us.
+		 */
+        updateViews: function(msg) {
+            for(var i=0; i<this._viewUpdaters.length; i++) {
+                this._viewUpdaters[i](msg);
+            }
+        },
+        
+        _parseData: function(productObj, callback, that) {
+            for (var property in productObj) {
+                if (!productObj[property]) {
+                    this._thisProdInfo[property] = 0;
+                } else {
+                    this._thisProdInfo[property] = productObj[property];
+                }
+            }
+//            this._thisProdInfo = productObj;
+            console.log("currentProdInfo:");
+            console.log(this._thisProdInfo);
+            that.updateViews("");//success
+            if (callback) callback();
+        },
+
+        loadProdData: function(callback) { // call only once!!!!
+            var that = this;
+            // getJSON can fail silently.  It may be better (and only slightly more work)
+            // to use $.ajax -- or write your own version of getJSON that does not fail silently.
+            var data = {
+                "key": "d47fe3afb19f506f5a95e89e99527595" // TODO: also add outlet_id to data.
+            }
+            
+            var productAjaxSuccessObj = {};
+            
+            var counter = 0;
+            var MAX_COUNTER = 1;
+//            var outletsdAjaxSuccessObj = [];
+//                   
+            // ajax here if any [remember to change MAX_COUNTER accordingly]
+            $.ajax({
+                type :'GET',
+                url : wsServer + 'foodservices/products/'+ this._thisProdInfo.product_id +'.json',
+                data : data,
+                dataType : 'json', 
+                timeout : 30000,
+                success : function(j) {
+                    console.log("data retrieved from product API:");
+                    console.log(j);
+                    if (j.meta.status === 200) {
+                        counter++;
+                        productAjaxSuccessObj = j.data;
+                        if (counter === MAX_COUNTER) {
+                            counter = 0;
+                            that._parseData(productAjaxSuccessObj, callback, that);
+                        }
+                    } else {
+                        that.updateViews("error");
+                    }
+                    
+                }, 
+                error : function(xhr, type){
+                    
+                }
+            });
+            
+        },
+        
+        getData: function() {
+            var dataObj = new Object();
+            dataObj.currentProdInfo = this._thisProdInfo;
+            return dataObj;
+        }
+        
+        
         
     }
     
@@ -628,7 +717,7 @@ function g023(userid, htmlId) {
 //                $(pageObj).find("#catalog").val("");
             });
             // TODO: dynamically append all restaurants
-            restaListModel.addViewUpdater(restaListView.updateView); // register view updater
+            restaListModel.addViewUpdater(this.updateView); // register view updater
             restaListModel.loadOutletData(ajaxDoneCallback); // trigger retrieving data and update views
         }
     }
@@ -731,20 +820,17 @@ function g023(userid, htmlId) {
                                 );
             }
             offeringItem.bind('click', function() {
-//                var restaMenus = restaListModel.getData().restaMenus;
-//                var thisRestaOfferings = {};
-//                for (var i = 0; i < restaMenus.length; ++i) {
-//                    if (restaMenus[i].outlet_id === item.outlet_id) {
-//                        thisRestaOfferings = restaMenus[i];
-//                        break;
-//                    }
-//                }
-//                restaOfferingsModel.initWithRestaInfo(thisRestaOfferings);
-//                restaOfferingsViewController.addView(restaOfferingsView);
-//                restaOfferingsViewController.initViews(restaListModel, function() {
-//                    navigationController.pushPage(restaOfferingsViewController);
-//                }); // construct viewController and init its views
-//
+                console.log('product clicked:');
+                console.log(item);
+                if (item.product_id) {
+                    offeringDetailModel.initWithProdInfo(item);
+                    offeringDetailViewController.addView(offeringDetailView);
+                    offeringDetailViewController.initViews(offeringDetailModel, function() {
+                        navigationController.pushPage(offeringDetailViewController);
+                    }); 
+                } else {
+                    // degrade
+                }
             });
             return offeringItem;
         },
@@ -939,7 +1025,7 @@ function g023(userid, htmlId) {
             });
             
             // TODO: dynamically append all restaurants
-            restaOfferingsModel.addViewUpdater(restaOfferingsView.updateView); // register view updater
+            restaOfferingsModel.addViewUpdater(this.updateView); // register view updater
             restaOfferingsModel.loadOfferingDetailData(function() { // called before updateView is called and after data are ready
                 console.log("callfront");
                 that._setWeekdayArray(restaOfferingsModel.getData().currentRestaMenu.menu); // set current week weekdays
@@ -1000,11 +1086,94 @@ function g023(userid, htmlId) {
     /************************/
     
     var offeringDetailViewController = {
+        _views: [], // its view objects
+        _model: null, // for the use of navigationController
+        _pageWrapper: null, // jQuery Object for page wrapper
+//        _timer: null,
+        addView: function(view) {
+            this._views.push(view);
+        },
         
+        initViews: function(model, barrierCallback) { // constructor + initializer
+            var counter = 0;
+            this._model = model;
+            this._pageWrapper = $(templates.restaProdWrapperHtml);
+            myDiv.append(this._pageWrapper); // init superview
+            var that = this;
+            for (var i = 0; i < this._views.length; ++i) {
+                this._views[i].initView(this._pageWrapper, function() {
+                    counter++;
+                    if (counter === that._views.length) { // all async requests done
+                        barrierCallback();
+                    }
+                }); // init subviews
+            }
+        },
+        
+        getModel: function() {
+            return this._model;
+        },
+        
+        fadeInPage: function(callback) {
+            if (callback) {
+                this._pageWrapper.fadeIn(400, callback);
+            } else {
+                this._pageWrapper.fadeIn(400);
+            }
+        },
+        
+        fadeOutPage: function(callback) {
+            if (callback) {
+                this._pageWrapper.fadeOut(400, callback);
+            } else {
+                this._pageWrapper.fadeOut(400);
+            }
+        },
+        
+        destroy: function() {
+            this._pageWrapper.remove();
+        }
     }
     
+    
     var offeringDetailView = {
+        _pageObj: null,
         
+        updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
+
+            if (msg === "error") {
+                
+            } else {
+                // create resta list using restaModel._outlets
+                console.log("offeringDetailModel Data");
+                console.log(offeringDetailModel.getData());
+                
+                // append value facts and ingredient and food kind here
+                var renderedHtml = Mustache.render(templates.valueFact, offeringDetailModel.getData());
+                $(offeringDetailView._pageObj).find('#g023_restaProdContent').append(renderedHtml);
+            }
+            
+        },
+
+
+        initView: function(pageObj, ajaxDoneCallback) {
+            
+            this._pageObj = pageObj;
+            
+            console.log("Initializing offeringDetailView");
+            console.log($(templates.restaProdBaseHtml));
+            
+            $(this._pageObj).append(templates.restaProdBaseHtml); // loading the base html into DOM
+            
+            var that = this;
+            
+            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
+                
+            });
+            // TODO: dynamically append all restaurants
+            offeringDetailModel.addViewUpdater(this.updateView); // register view updater
+            offeringDetailModel.loadProdData(ajaxDoneCallback); // trigger retrieving data and update views
+        }
     }
     
     /************************/
@@ -1138,7 +1307,7 @@ function g023(userid, htmlId) {
 //                $(pageObj).find("#catalog").val("");
             });
             // TODO: dynamically append all restaurants
-            restaMapModel.addViewUpdater(restaMapView.updateView); // register view updater
+            restaMapModel.addViewUpdater(this.updateView); // register view updater
             restaMapModel.loadMapData(ajaxDoneCallback); // trigger retrieving data and update views
         }
     }

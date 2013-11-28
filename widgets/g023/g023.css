@@ -83,6 +83,10 @@ div.g023_restaItemWrapper div.pin, div.g023_offeringItemWrapper div.pin {
     -o-transform: rotate(-1.2deg);*/
 }
 
+.stickyVF {
+    background-color: #ADD8E6;
+}
+
 div.widget_page {
     display: none;
     height: 100%;
@@ -106,6 +110,25 @@ div.widget_page {
 
 #g023_restaMapContent.g023_content {
     
+}
+
+#g023_restaProdContent.g023_content {
+    margin-top: 20px;
+}
+
+#g023_restaProdContent.g023_content .g023_value_facts {
+    background-color: #EFEFEF;
+    background-image: url("watermark.png");
+    background-position: 70% 70%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    padding: 8px;
+    position: relative;
+    margin-left: 90px;
+}
+
+.g023_value_facts * {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 #g023_restaMapContent.g023_content #g023_mapCanvas {
@@ -225,7 +248,7 @@ div.g023_offering span.normal {
 }
 
 .g023_info_content .note {
-    margin: 8px !important;
+    margin: 4px !important;
 }
 /*.g023_sectionHeaderBacking span img {
     height: 10px;
@@ -296,6 +319,15 @@ div.g023_offering span.normal {
     -moz-box-shadow: 0 3px 6px rgba(0,0,0,.55);
     box-shadow: 0 3px 6px rgba(0,0,0,.55);
     margin: 0 auto;
+}
+
+.pin.vf {
+    position: absolute;
+    left: 50%;
+    margin-left: -10px;
+    background-image: -moz-radial-gradient(35px 35px 35deg, circle cover, blue 50%, black 100%);
+    background-image: -webkit-radial-gradient(35px 35px, circle cover, blue, black);
+    background-image: radial-gradient(blue 50%, black 100%);
 }
 
 .pin.left, .pin.right {
@@ -644,7 +676,7 @@ div.g023_arrow.g023_right_arrow {
 }
 
 .g023_info_content .g023_notice {
-    max-height: 62px;
+    max-height: 56px;
 }
 
 .g023_info_content .g023_notes {
@@ -666,4 +698,134 @@ div.g023_arrow.g023_right_arrow {
     -webkit-transform: scale(1.2) !important;
     -moz-transform: scale(1.2) !important;
     transform: scale(1.2) !important;
+}
+
+
+
+div.uw_food_services-nutrition {
+width: 20em;
+min-width: 0;
+border-width: 0.1em;
+padding: 0.2em;
+margin: 1em 0;
+}
+
+#content table {
+max-width: 750px;
+}
+
+
+
+table {
+display: table;
+border-collapse: separate;
+border-spacing: 2px;
+border-color: gray;
+}
+
+table {
+border-collapse: collapse;
+}
+
+
+
+table {
+margin: 1em 0;
+min-width: 100%;
+max-width: 100%;
+font-size: .9em;
+}
+
+div.uw_food_services-nutrition, div.uw_food_services-nutrition table, div.uw_food_services-nutrition table * {
+text-align: left;
+font-style: normal;
+border: none;
+margin: 0;
+padding: 0;
+/*background-color: #FFF;*/
+border-color: #000;
+border-style: solid;
+border-width: 0;
+}
+
+div.uw_food_services-nutrition table td, div.uw_food_services-nutrition table thead th:last-child {
+    text-align: right;
+}
+
+div.uw_food_services-nutrition table td.serving_size {
+    border-bottom-width: 0.4em;
+    text-align: left;
+}
+
+div.uw_food_services-nutrition table th, div.uw_food_services-nutrition table td {
+    padding: 0.2em;
+}
+
+
+th {
+    border-bottom: 3px solid #CCCCCC;
+    padding-right: 1em;
+    text-align: left;
+}
+
+
+p, h1, h2, h3, h4, h5, h6, table, th, td {
+margin: 0;
+padding: 0;
+font-size: 1em;
+line-height: inherit;
+font-weight: inherit;
+border: none;
+}
+
+
+h2 {
+    border-bottom: 1px solid #FECB00;
+    color: #111111;
+    font-size: 1.3em;
+    margin-bottom: 0.8em;
+    padding-bottom: 1px;
+    line-height: 1.2em;
+    font-weight: bold;
+}
+
+
+th, td {
+    border: 1px solid #DDDDDD;
+    padding: 0.5em;
+    vertical-align: top;
+}
+
+th {
+    /*background-color: #EEEEEE;*/
+    font-style: italic;
+    text-align: left;
+}
+
+
+div.uw_food_services-nutrition table tbody:first-of-type {
+    border-top-width: 0.2em;
+}
+div.uw_food_services-nutrition table tbody {
+    border-top-width: 0.4em;
+}
+
+tbody {
+    border-top: 1px solid #CCCCCC;
+}
+
+div.uw_food_services-nutrition table tbody tr {
+    border-bottom-width: 0.1em;
+}
+
+div.uw_food_services-nutrition table th.sub {
+    padding-left: 1em;
+}
+
+div.uw_food_services-nutrition table tbody tr:last-child {
+    border-bottom-width: 0;
+}
+
+tbody.nutrients span {
+font-weight: bold;
 }

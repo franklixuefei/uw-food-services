@@ -16,6 +16,8 @@ when popping a page, also clear up its model content, view content and viewContr
 
 for "more restaurants", when clicked, only show has_breakfast/lunch/dinner in google map
 
+abstract data passed into ajax calls to a global scope
+
 ************************************** Notice *******************************************
 in updateView(), don't use "this", because this function pointer is passed into an array and will be executed by another function
 fix problem of disappearing images for firefox after reloading
@@ -34,7 +36,7 @@ mapPage -- done
 
 
 
-TO SHOW
+************************************** TO SHOW **************************************
 
 vacation view
 
