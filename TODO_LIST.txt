@@ -14,7 +14,7 @@ while fading in, freeze all interactions
 
 when popping a page, also clear up its model content, view content and viewController content, as if that page were never entered. !!!!!! VERY IMPORTANT
 
-for "more restaurants", when clicked, only show has_breakfast/lunch/dinner in google map
+for "more restaurants", when clicked, show their info (e.g., has_breakfast/lunch/dinner) in google map info window
 
 abstract data passed into ajax calls to a global scope
 

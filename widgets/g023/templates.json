@@ -24,8 +24,12 @@
 		"</div>"
 	],
         "restaListBaseHtml": [
-		
                 "<div class='g023_content' id='g023_restaListContent'>",
+                    "<div class='g023_sectionHeaderBacking note sticky1 g023_mapthem'>",
+                        "<div class='pin left'></div>",
+                        "<button class='btn-primary btn mapall' type='button'>Map them!</button>",
+                        "<div class='pin right'></div>",
+                    "</div>",
                     "<div class='g023_sectionHeader g023_upper'>",
                         "<div class='g023_sectionHeaderBacking note sticky1'>",
                             "<div class='pin left'></div>",
@@ -85,7 +89,7 @@
                                 "<div class='g023_dates_closed note sticky3'></div>",
                             "</div>",
                             "<div class='g023_info_buttons'>",
-                                "<button type='button' class='btn btn-primary' id='mapit'>Map It!</button>",
+                                "<button type='button' class='btn btn-primary' id='mapit'>Map it!</button>",
                             "</div>",
                             "<div class='g023_info_handle'></div>",
                         "</div>",

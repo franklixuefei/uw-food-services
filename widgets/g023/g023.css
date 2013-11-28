@@ -226,6 +226,19 @@ div.g023_offering span.normal {
     line-height: 10px;
 }
 
+.g023_mapthem {
+    position:absolute;
+    right: 60px;
+}
+
+.g023_mapthem > * {
+    display:inline-block;
+}
+
+.g023_mapthem button {
+    line-height: 10px;
+}
+
 #g023_restaOfferingsContent .g023_sectionHeaderBacking span {
     font-family: 'Great Vibes',cursive;
     font-size: 20px;

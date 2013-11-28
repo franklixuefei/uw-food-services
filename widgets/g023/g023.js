@@ -703,18 +703,11 @@ function g023(userid, htmlId) {
                     scrollLeft: "+=208px"
                 }, 400);
             });
-            /*
-  		 * Set the controller for the "Go" button.
-  		 * Get the subject and catalog from the input fields and
-  		 * then tell the model to get the corresponding course.
-  		 */
-            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
-//                var subject = $("#subject").val();
-//                var catalog = $("#catalog").val();
-//                console.log("Go clicked: " + subject + " " + catalog);
-////                restaListModel.loadCourseData(subject.toLowerCase(), catalog);
-//                $(pageObj).find("#subject").val("");
-//                $(pageObj).find("#catalog").val("");
+
+            $(this._pageObj).find(".mapall").click(function() { // static button press maybe
+                console.log("Map them! button clicked");
+                // TODO: show google map with all restaurants and their info
+                
             });
             // TODO: dynamically append all restaurants
             restaListModel.addViewUpdater(this.updateView); // register view updater
