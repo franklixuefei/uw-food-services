@@ -1279,26 +1279,34 @@ function g023(userid, htmlId) {
         _pageObj: null,
         
         updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
-
+            
             if (msg === "error") {
                 
             } else {
                 // create resta list using restaModel._outlets
+                var map = '';
+                var marker = '';
+                var infowindow = '';
+                var dest = '';
+                var mapOptions = '';
                 console.log("restaMapModel Data");
                 console.log(restaMapModel.getData());
                 
                 var latitude = restaMapModel.getData().currentRestaInfo.latitude;
                 var longitude = restaMapModel.getData().currentRestaInfo.longitude;
-                var dest = new google.maps.LatLng(latitude, longitude);
+                console.log("lat and long");
+                console.log(latitude);
+                console.log(longitude);
+                dest = new google.maps.LatLng(latitude, longitude);
                 // init google map
-                var mapOptions = {
+                mapOptions = {
                     zoom: 18,
                     center: dest
                 };
-
-                var map = new google.maps.Map(document.getElementById('g023_mapCanvas'), mapOptions);
-
-                var marker = new google.maps.Marker({
+                $('#g023_mapCanvas').css('height', 460).css('width', 876);
+                map = new google.maps.Map(document.getElementById('g023_mapCanvas'), mapOptions);
+                
+                marker = new google.maps.Marker({
                     map:map,
                     position: dest,
                     title: restaMapModel.getData().currentRestaInfo.outlet_name
@@ -1313,14 +1321,18 @@ function g023(userid, htmlId) {
                     '</div>'+
                     '</div>';
 
-                var infowindow = new google.maps.InfoWindow({
+                infowindow = new google.maps.InfoWindow({
                     content: contentString
                 });
 
                 google.maps.event.addListener(marker, 'click', function() {
                     infowindow.open(map,marker);
                 });
-
+//                google.maps.event.trigger(map, 'resize');//
+                setTimeout(function() {
+                    google.maps.event.trigger(map, 'resize');
+                    map.setCenter(dest);
+                });
             }
             
         },
