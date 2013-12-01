@@ -768,17 +768,7 @@ max-width: 100%;
 font-size: .9em;
 }
 
-div.uw_food_services-nutrition, div.uw_food_services-nutrition table, div.uw_food_services-nutrition table * {
-text-align: left;
-font-style: normal;
-border: none;
-margin: 0;
-padding: 0;
-/*background-color: #FFF;*/
-border-color: #000;
-border-style: solid;
-border-width: 0;
-}
+
 
 div.uw_food_services-nutrition table td, div.uw_food_services-nutrition table thead th:last-child {
     text-align: right;
@@ -808,8 +798,6 @@ div.uw_food_services-nutrition h3,
 div.uw_food_services-nutrition table, 
 div.uw_food_services-nutrition th, 
 div.uw_food_services-nutrition td {
-margin: 0;
-padding: 0;
 font-size: 1em;
 line-height: inherit;
 font-weight: inherit;
@@ -818,27 +806,20 @@ border: none;
 
 
 div.uw_food_services-nutrition h2 {
-    /*border-bottom: 1px solid #FECB00;*/
     color: #111111;
     font-size: 1.3em;
-    margin-bottom: 0.8em;
-    padding-bottom: 1px;
     line-height: 1.2em;
     font-weight: bold;
 }
 
 
 div.uw_food_services-nutrition th, td {
-    /*border: 1px solid #DDDDDD;*/
     padding: 0.5em;
     vertical-align: top;
 }
 
-div.uw_food_services-nutrition th {
-    /*background-color: #EEEEEE;*/
-    font-style: italic;
-    text-align: left;
-}
+
+
 
 
 div.uw_food_services-nutrition table tbody:first-of-type {
@@ -848,9 +829,6 @@ div.uw_food_services-nutrition table tbody {
     border-top-width: 0.4em;
 }
 
-tbody {
-    border-top: 1px solid #CCCCCC;
-}
 
 div.uw_food_services-nutrition table tbody tr {
     border-bottom-width: 0.1em;
@@ -866,6 +844,18 @@ div.uw_food_services-nutrition table tbody tr:last-child {
 
 tbody.nutrients span {
 font-weight: bold;
+}
+
+div.uw_food_services-nutrition, div.uw_food_services-nutrition table, div.uw_food_services-nutrition table * {
+text-align: left;
+font-style: normal;
+border: none;
+margin: 0;
+padding: 0;
+/*background-color: #FFF;*/
+border-color: #000;
+border-style: solid;
+border-width: 0;
 }
 
 .g023_prod_details .g023_ingredients_title {
