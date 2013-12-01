@@ -249,6 +249,15 @@ function g023(userid, htmlId) {
             dataObj.restaMenus = this._restaMenus;
             dataObj.restaMenusDateInfo = this._restaMenusDateInfo;
             return dataObj;
+        },
+        
+        clear: function() {
+            console.log("restaListModel clear");
+            this._viewUpdaters = [];
+            this._restaInfoWithMenu = []; 
+            this._restaInfoWithoutMenu = [];
+            this._restaMenus = [];
+            this._restaMenusDateInfo = {};
         }
         
 //        stopRefresh: function() {
@@ -319,6 +328,13 @@ function g023(userid, htmlId) {
             dataObj.currentRestaMenu = this._thisRestaMenu;
             dataObj.currentRestaInfo = this._thisRestaInfo;
             return dataObj;
+        },
+        
+        clear: function() {
+            console.log("restaOfferingsModel clear");
+            this._viewUpdaters = [];
+            this._thisRestaMenu = [];
+            this._thisRestaInfo = {};
         }
 
 
@@ -410,6 +426,12 @@ function g023(userid, htmlId) {
             var dataObj = new Object();
             dataObj.currentProdInfo = this._thisProdInfo;
             return dataObj;
+        },
+        
+        clear: function() {
+            console.log("offeringDetailModel clear");
+            this._viewUpdaters = [];
+            this._thisProdInfo = {};
         }
         
         
@@ -478,6 +500,12 @@ function g023(userid, htmlId) {
             dataObj.currentRestaInfo = this._thisRestaInfo;
 //            dataObj.dest = this._dest;
             return dataObj;
+        },
+        
+        clear: function() {
+            console.log("restaMapModel clear");
+            this._viewUpdaters = [];
+            this._thisRestaInfo = {};
         }
         
         
@@ -571,6 +599,8 @@ function g023(userid, htmlId) {
         
         destroy: function() {
             this._pageWrapper.remove();
+            this._model.clear();
+            this._views = [];
 //            this._model.stopRefresh();
             // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
         }
@@ -608,7 +638,7 @@ function g023(userid, htmlId) {
                     }
                     restaOfferingsModel.initWithRestaInfo(item, thisRestaOfferings);
                     restaOfferingsViewController.addView(restaOfferingsView);
-                    restaOfferingsViewController.initViews(restaListModel, function() {
+                    restaOfferingsViewController.initViews(restaOfferingsModel, function() {
                         navigationController.pushPage(restaOfferingsViewController);
                     }); // construct viewController and init its views
                 } else {
@@ -767,6 +797,8 @@ function g023(userid, htmlId) {
         
         destroy: function() {
             this._pageWrapper.remove();
+            this._model.clear();
+            this._views = [];
             // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
         }
         
@@ -1085,6 +1117,7 @@ function g023(userid, htmlId) {
 //        _timer: null,
         addView: function(view) {
             this._views.push(view);
+            console.log("offeringDetailViewController addView");
         },
         
         initViews: function(model, barrierCallback) { // constructor + initializer
@@ -1125,6 +1158,8 @@ function g023(userid, htmlId) {
         
         destroy: function() {
             this._pageWrapper.remove();
+            this._model.clear();
+            this._views = [];
         }
     }
     
@@ -1233,6 +1268,8 @@ function g023(userid, htmlId) {
         
         destroy: function() {
             this._pageWrapper.remove();
+            this._model.clear();
+            this._views = [];
 //            this._model.stopRefresh();
             // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
         }
