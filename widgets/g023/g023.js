@@ -441,10 +441,12 @@ function g023(userid, htmlId) {
     var restaMapModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _thisRestaInfoArray: [],
+        _zoom: 0,
 //        _dest: null,
 
-        initWithRestaInfo: function(restaInfo) {
+        initWithRestaInfo: function(restaInfo, zoom) {
             this._thisRestaInfoArray.push(restaInfo);
+            this._zoom = zoom;
         },
         
         /**
@@ -498,7 +500,7 @@ function g023(userid, htmlId) {
         getData: function() {
             var dataObj = new Object();
             dataObj.currentRestaInfoArray = this._thisRestaInfoArray;
-//            dataObj.dest = this._dest;
+            dataObj.zoom = this._zoom;
             return dataObj;
         },
         
@@ -734,14 +736,32 @@ function g023(userid, htmlId) {
                 }, 400);
             });
 
-            $(this._pageObj).find(".mapall").click(function() { // static button press maybe
-                console.log("Map them! button clicked");
-                // TODO: show google map with all restaurants and their info
-                
-            });
+            
             // TODO: dynamically append all restaurants
             restaListModel.addViewUpdater(this.updateView); // register view updater
-            restaListModel.loadOutletData(ajaxDoneCallback); // trigger retrieving data and update views
+            restaListModel.loadOutletData(function() {
+                $(that._pageObj).find(".mapall").click(function() { // static button press maybe
+                    console.log("Map them! clicked!");
+                    console.log(restaListModel.getData());
+                    if (!gMapLoaded) {
+                        utils.showAlert(that._pageObj, "Error", "Google API has not been fully loaded. Please try again later.", "OK");
+                        return false;
+                    }
+                    var restaInfoWithMenu = restaListModel.getData().restaInfoWithMenu;
+                    var restaInfoWithoutMenu = restaListModel.getData().restaInfoWithoutMenu;
+                    for (var i = 0; i < restaInfoWithMenu.length; ++i) {
+                        restaMapModel.initWithRestaInfo(restaInfoWithMenu[i], 15);
+                    }
+                    for (var i = 0; i < restaInfoWithoutMenu.length; ++i) {
+                        restaMapModel.initWithRestaInfo(restaInfoWithoutMenu[i], 15);
+                    }
+                    restaMapViewController.addView(restaMapView);
+                    restaMapViewController.initViews(restaMapModel, function() {
+                        navigationController.pushPage(restaMapViewController);
+                    }); // construct viewController and init its views
+                });
+                ajaxDoneCallback();
+            }); // trigger retrieving data and update views
         }
     }
     
@@ -1097,7 +1117,8 @@ function g023(userid, htmlId) {
                         utils.showAlert(that._pageObj, "Error", "Google API has not been fully loaded. Please try again later.", "OK");
                         return false;
                     }
-                    restaMapModel.initWithRestaInfo(restaOfferingsModel.getData().currentRestaInfo);
+                    var currentRestaInfo = restaOfferingsModel.getData().currentRestaInfo;
+                    restaMapModel.initWithRestaInfo(currentRestaInfo,18);
                     restaMapViewController.addView(restaMapView);
                     restaMapViewController.initViews(restaMapModel, function() {
                         navigationController.pushPage(restaMapViewController);
@@ -1289,27 +1310,31 @@ function g023(userid, htmlId) {
                 var destArr = [];
                 var centeredDest = ''
                 var mapOptions = '';
+                var infowindow = null;
                 var iterator = 0;
                 console.log("restaMapModel Data");
                 console.log(restaMapModel.getData());
+                
+                centeredDest = new google.maps.LatLng(43.471324, -80.545186);
+                console.log("centered dest");
+                console.log(centeredDest);
                 
                 var currentRestaInfoArray = restaMapModel.getData().currentRestaInfoArray;
                 
                 for (var i = 0; i < currentRestaInfoArray.length; ++i) {
                     var latitude = currentRestaInfoArray[i].latitude;
                     var longitude = currentRestaInfoArray[i].longitude;
-                    console.log("lat and long");
+                    console.log("lat and long of " + currentRestaInfoArray[i].outlet_name);
                     console.log(latitude);
                     console.log(longitude);
-                    centeredDest = new google.maps.LatLng(latitude, longitude);
-                    destArr.push(centeredDest);
+                    var dest = new google.maps.LatLng(latitude, longitude);
+                    destArr.push(dest);
                 }
-                console.log("centered dest");
-                console.log(centeredDest);
+                
                 // init google map
                 
                 mapOptions = {
-                    zoom: 18,
+                    zoom: restaMapModel.getData().zoom,
                     center: centeredDest
                 };
                 
@@ -1342,12 +1367,14 @@ function g023(userid, htmlId) {
                                         '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + currentRestaInfoArray[iterator].description + '</p>'
                                         '</div>'+
                                         '</div>';
-
-                    var infowindow = new google.maps.InfoWindow({
-                        content: contentString
-                    });
-                    
                     google.maps.event.addListener(marker, 'click', function() {
+                        if (infowindow) {
+                            infowindow.close();
+                            infowindow = null;
+                        }
+                        infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
                         infowindow.open(map,marker);
                     });
                     iterator++;
@@ -1356,6 +1383,12 @@ function g023(userid, htmlId) {
                 setTimeout(function() {
                     google.maps.event.trigger(map, 'resize');
                     map.setCenter(centeredDest);
+                });
+                google.maps.event.addListener(map, 'click', function() {
+                    if (infowindow) {
+                        infowindow.close();
+                        infowindow = null;
+                    }
                 });
             }
             
