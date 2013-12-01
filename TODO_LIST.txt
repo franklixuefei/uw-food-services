@@ -18,6 +18,8 @@ for "more restaurants", when clicked, show their info (e.g., has_breakfast/lunch
 
 abstract data passed into ajax calls to a global scope
 
+add a loader for ajax
+
 ************************************** Notice *******************************************
 in updateView(), don't use "this", because this function pointer is passed into an array and will be executed by another function
 fix problem of disappearing images for firefox after reloading

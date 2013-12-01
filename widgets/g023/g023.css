@@ -818,7 +818,7 @@ border: none;
 
 
 div.uw_food_services-nutrition h2 {
-    border-bottom: 1px solid #FECB00;
+    /*border-bottom: 1px solid #FECB00;*/
     color: #111111;
     font-size: 1.3em;
     margin-bottom: 0.8em;
@@ -829,7 +829,7 @@ div.uw_food_services-nutrition h2 {
 
 
 div.uw_food_services-nutrition th, td {
-    border: 1px solid #DDDDDD;
+    /*border: 1px solid #DDDDDD;*/
     padding: 0.5em;
     vertical-align: top;
 }
