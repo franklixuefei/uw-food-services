@@ -742,26 +742,26 @@ padding: 0.2em;
 margin: 1em 0;
 }
 
-#content table {
+div.uw_food_services-nutrition #content table {
 max-width: 750px;
 }
 
 
 
-table {
+div.uw_food_services-nutrition table {
 display: table;
 border-collapse: separate;
 border-spacing: 2px;
 border-color: gray;
 }
 
-table {
+div.uw_food_services-nutrition table {
 border-collapse: collapse;
 }
 
 
 
-table {
+div.uw_food_services-nutrition table {
 margin: 1em 0;
 min-width: 100%;
 max-width: 100%;
@@ -794,14 +794,20 @@ div.uw_food_services-nutrition table th, div.uw_food_services-nutrition table td
 }
 
 
-th {
+div.uw_food_services-nutrition th {
     border-bottom: 3px solid #CCCCCC;
     padding-right: 1em;
     text-align: left;
 }
 
 
-p, h1, h2, h3, h4, h5, h6, table, th, td {
+div.uw_food_services-nutrition p, 
+div.uw_food_services-nutrition h1, 
+div.uw_food_services-nutrition h2, 
+div.uw_food_services-nutrition h3, 
+div.uw_food_services-nutrition table, 
+div.uw_food_services-nutrition th, 
+div.uw_food_services-nutrition td {
 margin: 0;
 padding: 0;
 font-size: 1em;
@@ -811,7 +817,7 @@ border: none;
 }
 
 
-h2 {
+div.uw_food_services-nutrition h2 {
     border-bottom: 1px solid #FECB00;
     color: #111111;
     font-size: 1.3em;
@@ -822,13 +828,13 @@ h2 {
 }
 
 
-th, td {
+div.uw_food_services-nutrition th, td {
     border: 1px solid #DDDDDD;
     padding: 0.5em;
     vertical-align: top;
 }
 
-th {
+div.uw_food_services-nutrition th {
     /*background-color: #EEEEEE;*/
     font-style: italic;
     text-align: left;

@@ -1271,8 +1271,8 @@ function g023(userid, htmlId) {
                     '</div>'+
                     '<h3 id="firstHeading" class="firstHeading">'+ restaMapModel.getData().currentRestaInfo.outlet_name +'</h1>'+
                     '<div id="bodyContent">'+
-                    '<img src="'+restaMapModel.getData().currentRestaInfo.logo+'" style="display:inline-block;"/>'+
-                    '<p style="display: inline-block; margin-left: 30px; max-width: 444px;">' + restaMapModel.getData().currentRestaInfo.description + '</p>'
+                    '<img src="'+restaMapModel.getData().currentRestaInfo.logo+'" style="display:inline-block; float:left;"/>'+
+                    '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + restaMapModel.getData().currentRestaInfo.description + '</p>'
                     '</div>'+
                     '</div>';
 
