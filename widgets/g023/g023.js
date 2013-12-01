@@ -440,11 +440,11 @@ function g023(userid, htmlId) {
     
     var restaMapModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
-        _thisRestaInfo: {},
+        _thisRestaInfoArray: [],
 //        _dest: null,
 
         initWithRestaInfo: function(restaInfo) {
-            this._thisRestaInfo = restaInfo;
+            this._thisRestaInfoArray.push(restaInfo);
         },
         
         /**
@@ -468,8 +468,8 @@ function g023(userid, htmlId) {
             
             // TODO: combine _thisRestaMenu with outlets
             
-            console.log("currentRestaInfo:");
-            console.log(this._thisRestaInfo);
+            console.log("currentRestaInfoArray:");
+            console.log(this._thisRestaInfoArray);
 //            this._dest = new google.maps.LatLng(this._thisRestaInfo.latitude, this._thisRestaInfo.longitude);
             that.updateViews("");//success
             if (callback) callback();
@@ -497,7 +497,7 @@ function g023(userid, htmlId) {
         
         getData: function() {
             var dataObj = new Object();
-            dataObj.currentRestaInfo = this._thisRestaInfo;
+            dataObj.currentRestaInfoArray = this._thisRestaInfoArray;
 //            dataObj.dest = this._dest;
             return dataObj;
         },
@@ -505,7 +505,7 @@ function g023(userid, htmlId) {
         clear: function() {
             console.log("restaMapModel clear");
             this._viewUpdaters = [];
-            this._thisRestaInfo = {};
+            this._thisRestaInfoArray = [];
         }
         
         
@@ -1285,53 +1285,77 @@ function g023(userid, htmlId) {
             } else {
                 // create resta list using restaModel._outlets
                 var map = '';
-                var marker = '';
-                var infowindow = '';
-                var dest = '';
+                var markers = [];
+                var destArr = [];
+                var centeredDest = ''
                 var mapOptions = '';
+                var iterator = 0;
                 console.log("restaMapModel Data");
                 console.log(restaMapModel.getData());
                 
-                var latitude = restaMapModel.getData().currentRestaInfo.latitude;
-                var longitude = restaMapModel.getData().currentRestaInfo.longitude;
-                console.log("lat and long");
-                console.log(latitude);
-                console.log(longitude);
-                dest = new google.maps.LatLng(latitude, longitude);
+                var currentRestaInfoArray = restaMapModel.getData().currentRestaInfoArray;
+                
+                for (var i = 0; i < currentRestaInfoArray.length; ++i) {
+                    var latitude = currentRestaInfoArray[i].latitude;
+                    var longitude = currentRestaInfoArray[i].longitude;
+                    console.log("lat and long");
+                    console.log(latitude);
+                    console.log(longitude);
+                    centeredDest = new google.maps.LatLng(latitude, longitude);
+                    destArr.push(centeredDest);
+                }
+                console.log("centered dest");
+                console.log(centeredDest);
                 // init google map
+                
                 mapOptions = {
                     zoom: 18,
-                    center: dest
+                    center: centeredDest
                 };
+                
                 $('#g023_mapCanvas').css('height', 460).css('width', 876);
                 map = new google.maps.Map(document.getElementById('g023_mapCanvas'), mapOptions);
+                             
                 
-                marker = new google.maps.Marker({
-                    map:map,
-                    position: dest,
-                    title: restaMapModel.getData().currentRestaInfo.outlet_name
-                });
-                var contentString = '<div id="content">'+
-                    '<div id="siteNotice">'+
-                    '</div>'+
-                    '<h3 id="firstHeading" class="firstHeading">'+ restaMapModel.getData().currentRestaInfo.outlet_name +'</h1>'+
-                    '<div id="bodyContent">'+
-                    '<img src="'+restaMapModel.getData().currentRestaInfo.logo+'" style="display:inline-block; float:left;"/>'+
-                    '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + restaMapModel.getData().currentRestaInfo.description + '</p>'
-                    '</div>'+
-                    '</div>';
+                for (var i = 0; i < destArr.length; ++i) {
+                    setTimeout(function() {
+                        addMarker();
+                    }, i * 200);
+                }
+                
 
-                infowindow = new google.maps.InfoWindow({
-                    content: contentString
-                });
+                function addMarker() {
+                    var marker = new google.maps.Marker({
+                        position: destArr[iterator],
+                        map: map,
+                        animation: google.maps.Animation.DROP,
+                        title: currentRestaInfoArray[iterator].outlet_name
+                    });
+                    markers.push(marker);
+                    
+                    var contentString = '<div id="content">'+
+                                        '<div id="siteNotice">'+
+                                        '</div>'+
+                                        '<h3 id="firstHeading" class="firstHeading">'+ currentRestaInfoArray[iterator].outlet_name +'</h1>'+
+                                        '<div id="bodyContent">'+
+                                        '<img src="'+currentRestaInfoArray[iterator].logo+'" style="display:inline-block; float:left;"/>'+
+                                        '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + currentRestaInfoArray[iterator].description + '</p>'
+                                        '</div>'+
+                                        '</div>';
 
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map,marker);
-                });
-//                google.maps.event.trigger(map, 'resize');//
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+                    
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.open(map,marker);
+                    });
+                    iterator++;
+                }
+
                 setTimeout(function() {
                     google.maps.event.trigger(map, 'resize');
-                    map.setCenter(dest);
+                    map.setCenter(centeredDest);
                 });
             }
             
