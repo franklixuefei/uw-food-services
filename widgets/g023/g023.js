@@ -612,6 +612,8 @@ function g023(userid, htmlId) {
 
     var restaListView = { // each view belongs to one model, a model can have many views
         _pageObj: null,
+        _LEFT_ARROW_FLAG: 0x1,
+        _RIGHT_ARROW_FLAG: 0x2,
         _generateRestaItem: function(item, type, i) { // return jQuery Obj
             var rand = (Math.random()*15-7.5);
             var restaItem = $('<div>').attr('class', 'g023_restaItemWrapper note sticky' + (i%6))
@@ -706,6 +708,21 @@ function g023(userid, htmlId) {
             }
             
         },
+        
+        _toggleArrowButton: function(leftArrow, rightArrow, scrollView) {
+//            console.log(scrollView.scrollLeft);
+//            console.log(scrollView.scrollLeftMax);
+            if (scrollView.scrollLeft === 0) { // hide left arrow button
+                if (leftArrow) $(leftArrow).addClass('g023_arrow_disabled');
+            } else {
+                if (leftArrow) $(leftArrow).removeClass('g023_arrow_disabled');
+            }
+            if (scrollView.scrollLeft === scrollView.scrollLeftMax) { // hide left arrow button
+                if (rightArrow) $(rightArrow).addClass('g023_arrow_disabled');
+            } else {
+                if (rightArrow) $(rightArrow).removeClass('g023_arrow_disabled');
+            }
+        },
 
 
         initView: function(pageObj, ajaxDoneCallback) {
@@ -717,34 +734,45 @@ function g023(userid, htmlId) {
             
             $(this._pageObj).append(templates.restaListBaseHtml); // loading the base html into DOM
             
-            // TODO: FIXME: fix scollLeft displacement
-            console.log("1231212312312123");
-            console.log($(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper'));
             var that = this;
-            $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
-//                alert("working");
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+            var scrollView1 = $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper');
+            var scrollView2 = $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower');
+            var upperLeftArrowButton = $(this._pageObj).find('.g023_left_arrow.g023_upper_row');
+            var upperRightArrowButton = $(this._pageObj).find('.g023_right_arrow.g023_upper_row');
+            var lowerLeftArrowButton = $(this._pageObj).find('.g023_left_arrow.g023_lower_row');
+            var lowerRightArrowButton = $(this._pageObj).find('.g023_right_arrow.g023_lower_row');
+            
+            
+            upperLeftArrowButton.bind('click', function() {
+                scrollView1.animate({
                     scrollLeft: "-=166px"
-                }, 400); 
+                }, 400, function() {
+                    that._toggleArrowButton(upperLeftArrowButton, upperRightArrowButton, scrollView1[0]);
+                }); 
             });
             
-            $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
-//                alert("working");
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+            upperRightArrowButton.bind('click', function() {
+                scrollView1.animate({
                     scrollLeft: "+=166px"
-                }, 400);
+                }, 400, function() {
+                    that._toggleArrowButton(upperLeftArrowButton, upperRightArrowButton, scrollView1[0]);
+                });
             });
 
-            $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            lowerLeftArrowButton.bind('click', function() {
+                scrollView2.animate({
                     scrollLeft: "-=166px"
-                }, 400);
+                }, 400, function() {
+                    that._toggleArrowButton(lowerLeftArrowButton, lowerRightArrowButton, scrollView2[0]);
+                });
             });
             
-            $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            lowerRightArrowButton.bind('click', function() {
+                scrollView2.animate({
                     scrollLeft: "+=166px"
-                }, 400);
+                }, 400, function() {
+                    that._toggleArrowButton(lowerLeftArrowButton, lowerRightArrowButton, scrollView2[0]);
+                });
             });
 
             
@@ -1012,6 +1040,21 @@ function g023(userid, htmlId) {
             }
             
         },
+        
+        _toggleArrowButton: function(leftArrow, rightArrow, scrollView) {
+//            console.log(scrollView.scrollLeft);
+//            console.log(scrollView.scrollLeftMax);
+            if (scrollView.scrollLeft === 0) { // hide left arrow button
+                if (leftArrow) $(leftArrow).addClass('g023_arrow_disabled');
+            } else {
+                if (leftArrow) $(leftArrow).removeClass('g023_arrow_disabled');
+            }
+            if (scrollView.scrollLeft === scrollView.scrollLeftMax) { // hide left arrow button
+                if (rightArrow) $(rightArrow).addClass('g023_arrow_disabled');
+            } else {
+                if (rightArrow) $(rightArrow).removeClass('g023_arrow_disabled');
+            }
+        },
 
 
         initView: function(pageObj, ajaxDoneCallback) {
@@ -1026,30 +1069,44 @@ function g023(userid, htmlId) {
             // FIXME: fix scrollLeft displacement
             
             var that = this;
+            var scrollView1 = $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper');
+            var scrollView2 = $(this._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower');
+            var upperLeftArrowButton = $(this._pageObj).find('.g023_left_arrow.g023_upper_row');
+            var upperRightArrowButton = $(this._pageObj).find('.g023_right_arrow.g023_upper_row');
+            var lowerLeftArrowButton = $(this._pageObj).find('.g023_left_arrow.g023_lower_row');
+            var lowerRightArrowButton = $(this._pageObj).find('.g023_right_arrow.g023_lower_row');
             
-            $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
+            upperLeftArrowButton.bind('click', function() {
                 
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+                scrollView1.animate({
                     scrollLeft: "-=180px"
-                }, 400); 
+                }, 400, function() {
+                    that._toggleArrowButton(upperLeftArrowButton, upperRightArrowButton, scrollView1[0]);
+                }); 
             });
             
-            $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
+            upperRightArrowButton.bind('click', function() {
+                scrollView1.animate({
                     scrollLeft: "+=180px"
-                }, 400);
+                }, 400, function() {
+                    that._toggleArrowButton(upperLeftArrowButton, upperRightArrowButton, scrollView1[0]);
+                });
             });
 
-            $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            lowerLeftArrowButton.bind('click', function() {
+                scrollView2.animate({
                     scrollLeft: "-=180px"
-                }, 400);
+                }, 400, function() {
+                    that._toggleArrowButton(lowerLeftArrowButton, lowerRightArrowButton, scrollView2[0]);
+                });
             });
             
-            $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
-                $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
+            lowerRightArrowButton.bind('click', function() {
+                scrollView2.animate({
                     scrollLeft: "+=180px"
-                }, 400);
+                }, 400, function() {
+                    that._toggleArrowButton(lowerLeftArrowButton, lowerRightArrowButton, scrollView2[0]);
+                });
             });
                 /*
   		 * Set the controller for the "Go" button.

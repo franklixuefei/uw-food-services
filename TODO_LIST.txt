@@ -1,7 +1,5 @@
 ************************************** TODO & FIXME *******************************************
 
-disable arrow button when reaching end.
-
 indicate is_open_now for each restaurant at homepage and menu page [location API] 
 
 if is_closed is true for a restaurant, just show "today closed" at homepage hours, and hide is_open_now at homepage. [location API]
@@ -34,6 +32,7 @@ when popping a page, also clear up its model content, view content and viewContr
 mapThem page -- done
 for "more restaurants", when clicked, show their info (e.g., has_breakfast/lunch/dinner) in google map info window -- done
 fix homepage arrow button stepsize -- done
+disable arrow button when reaching end. -- done
 ************************************** TO SHOW **************************************
 
 vacation view

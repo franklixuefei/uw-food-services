@@ -465,6 +465,12 @@ div.g023_arrow {
     -webkit-transition: all 0.4s ease-in-out;
     -moz-transition: all 0.4s ease-in-out;
     -o-transition: all 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+div.g023_arrow_disabled {
+    opacity: 0.2 !important;
+    cursor: default;
 }
 
 #g023_restaListWrapper div.g023_arrow.g023_upper_row, #g023_restaListWrapper div.g023_arrow.g023_lower_row {
@@ -481,7 +487,6 @@ div.g023_arrow:hover {
     -moz-opacity: 0.8;
     -khtml-opacity: 0.8;
     opacity: 0.8;
-    cursor: pointer;
 }
 
 div.g023_arrow.g023_left_arrow {
