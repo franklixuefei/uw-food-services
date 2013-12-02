@@ -4,7 +4,7 @@ function g023(userid, htmlId) {
     var templates = {};
     var curPage = null; // points to current page (model type)
     var gMapLoaded = false;
-    
+    var pageShown = false;
     window.g023_gMapInitialize = function() {
         gMapLoaded = true;
     }
@@ -37,6 +37,7 @@ function g023(userid, htmlId) {
             alertHtml.find('.g023_alert_content').text(content);
             alertHtml.find('button').text(buttonText)
                 .bind('click', function() {
+                    if (!pageShown) return;
                     alertHtml.fadeOut(300, function() {
                         $(this).remove();
                     });
@@ -521,9 +522,12 @@ function g023(userid, htmlId) {
          *
          **/
         pushPage: function(page) { // fadein at top
+            pageShown = false;
             if (curPage) curPage.fadeOutPage();
             page.fadeInPage(function() {
+                console.log('page pushed in');
                 curPage = page;
+                pageShown = true;
             }); 
             this._pageStack.push(page);
             if (this._pageStack.length > 1) {
@@ -533,12 +537,15 @@ function g023(userid, htmlId) {
             }
         },
         popPage: function() { // fadeout and remove top
+            pageShown = false;
             if (this._pageStack.length === 1) return false; // pop failed
             var poppedPage = this._pageStack.pop();
             curPage = this._pageStack[this._pageStack.length-1];
             curPage.fadeInPage();
             poppedPage.fadeOutPage(function() {
                 poppedPage.destroy();
+                pageShown = true;
+                console.log('page popped out');
             });
             if (this._pageStack.length > 1) {
                 $('#g023').find('.back').fadeIn(400);
@@ -625,12 +632,14 @@ function g023(userid, htmlId) {
                                 .append($('<img>').attr('src', item.logo)
                             )
                             .append($("<div>").attr('class', 'g023_restaDetail')
-                                .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + item.opening_hours[utils.getWeekdayString()].opening_hour 
-                                    + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour + "</span>"))
+                                .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + (item.opening_hours[utils.getWeekdayString()].is_closed === false ? 
+                                    (item.opening_hours[utils.getWeekdayString()].opening_hour + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour) 
+                                    : "<span style='margin-top: 2px; color:red;display:inline-block;font-size:16px;'>CLOSED TODAY</span>") + "</span>"))
                             )
                         );   
                 
             restaItem.bind('click', function() {
+                if (!pageShown) return;
                 if (type === "menu") {
                     var restaMenus = restaListModel.getData().restaMenus;
                     var thisRestaOfferings = {};
@@ -665,6 +674,7 @@ function g023(userid, htmlId) {
         },
         
         _generateRestaList: function() {
+            $(this._pageObj).find('.g023_sectionContent').children().remove();
             var restaInfoWithMenu = restaListModel.getData().restaInfoWithMenu;
             for (var i = 0; i < restaInfoWithMenu.length; ++i) {
                 var resta = this._generateRestaItem(restaInfoWithMenu[i], "menu", i);
@@ -744,6 +754,7 @@ function g023(userid, htmlId) {
             
             
             upperLeftArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView1.animate({
                     scrollLeft: "-=166px"
                 }, 400, function() {
@@ -752,6 +763,7 @@ function g023(userid, htmlId) {
             });
             
             upperRightArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView1.animate({
                     scrollLeft: "+=166px"
                 }, 400, function() {
@@ -760,6 +772,7 @@ function g023(userid, htmlId) {
             });
 
             lowerLeftArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView2.animate({
                     scrollLeft: "-=166px"
                 }, 400, function() {
@@ -768,6 +781,7 @@ function g023(userid, htmlId) {
             });
             
             lowerRightArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView2.animate({
                     scrollLeft: "+=166px"
                 }, 400, function() {
@@ -780,6 +794,7 @@ function g023(userid, htmlId) {
             restaListModel.addViewUpdater(this.updateView); // register view updater
             restaListModel.loadOutletData(function() {
                 $(that._pageObj).find(".mapall").click(function() { // static button press maybe
+                    if (!pageShown) return;
                     console.log("Map them! clicked!");
                     console.log(restaListModel.getData());
                     if (!gMapLoaded) {
@@ -904,6 +919,7 @@ function g023(userid, htmlId) {
                                 );
             }
             offeringItem.bind('click', function() {
+                if (!pageShown) return;
                 console.log('product clicked:');
                 console.log(item);
                 if (item.product_id) {
@@ -920,7 +936,7 @@ function g023(userid, htmlId) {
         },
         
         _generateOfferingList: function() {
-            
+            this._clearMenu();
             console.log("selectedDay: " + this._selectedDay);
             console.log("menuOfDay: ");
             console.log(this._menuOfDay);
@@ -1077,7 +1093,7 @@ function g023(userid, htmlId) {
             var lowerRightArrowButton = $(this._pageObj).find('.g023_right_arrow.g023_lower_row');
             
             upperLeftArrowButton.bind('click', function() {
-                
+                if (!pageShown) return;
                 scrollView1.animate({
                     scrollLeft: "-=180px"
                 }, 400, function() {
@@ -1086,6 +1102,7 @@ function g023(userid, htmlId) {
             });
             
             upperRightArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView1.animate({
                     scrollLeft: "+=180px"
                 }, 400, function() {
@@ -1094,6 +1111,7 @@ function g023(userid, htmlId) {
             });
 
             lowerLeftArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView2.animate({
                     scrollLeft: "-=180px"
                 }, 400, function() {
@@ -1102,6 +1120,7 @@ function g023(userid, htmlId) {
             });
             
             lowerRightArrowButton.bind('click', function() {
+                if (!pageShown) return;
                 scrollView2.animate({
                     scrollLeft: "+=180px"
                 }, 400, function() {
@@ -1114,13 +1133,16 @@ function g023(userid, htmlId) {
   		 * then tell the model to get the corresponding course.
   		 */
             $(this._pageObj).find(".g023_selector_arrows#right").click(function() { // static button press maybe
+                if (!pageShown) return;
                 that._handleDayChange(true);
             });
             $(this._pageObj).find(".g023_selector_arrows#left").click(function() { // static button press maybe
+                if (!pageShown) return;
                 that._handleDayChange(false);
             });
             
             $(this._pageObj).find(".g023_info_handle").click(function() {
+                if (!pageShown) return;
                 if (!that.toggle) {
                     $(that._pageObj).find('.g023_info_wrapper').css('top', 25);
                 } else {
@@ -1129,6 +1151,7 @@ function g023(userid, htmlId) {
                 that.toggle = !that.toggle;
             });
             $(this._pageObj).click(function(e) {
+                if (!pageShown) return;
                 if (that.toggle) {
                     if (e.target.className.indexOf("g023_desc") === -1 && e.target.className.indexOf("g023_notes") === -1 && e.target.className.indexOf("g023_notice") === -1 && e.target.className.indexOf("g023_special_hours") === -1 && e.target.className.indexOf("g023_dates_closed") === -1 && e.target.className.indexOf("g023_info_handle") === -1) {
                         $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+that.height));
@@ -1180,6 +1203,7 @@ function g023(userid, htmlId) {
                 });
                 
                 $(that._pageObj).find("#mapit").click(function() {
+                    if (!pageShown) return;
                     console.log("Map It! clicked!");
                     if (!gMapLoaded) {
                         utils.showAlert(that._pageObj, "Error", "Google API has not been fully loaded. Please try again later.", "OK");
@@ -1299,7 +1323,7 @@ function g023(userid, htmlId) {
             var that = this;
             
             $(this._pageObj).find("#someButton").click(function() { // static button press maybe
-                
+                if (!pageShown) return;
             });
             // TODO: dynamically append all restaurants
             offeringDetailModel.addViewUpdater(this.updateView); // register view updater
@@ -1486,12 +1510,7 @@ function g023(userid, htmlId) {
   		 * then tell the model to get the corresponding course.
   		 */
             $(this._pageObj).find("#someButton").click(function() { // static button press maybe
-//                var subject = $("#subject").val();
-//                var catalog = $("#catalog").val();
-//                console.log("Go clicked: " + subject + " " + catalog);
-////                restaListModel.loadCourseData(subject.toLowerCase(), catalog);
-//                $(pageObj).find("#subject").val("");
-//                $(pageObj).find("#catalog").val("");
+                if (!pageShown) return;
             });
             // TODO: dynamically append all restaurants
             restaMapModel.addViewUpdater(this.updateView); // register view updater
@@ -1505,6 +1524,7 @@ function g023(userid, htmlId) {
             templates = t;
             myDiv.append(templates.foodServicesHeaderHtml);
             $('#g023').find('.back').bind('click', function() {
+                if (!pageShown) return;
                 navigationController.popPage();
             });
             restaListViewController.addView(restaListView);
