@@ -645,6 +645,17 @@ function g023(userid, htmlId) {
                     }); // construct viewController and init its views
                 } else {
                     // TODO: define behaviour here
+                    console.log("I do not have menu!!");
+                    console.log(item);
+                    if (!gMapLoaded) {
+                        utils.showAlert(this._pageObj, "Error", "Google API has not been fully loaded. Please try again later.", "OK");
+                        return false;
+                    }
+                    restaMapModel.initWithRestaInfo(item,18);
+                    restaMapViewController.addView(restaMapView);
+                    restaMapViewController.initViews(restaMapModel, function() {
+                        navigationController.pushPage(restaMapViewController);
+                    }); // construct viewController and init its views
                 } 
             });
                 
@@ -713,26 +724,26 @@ function g023(userid, htmlId) {
             $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
 //                alert("working");
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
-                    scrollLeft: "-=208px"
+                    scrollLeft: "-=166px"
                 }, 400); 
             });
             
             $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
 //                alert("working");
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
-                    scrollLeft: "+=208px"
+                    scrollLeft: "+=166px"
                 }, 400);
             });
 
             $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
-                    scrollLeft: "-=208px"
+                    scrollLeft: "-=166px"
                 }, 400);
             });
             
             $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
-                    scrollLeft: "+=208px"
+                    scrollLeft: "+=166px"
                 }, 400);
             });
 
@@ -1019,25 +1030,25 @@ function g023(userid, htmlId) {
             $(this._pageObj).find('.g023_left_arrow.g023_upper_row').bind('click', function() {
                 
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
-                    scrollLeft: "-=208px"
+                    scrollLeft: "-=180px"
                 }, 400); 
             });
             
             $(this._pageObj).find('.g023_right_arrow.g023_upper_row').bind('click', function() {
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_upper').stop().animate({
-                    scrollLeft: "+=208px"
+                    scrollLeft: "+=180px"
                 }, 400);
             });
 
             $(this._pageObj).find('.g023_left_arrow.g023_lower_row').bind('click', function() {
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
-                    scrollLeft: "-=208px"
+                    scrollLeft: "-=180px"
                 }, 400);
             });
             
             $(this._pageObj).find('.g023_right_arrow.g023_lower_row').bind('click', function() {
                 $(that._pageObj).find('.g023_overflow_wrapper.g023_overflow_lower').stop().animate({
-                    scrollLeft: "+=208px"
+                    scrollLeft: "+=180px"
                 }, 400);
             });
                 /*
@@ -1315,9 +1326,8 @@ function g023(userid, htmlId) {
                 console.log("restaMapModel Data");
                 console.log(restaMapModel.getData());
                 
-                centeredDest = new google.maps.LatLng(43.471324, -80.545186);
-                console.log("centered dest");
-                console.log(centeredDest);
+//                centeredDest = new google.maps.LatLng(43.471324, -80.545186);
+                
                 
                 var currentRestaInfoArray = restaMapModel.getData().currentRestaInfoArray;
                 
@@ -1329,8 +1339,12 @@ function g023(userid, htmlId) {
                     console.log(longitude);
                     var dest = new google.maps.LatLng(latitude, longitude);
                     destArr.push(dest);
+                    if (i == Math.floor(currentRestaInfoArray.length/2)) {
+                        centeredDest = dest;
+                    }
                 }
-                
+                console.log("centered dest");
+                console.log(centeredDest);
                 // init google map
                 
                 mapOptions = {
@@ -1350,6 +1364,9 @@ function g023(userid, htmlId) {
                 
 
                 function addMarker() {
+                    
+                    console.log("destarr");
+                    console.log(destArr[iterator]);
                     var marker = new google.maps.Marker({
                         position: destArr[iterator],
                         map: map,
@@ -1364,7 +1381,7 @@ function g023(userid, htmlId) {
                                         '<h3 id="firstHeading" class="firstHeading">'+ currentRestaInfoArray[iterator].outlet_name +'</h1>'+
                                         '<div id="bodyContent">'+
                                         '<img src="'+currentRestaInfoArray[iterator].logo+'" style="display:inline-block; float:left;"/>'+
-                                        '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + currentRestaInfoArray[iterator].description + '</p>'
+                                        '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + (currentRestaInfoArray[iterator].description?currentRestaInfoArray[iterator].description:'') + '</p>'
                                         '</div>'+
                                         '</div>';
                     google.maps.event.addListener(marker, 'click', function() {
