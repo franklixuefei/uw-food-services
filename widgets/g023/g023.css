@@ -5,7 +5,6 @@
     src: local('The Girl Next Door'), local('TheGirlNextDoor'), url(https://themes.googleusercontent.com/static/fonts/thegirlnextdoor/v4/cWRA4JVGeEcHGcPl5hmX7p-yoK3Kl6E6RmvAncM23y8.woff) format('woff');
 }
 
-/*@import url(http://fonts.googleapis.com/css?family=Dancing+Script:400,700);*/
 
 div#g023 {
     font-family: 'The Girl Next Door', cursive;
@@ -41,7 +40,7 @@ div.g023_header img {
     margin-top: 2px;
 }
 
-div.g023_header div.back {
+div.g023_header div.g023_back {
     font-size: 16px;
     height: 26px;
     left: 50%;
@@ -55,14 +54,14 @@ div.g023_header div.back {
     display:none;
     z-index: 4;
 }
-div.g023_header div.back:hover {
+div.g023_header div.g023_back:hover {
     cursor: pointer;
     -webkit-transform: scale(1.1) !important;
     -moz-transform: scale(1.1) !important;
     transform: scale(1.1) !important;
 }
 
-div.back > * {
+div.g023_back > * {
     display: inline-block;
 }
 
@@ -71,24 +70,17 @@ div.g023_restaItemWrapper, div.g023_offeringItemWrapper {
     text-align: center;
 }
 
-div.g023_restaItemWrapper div.pin, div.g023_offeringItemWrapper div.pin {
+div.g023_restaItemWrapper div.g023_pin, div.g023_offeringItemWrapper div.g023_pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 50%, black 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, black);
     background-image: radial-gradient(yellow 50%, black 100%);
 }
 
-.stickyMap {
-/*    transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(-1.2deg);*/
-}
-
-.stickyVF {
+.g023_stickyVF {
     background-color: #ADD8E6;
 }
 
-div.widget_page {
+div.g023_widget_page {
     display: none;
     height: 100%;
     position: absolute;
@@ -110,7 +102,7 @@ div.widget_page {
 }
 
 #g023_restaMapContent.g023_content {
-    
+
 }
 
 #g023_restaProdContent.g023_content {
@@ -135,7 +127,6 @@ div.widget_page {
 #g023_restaProdContent.g023_content .g023_ingredients {
     display: inline-block;
     margin-left: 56px;
-    /*margin-top: -12px;*/
 }
 
 .g023_ingredients > div {
@@ -173,20 +164,20 @@ div.g023_offering span {
     line-height: 0px;
 }
 
-div.g023_offering span.no_meal {
+div.g023_offering span.g023_no_meal {
     color: gray;
 }
 
-div.g023_offering span.meal_no_detail {
+div.g023_offering span.g023_meal_no_detail {
     color: green;
 }
 
-div.g023_offering span.normal {
+div.g023_offering span.g023_normal {
     color: black;
     font-size: 16px;
 }
 
-#g023_restaListWrapper div.g023_restaItemWrapper.note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper.note {
+#g023_restaListWrapper div.g023_restaItemWrapper.g023_note, #g023_restaOfferingsWrapper div.g023_offeringItemWrapper.g023_note {
     -transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out; 
     -webkit-transition: all .2s ease-in-out; 
@@ -197,9 +188,9 @@ div.g023_offering span.normal {
     min-width: 110px;
 }
 
-#g023_restaListWrapper div.g023_restaItemWrapper:hover.note, 
-#g023_restaOfferingsWrapper div.g023_offeringItemWrapper:hover.note,
-#g023_restaProdWrapper div.g023_prod_details:hover.note{
+#g023_restaListWrapper div.g023_restaItemWrapper:hover.g023_note, 
+#g023_restaOfferingsWrapper div.g023_offeringItemWrapper:hover.g023_note,
+#g023_restaProdWrapper div.g023_prod_details:hover.g023_note{
     -webkit-transform: scale(1.1) !important;
     -moz-transform: scale(1.1) !important;
     transform: scale(1.1) !important;
@@ -249,7 +240,7 @@ div.g023_offering span.normal {
     margin-top: 4px;
 }
 
-.note {
+.g023_note {
     box-shadow: 0 3px 6px rgba(0,0,0,.25);
     -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.25);
     -moz-box-shadow: 0 3px 6px rgba(0,0,0,.25);
@@ -265,7 +256,7 @@ div.g023_offering span.normal {
     -moz-transform: rotate(0deg) !important;
 }
 
-.g023_sectionHeaderBacking.note {
+.g023_sectionHeaderBacking.g023_note {
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 3px;
@@ -273,11 +264,11 @@ div.g023_offering span.normal {
     margin: 4px 10px;
 }
 
-.g023_info_content .note {
+.g023_info_content .g023_note {
     margin: 6px 4px !important;
 }
 
-.g023_ingredients .note {
+.g023_ingredients .g023_note {
     margin: 10px 20px;
     -transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out; 
@@ -286,56 +277,56 @@ div.g023_offering span.normal {
 }
 
 
-.stickyGray {
+.g023_stickyGray {
     transform: rotate(-3.5deg);
     -webkit-transform: rotate(-3.5deg);
     -moz-transform: rotate(-3.5deg);
     background-color: #dfdfdf;
 }
 
-.stickyBlue {
+.g023_stickyBlue {
     transform: rotate(-3.5deg);
     -webkit-transform: rotate(-3.5deg);
     -moz-transform: rotate(-3.5deg);
     background-color: #CBFAFA;
 }
 
-.sticky0 {
+.g023_sticky0 {
     transform: rotate(-3.5deg);
     -webkit-transform: rotate(-3.5deg);
     -moz-transform: rotate(-3.5deg);
     background-color: white;
 }
 
-.sticky1 {
+.g023_sticky1 {
     transform: rotate(-3.5deg);
     -webkit-transform: rotate(-3.5deg);
     -moz-transform: rotate(-3.5deg);
     background-color: #CBFAFA;
 }
 
-.sticky2 {
+.g023_sticky2 {
     transform: rotate(1deg);
     -webkit-transform: rotate(1deg);
     -moz-transform: rotate(1deg);
     background-color: #FFF780;
 }
 
-.sticky3 {
+.g023_sticky3 {
     transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
     background-color: #F8CDCD;
 }
 
-.sticky4 {
+.g023_sticky4 {
     transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
     -moz-transform: rotate(-2deg);
     background-color: #F8CDCD;
 }
 
-.sticky5 {
+.g023_sticky5 {
     transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
     -moz-transform: rotate(-2deg);
@@ -343,7 +334,7 @@ div.g023_offering span.normal {
     background-color: #ffffff;
 }
 
-.pin {
+.g023_pin {
     border-radius: 50%;
     width: 20px;
     height: 20px;
@@ -353,7 +344,7 @@ div.g023_offering span.normal {
     margin: 0 auto;
 }
 
-.pin.vf {
+.g023_pin.g023_vf {
     position: absolute;
     left: 50%;
     margin-left: -10px;
@@ -362,75 +353,75 @@ div.g023_offering span.normal {
     background-image: radial-gradient(blue 50%, black 100%);
 }
 
-.pin.left, .pin.right {
+.g023_pin.g023_left, .g023_pin.g023_right {
     width: 14px;
     height: 14px;
     margin-top: 0px;
 }
 
-.pin.left {
+.g023_pin.g023_left {
     margin-left:3px;
     background-image: -moz-radial-gradient(35px 35px 35deg, circle cover, skyBlue 50%, black 100%);
     background-image: -webkit-radial-gradient(35px 35px, circle cover, skyBlue, black);
     background-image: radial-gradient(skyBlue 50%, black 100%);
 }
-.pin.right {
+.g023_pin.g023_right {
     margin-right:3px;
     background-image: -moz-radial-gradient(35px 35px 35deg, circle cover, orange 50%, black 100%);
     background-image: -webkit-radial-gradient(35px 35px, circle cover, orange, black);
     background-image: radial-gradient(orange 50%, black 100%);
 }
 
-div.g023_restaItemWrapper:nth-child(1n) .pin, div.g023_offeringItemWrapper:nth-child(1n) .pin, div.g023_prod_details:nth-child(1) .pin {
+div.g023_restaItemWrapper:nth-child(1n) .g023_pin, div.g023_offeringItemWrapper:nth-child(1n) .g023_pin, div.g023_prod_details:nth-child(1) .g023_pin {
     background-image: -moz-radial-gradient(35px 35px 35deg, circle cover, red 50%, black 100%);
     background-image: -webkit-radial-gradient(35px 35px, circle cover, red, black);
     background-image: radial-gradient(red 50%, black 100%);
 
 }
 
-div.g023_restaItemWrapper:nth-child(6n) .pin, div.g023_offeringItemWrapper:nth-child(6n) .pin, div.g023_prod_details:nth-child(2) .pin {
+div.g023_restaItemWrapper:nth-child(6n) .g023_pin, div.g023_offeringItemWrapper:nth-child(6n) .g023_pin, div.g023_prod_details:nth-child(2) .g023_pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, orange 50%, black 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
     background-image: radial-gradient(orange 50%, black 100%);
 }
 
-div.g023_restaItemWrapper:nth-child(3n) .pin, div.g023_offeringItemWrapper:nth-child(3n) .pin, div.g023_prod_details:nth-child(3) .pin {
+div.g023_restaItemWrapper:nth-child(3n) .g023_pin, div.g023_offeringItemWrapper:nth-child(3n) .g023_pin, div.g023_prod_details:nth-child(3) .g023_pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 50%, black 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, black);
     background-image: radial-gradient(yellow 50%, black 100%);
 }
 
-div.g023_restaItemWrapper:nth-child(5n+3) .pin,
-div.g023_restaItemWrapper:last-child .pin,
-div.g023_offeringItemWrapper:nth-child(5n+3) .pin,
-div.g023_offeringItemWrapper:last-child .pin,
-div.g023_prod_details:nth-child(4) .pin {
+div.g023_restaItemWrapper:nth-child(5n+3) .g023_pin,
+div.g023_restaItemWrapper:last-child .g023_pin,
+div.g023_offeringItemWrapper:nth-child(5n+3) .g023_pin,
+div.g023_offeringItemWrapper:last-child .g023_pin,
+div.g023_prod_details:nth-child(4) .g023_pin {
     background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, blue 50%, white 100%);
     background-image: -webkit-radial-gradient(45px 45px, circle cover, blue, white);
     background-image: radial-gradient(blue 50%, white 100%);
 }
 
-#g023_restaMapContent .pin {
+#g023_restaMapContent .g023_pin {
     background-image: -moz-radial-gradient(35px 35px 35deg, circle cover, red 50%, black 100%);
     background-image: -webkit-radial-gradient(35px 35px, circle cover, red, black);
     background-image: radial-gradient(red 50%, black 100%);
 }
 
-.pin.mapPin_1 {
+.g023_pin.g023_mapPin_1 {
     left: 170px;
     position: absolute;
     top: 55px;
     z-index: 5;
 }
 
-.pin.mapPin_2 {
+.g023_pin.g023_mapPin_2 {
     left: 490px;
     position: absolute;
     top: 55px;
     z-index: 5;
 }
 
-.pin.mapPin_3 {
+.g023_pin.g023_mapPin_3 {
     left: 800px;
     position: absolute;
     top: 55px;
@@ -506,7 +497,7 @@ div.g023_arrow.g023_right_arrow {
 }
 
 .g023_day_selector .g023_selector_arrows {
-    
+
     background-size: 100% 100%;
     height: 51px;
     position: absolute;
@@ -514,12 +505,12 @@ div.g023_arrow.g023_right_arrow {
     width: 101px;
 }
 
-.g023_selector_arrows#left {
+.g023_selector_arrows#g023_left {
     left: 100px;
     background-image: url("day_selector_arrows_backing_left.png");
 }
 
-.g023_selector_arrows#right {
+.g023_selector_arrows#g023_right {
     right :100px;
     background-image: url("day_selector_arrows_backing_right.png");
 }
@@ -582,7 +573,7 @@ div.g023_arrow.g023_right_arrow {
     position: absolute;
 }
 
-.g023_mask.outer {
+.g023_mask.g023_outer {
     height: 523px;
     left: 35px;
     top: 34px;
@@ -747,78 +738,74 @@ div.g023_arrow.g023_right_arrow {
 
 
 
-div.uw_food_services-nutrition {
-width: 20em;
-min-width: 0;
-border-width: 0.1em;
-padding: 0.2em;
-margin: 1em 0;
-}
-
-div.uw_food_services-nutrition #content table {
-max-width: 750px;
+div.g023_uw_food_services-nutrition {
+    width: 20em;
+    min-width: 0;
+    border-width: 0.1em;
+    padding: 0.2em;
+    margin: 1em 0;
 }
 
 
 
-div.uw_food_services-nutrition table {
-display: table;
-border-collapse: separate;
-border-spacing: 2px;
-border-color: gray;
+div.g023_uw_food_services-nutrition table {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: gray;
 }
 
-div.uw_food_services-nutrition table {
-border-collapse: collapse;
-}
-
-
-
-div.uw_food_services-nutrition table {
-margin: 1em 0;
-min-width: 100%;
-max-width: 100%;
-font-size: .9em;
+div.g023_uw_food_services-nutrition table {
+    border-collapse: collapse;
 }
 
 
 
-div.uw_food_services-nutrition table td, div.uw_food_services-nutrition table thead th:last-child {
+div.g023_uw_food_services-nutrition table {
+    margin: 1em 0;
+    min-width: 100%;
+    max-width: 100%;
+    font-size: .9em;
+}
+
+
+
+div.g023_uw_food_services-nutrition table td, div.g023_uw_food_services-nutrition table thead th:last-child {
     text-align: right;
 }
 
-div.uw_food_services-nutrition table td.serving_size {
+div.g023_uw_food_services-nutrition table td.serving_size {
     border-bottom-width: 0.4em;
     text-align: left;
 }
 
-div.uw_food_services-nutrition table th, div.uw_food_services-nutrition table td {
+div.g023_uw_food_services-nutrition table th, div.g023_uw_food_services-nutrition table td {
     padding: 0.2em;
 }
 
 
-div.uw_food_services-nutrition th {
+div.g023_uw_food_services-nutrition th {
     border-bottom: 3px solid #CCCCCC;
     padding-right: 1em;
     text-align: left;
 }
 
 
-div.uw_food_services-nutrition p, 
-div.uw_food_services-nutrition h1, 
-div.uw_food_services-nutrition h2, 
-div.uw_food_services-nutrition h3, 
-div.uw_food_services-nutrition table, 
-div.uw_food_services-nutrition th, 
-div.uw_food_services-nutrition td {
-font-size: 1em;
-line-height: inherit;
-font-weight: inherit;
-border: none;
+div.g023_uw_food_services-nutrition p, 
+div.g023_uw_food_services-nutrition h1, 
+div.g023_uw_food_services-nutrition h2, 
+div.g023_uw_food_services-nutrition h3, 
+div.g023_uw_food_services-nutrition table, 
+div.g023_uw_food_services-nutrition th, 
+div.g023_uw_food_services-nutrition td {
+    font-size: 1em;
+    line-height: inherit;
+    font-weight: inherit;
+    border: none;
 }
 
 
-div.uw_food_services-nutrition h2 {
+div.g023_uw_food_services-nutrition h2 {
     color: #111111;
     font-size: 1.3em;
     line-height: 1.2em;
@@ -826,49 +813,44 @@ div.uw_food_services-nutrition h2 {
 }
 
 
-div.uw_food_services-nutrition th, td {
+div.g023_uw_food_services-nutrition th, td {
     padding: 0.5em;
     vertical-align: top;
 }
 
-
-
-
-
-div.uw_food_services-nutrition table tbody:first-of-type {
+div.g023_uw_food_services-nutrition table tbody:first-of-type {
     border-top-width: 0.2em;
 }
-div.uw_food_services-nutrition table tbody {
+div.g023_uw_food_services-nutrition table tbody {
     border-top-width: 0.4em;
 }
 
 
-div.uw_food_services-nutrition table tbody tr {
+div.g023_uw_food_services-nutrition table tbody tr {
     border-bottom-width: 0.1em;
 }
 
-div.uw_food_services-nutrition table th.sub {
+div.g023_uw_food_services-nutrition table th.g023_sub {
     padding-left: 1em;
 }
 
-div.uw_food_services-nutrition table tbody tr:last-child {
+div.g023_uw_food_services-nutrition table tbody tr:last-child {
     border-bottom-width: 0;
 }
 
-tbody.nutrients span {
-font-weight: bold;
+tbody.g023_nutrients span {
+    font-weight: bold;
 }
 
-div.uw_food_services-nutrition, div.uw_food_services-nutrition table, div.uw_food_services-nutrition table * {
-text-align: left;
-font-style: normal;
-border: none;
-margin: 0;
-padding: 0;
-/*background-color: #FFF;*/
-border-color: #000;
-border-style: solid;
-border-width: 0;
+div.g023_uw_food_services-nutrition, div.g023_uw_food_services-nutrition table, div.g023_uw_food_services-nutrition table * {
+    text-align: left;
+    font-style: normal;
+    border: none;
+    margin: 0;
+    padding: 0;
+    border-color: #000;
+    border-style: solid;
+    border-width: 0;
 }
 
 .g023_prod_details .g023_ingredients_title {

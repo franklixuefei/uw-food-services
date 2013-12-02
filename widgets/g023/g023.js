@@ -25,7 +25,7 @@ function g023(userid, htmlId) {
             weekday[6]="saturday";
             return weekday[d.getDay()]; 
         },
-          
+        
         firstLetterCapitalizer: function(str) {
             if (str.length === 0) return str;
             return str[0].toUpperCase() + str.substr(1);
@@ -39,38 +39,29 @@ function g023(userid, htmlId) {
             alertHtml.find('.g023_alert_header').text(title);
             alertHtml.find('.g023_alert_content').text(content);
             alertHtml.find('button').text(buttonText)
-                .bind('click', function() {
-                    if (!pageShown) return;
-                    alertHtml.fadeOut(300, function() {
-                        $(this).remove();
-                    });
-                    mask.fadeOut(300, function() {
-                        $(this).remove();
-                    });
+            .bind('click', function() {
+                if (!pageShown) return;
+                alertHtml.fadeOut(300, function() {
+                    $(this).remove();
                 });
-            
-        }
-        
+                mask.fadeOut(300, function() {
+                    $(this).remove();
+                });
+            });
+        }        
     }
-
+    
     var restaListModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _restaInfoWithMenu:[], // This object contains a list of all outlets and their operating hour data and basic info
         _restaInfoWithoutMenu:[],
         _restaMenus:[],
         _restaMenusDateInfo:{},
-        /**
-		 * Add a new view to be notified when the model changes.
-		 */
         
         addViewUpdater: function(view) {
             this._viewUpdaters.push(view);
-//            view(""); // also refresh view
         },
-		
-        /**
-		 * Update all of the views that are observing us.
-		 */
+        
         updateViews: function(msg) {
             for(var i=0; i<this._viewUpdaters.length; i++) {
                 this._viewUpdaters[i](msg);
@@ -78,10 +69,10 @@ function g023(userid, htmlId) {
         },
         
         _parseData: function(outletsObj, locationObj, menuObj, callback, that) {
-            $('#g023').find('.g023_mask.outer').remove();
+            $('#g023').find('.g023_mask.g023_outer').remove();
             this._restaMenus = menuObj.outlets;
             this._restaMenusDateInfo = menuObj.date;
-                        
+            
             for (var objLocIndex in locationObj) {
                 var found = false;
                 for (var objMenuIndex in menuObj.outlets) {
@@ -141,7 +132,7 @@ function g023(userid, htmlId) {
             }
             if (callback) callback();
         },
-
+        
         loadOutletData: function(callback) { // call only once!!!!
             
             $('#g023').append(templates.loaderHtml);
@@ -179,7 +170,7 @@ function g023(userid, htmlId) {
                     }
                 }, 
                 error : function(xhr, type){
-                    
+                
                 }
             });
             
@@ -200,16 +191,16 @@ function g023(userid, htmlId) {
                             that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
-//                      _restaInfoWithMenu:[], // This object contains a list of all outlets and their operating hour data and basic info
+                        //                      _restaInfoWithMenu:[], // This object contains a list of all outlets and their operating hour data and basic info
                         that._restaInfoWithoutMenu = [];
                         that._restaMenus = [];
                         that._restaMenusDateInfo = {};
                         that.updateViews("error");
                     }
-                    
+                
                 }, 
                 error : function(xhr, type){
-
+                
                 }
             });
             
@@ -230,20 +221,20 @@ function g023(userid, htmlId) {
                             that._parseData(outletsAjaxSuccessObj, locationAjaxSuccessObj, menuAjaxSuccessObj, callback, that);
                         }
                     } else {
-//                        that._restaInfoWithMenu = [];
-//                        that._restaInfoWithoutMenu = [];
+                        //                        that._restaInfoWithMenu = [];
+                        //                        that._restaInfoWithoutMenu = [];
                         that.updateViews("error");
                     }
-                    
+                
                 }, 
                 error : function(xhr, type){
-
+                
                 }
             });
-            
-//            this._timer = setTimeout(function() { // recursion
-//                restaListModel.loadOutletData();
-//            }, 30*60*1000);
+        
+        //            this._timer = setTimeout(function() { // recursion
+        //                restaListModel.loadOutletData();
+        //            }, 30*60*1000);
         },
         
         getData: function() {
@@ -264,30 +255,30 @@ function g023(userid, htmlId) {
             this._restaMenus = [];
             this._restaMenusDateInfo = {};
         }
-        
-//        stopRefresh: function() {
-//            clearTimeout(this._timer);
-//        }
+    
+    //        stopRefresh: function() {
+    //            clearTimeout(this._timer);
+    //        }
     }
     
     var restaOfferingsModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _thisRestaMenu: [],
         _thisRestaInfo: {},
-
+        
         initWithRestaInfo: function(restaInfo, restaMenu) {
             this._thisRestaInfo = restaInfo;
             this._thisRestaMenu = restaMenu;
         },
-
+        
         /**
 		 * Add a new view to be notified when the model changes.
 		 */        
         addViewUpdater: function(view) {
             this._viewUpdaters.push(view);
-//            view(""); // also refresh view
+        //            view(""); // also refresh view
         },
-		
+        
         /**
 		 * Update all of the views that are observing us.
 		 */
@@ -299,24 +290,22 @@ function g023(userid, htmlId) {
         
         _parseData: function(outlets, callfront, callback, that) {
             
-            // TODO: combine _thisRestaMenu with outlets
-            
             console.log("currentRestaMenu:");
             console.log(this._thisRestaMenu);
             if (callfront) callfront();
             that.updateViews("");//success
             if (callback) callback();
         },
-
+        
         loadOfferingDetailData: function(callfront, callback) { // call only once!!!!
             var that = this;
             
             var counter = 0;
             var MAX_COUNTER = 0;         
-//            var outletsdAjaxSuccessObj = [];
-//                   
+            //            var outletsdAjaxSuccessObj = [];
+            //                   
             // ajax here if any [remember to change MAX_COUNTER accordingly]
-                    
+            
             if (counter === MAX_COUNTER) {
                 counter = 0;
                 that._parseData([], callfront, callback, that);
@@ -336,14 +325,14 @@ function g023(userid, htmlId) {
             this._thisRestaMenu = [];
             this._thisRestaInfo = {};
         }
-
-
+    
+    
     }
     
     var offeringDetailModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _thisProdInfo: {},
-
+        
         initWithProdInfo: function(prodInfo) {
             this._thisProdInfo = prodInfo;
         },
@@ -354,7 +343,7 @@ function g023(userid, htmlId) {
         addViewUpdater: function(view) {
             this._viewUpdaters.push(view);
         },
-		
+        
         /**
 		 * Update all of the views that are observing us.
 		 */
@@ -365,7 +354,7 @@ function g023(userid, htmlId) {
         },
         
         _parseData: function(productObj, callback, that) {
-            $('#g023').find('.g023_mask.outer').remove();
+            $('#g023').find('.g023_mask.g023_outer').remove();
             for (var property in productObj) {
                 if (!productObj[property]) {
                     this._thisProdInfo[property] = 0;
@@ -373,13 +362,13 @@ function g023(userid, htmlId) {
                     this._thisProdInfo[property] = productObj[property];
                 }
             }
-//            this._thisProdInfo = productObj;
+            //            this._thisProdInfo = productObj;
             console.log("currentProdInfo:");
             console.log(this._thisProdInfo);
             that.updateViews("");//success
             if (callback) callback();
         },
-
+        
         loadProdData: function(callback) { // call only once!!!!
             $('#g023').append(templates.loaderHtml);
             var that = this;
@@ -388,8 +377,8 @@ function g023(userid, htmlId) {
             
             var counter = 0;
             var MAX_COUNTER = 1;
-//            var outletsdAjaxSuccessObj = [];
-//                   
+            //            var outletsdAjaxSuccessObj = [];
+            //                   
             // ajax here if any [remember to change MAX_COUNTER accordingly]
             $.ajax({
                 type :'GET',
@@ -410,13 +399,13 @@ function g023(userid, htmlId) {
                     } else {
                         that.updateViews("error");
                     }
-                    
+                
                 }, 
                 error : function(xhr, type){
-                    
+                
                 }
             });
-            
+        
         },
         
         getData: function() {
@@ -430,17 +419,17 @@ function g023(userid, htmlId) {
             this._viewUpdaters = [];
             this._thisProdInfo = {};
         }
-        
-        
-        
+    
+    
+    
     }
     
     var restaMapModel = {
         _viewUpdaters: [], // a list of updateView functions. Only for updating views.
         _thisRestaInfoArray: [],
         _zoom: 0,
-//        _dest: null,
-
+        //        _dest: null,
+        
         initWithRestaInfo: function(restaInfo, zoom) {
             this._thisRestaInfoArray.push(restaInfo);
             this._zoom = zoom;
@@ -451,12 +440,8 @@ function g023(userid, htmlId) {
 		 */        
         addViewUpdater: function(view) {
             this._viewUpdaters.push(view);
-//            view(""); // also refresh view
         },
-		
-        /**
-		 * Update all of the views that are observing us.
-		 */
+        
         updateViews: function(msg) {
             for(var i=0; i<this._viewUpdaters.length; i++) {
                 this._viewUpdaters[i](msg);
@@ -464,30 +449,27 @@ function g023(userid, htmlId) {
         },
         
         _parseData: function(callback, that) {
-            
-            // TODO: combine _thisRestaMenu with outlets
-            
             console.log("currentRestaInfoArray:");
             console.log(this._thisRestaInfoArray);
-//            this._dest = new google.maps.LatLng(this._thisRestaInfo.latitude, this._thisRestaInfo.longitude);
+            //            this._dest = new google.maps.LatLng(this._thisRestaInfo.latitude, this._thisRestaInfo.longitude);
             that.updateViews("");//success
             if (callback) callback();
         },
-
+        
         loadMapData: function(callback) { // call only once!!!!
             var that = this;
             // getJSON can fail silently.  It may be better (and only slightly more work)
             // to use $.ajax -- or write your own version of getJSON that does not fail silently.
             var data = {
-                "key": "d47fe3afb19f506f5a95e89e99527595" // TODO: also add outlet_id to data.
+                "key": "d47fe3afb19f506f5a95e89e99527595" 
             }
             
             var counter = 0;
             var MAX_COUNTER = 0;
-//            var outletsdAjaxSuccessObj = [];
-//                   
+            //            var outletsdAjaxSuccessObj = [];
+            //                   
             // ajax here if any [remember to change MAX_COUNTER accordingly]
-                    
+            
             if (counter === MAX_COUNTER) {
                 counter = 0;
                 that._parseData(callback, that);
@@ -506,9 +488,9 @@ function g023(userid, htmlId) {
             this._viewUpdaters = [];
             this._thisRestaInfoArray = [];
         }
-        
-        
-        
+    
+    
+    
     }
     
     var navigationController = {
@@ -527,9 +509,9 @@ function g023(userid, htmlId) {
             }); 
             this._pageStack.push(page);
             if (this._pageStack.length > 1) {
-                $('#g023').find('.back').fadeIn(400);
+                $('#g023').find('.g023_back').fadeIn(400);
             } else {
-                $('#g023').find('.back').fadeOut(400);
+                $('#g023').find('.g023_back').fadeOut(400);
             }
         },
         popPage: function() { // fadeout and remove top
@@ -544,9 +526,9 @@ function g023(userid, htmlId) {
                 console.log('page popped out');
             });
             if (this._pageStack.length > 1) {
-                $('#g023').find('.back').fadeIn(400);
+                $('#g023').find('.g023_back').fadeIn(400);
             } else {
-                $('#g023').find('.back').fadeOut(400);
+                $('#g023').find('.g023_back').fadeOut(400);
             }
             return true; // pop succeeded
         }
@@ -558,7 +540,7 @@ function g023(userid, htmlId) {
         _views: [], // its view objects
         _model: null, // for the use of navigationController
         _pageWrapper: null, // jQuery Object for page wrapper
-//        _timer: null,
+        //        _timer: null,
         addView: function(view) {
             this._views.push(view);
         },
@@ -567,8 +549,6 @@ function g023(userid, htmlId) {
             var counter = 0;
             this._model = model;
             this._pageWrapper = $(templates.restaListWrapperHtml);
-//            console.log("pageWrapper:");
-//            console.log(this._pageWrapper);
             myDiv.append(this._pageWrapper); // init superview
             console.log('here');
             var that = this;
@@ -606,34 +586,32 @@ function g023(userid, htmlId) {
             this._pageWrapper.remove();
             this._model.clear();
             this._views = [];
-//            this._model.stopRefresh();
-            // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
         }
-        
-        
+    
+    
     }
-
+    
     var restaListView = { // each view belongs to one model, a model can have many views
         _pageObj: null,
         _LEFT_ARROW_FLAG: 0x1,
         _RIGHT_ARROW_FLAG: 0x2,
         _generateRestaItem: function(item, type, i) { // return jQuery Obj
             var rand = (Math.random()*15-7.5);
-            var restaItem = $('<div>').attr('class', 'g023_restaItemWrapper note sticky' + (i%6))
-                            .css('transform', 'rotate('+rand+'deg)')
-                            .css('-moz-transform', 'rotate('+rand+'deg)')
-                            .css('-webkit-transform', 'rotate('+rand+'deg)')
-                            .append($('<div>').attr('class', 'pin'))
-                            .append($('<div>').attr('class', 'g023_restaIconHolder')
-                                .append($('<img>').attr('src', item.logo)
-                            )
-                            .append($("<div>").attr('class', 'g023_restaDetail')
-                                .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + (item.opening_hours[utils.getWeekdayString()].is_closed === false ? 
-                                    (item.opening_hours[utils.getWeekdayString()].opening_hour + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour) 
-                                    : "<span style='margin-top: 2px; color:red;display:inline-block;font-size:16px;'>CLOSED TODAY</span>") + "</span>"))
-                            )
-                        );   
-                
+            var restaItem = $('<div>').attr('class', 'g023_restaItemWrapper g023_note g023_sticky' + (i%6))
+            .css('transform', 'rotate('+rand+'deg)')
+            .css('-moz-transform', 'rotate('+rand+'deg)')
+            .css('-webkit-transform', 'rotate('+rand+'deg)')
+            .append($('<div>').attr('class', 'g023_pin'))
+            .append($('<div>').attr('class', 'g023_restaIconHolder')
+                .append($('<img>').attr('src', item.logo)
+                    )
+                .append($("<div>").attr('class', 'g023_restaDetail')
+                    .append($('<span>').html("Today @ "+ item.building +": <br><span style='font-size: 20px;'>" + (item.opening_hours[utils.getWeekdayString()].is_closed === false ? 
+                        (item.opening_hours[utils.getWeekdayString()].opening_hour + ' - ' + item.opening_hours[utils.getWeekdayString()].closing_hour) 
+                        : "<span style='margin-top: 2px; color:red;display:inline-block;font-size:16px;'>CLOSED TODAY</span>") + "</span>"))
+                    )
+                );   
+            
             restaItem.bind('click', function() {
                 if (!pageShown) return;
                 if (type === "menu") {
@@ -651,7 +629,6 @@ function g023(userid, htmlId) {
                         navigationController.pushPage(restaOfferingsViewController);
                     }); // construct viewController and init its views
                 } else {
-                    // TODO: define behaviour here
                     console.log("I do not have menu!!");
                     console.log(item);
                     if (!gMapLoaded) {
@@ -665,7 +642,7 @@ function g023(userid, htmlId) {
                     }); // construct viewController and init its views
                 } 
             });
-                
+            
             return restaItem;
         },
         
@@ -674,24 +651,20 @@ function g023(userid, htmlId) {
             var restaInfoWithMenu = restaListModel.getData().restaInfoWithMenu;
             for (var i = 0; i < restaInfoWithMenu.length; ++i) {
                 var resta = this._generateRestaItem(restaInfoWithMenu[i], "menu", i);
-//                console.log("myDiv");
-//                console.log($('#g023').find('#g023_restaListContent'));
                 $(this._pageObj).find('.g023_sectionContent#with_menu').append(resta);
             }
             var restaInfoWithoutMenu = restaListModel.getData().restaInfoWithoutMenu;
             for (var i = 0; i < restaInfoWithoutMenu.length; ++i) {
                 var resta = this._generateRestaItem(restaInfoWithoutMenu[i], "no_menu", i);
-//                console.log("myDiv");
-//                console.log($('#g023').find('#g023_restaListContent'));
                 $(this._pageObj).find('.g023_sectionContent#without_menu').append(resta);
             }
-            
-            
+        
+        
         },
         
         
-        updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
-
+        updateView: function(msg) { 
+            
             if (msg === "error") {
                 t = templates.restaListError;
             } else if (msg === "vacation") {
@@ -707,17 +680,14 @@ function g023(userid, htmlId) {
                 var contentString = "School is closed due to vacation or holidays. But feel free to explore all restaurants!";
                 utils.showAlert(restaListView._pageObj, "Notice", contentString, "OK");
             } else {
-                // create resta list using restaModel._outlets
                 restaListView._generateRestaList();
                 console.log("restaListModel Data");
                 console.log(restaListModel.getData());
             }
-            
+        
         },
         
         _toggleArrowButton: function(leftArrow, rightArrow, scrollView) {
-//            console.log(scrollView.scrollLeft);
-//            console.log(scrollView.scrollLeftMax);
             if (scrollView.scrollLeft === 0) { // hide left arrow button
                 if (leftArrow) $(leftArrow).addClass('g023_arrow_disabled');
             } else {
@@ -729,8 +699,8 @@ function g023(userid, htmlId) {
                 if (rightArrow) $(rightArrow).removeClass('g023_arrow_disabled');
             }
         },
-
-
+        
+        
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
@@ -766,7 +736,7 @@ function g023(userid, htmlId) {
                     that._toggleArrowButton(upperLeftArrowButton, upperRightArrowButton, scrollView1[0]);
                 });
             });
-
+            
             lowerLeftArrowButton.bind('click', function() {
                 if (!pageShown) return;
                 scrollView2.animate({
@@ -784,12 +754,11 @@ function g023(userid, htmlId) {
                     that._toggleArrowButton(lowerLeftArrowButton, lowerRightArrowButton, scrollView2[0]);
                 });
             });
-
             
-            // TODO: dynamically append all restaurants
+            
             restaListModel.addViewUpdater(this.updateView); // register view updater
             restaListModel.loadOutletData(function() {
-                $(that._pageObj).find(".mapall").click(function() { // static button press maybe
+                $(that._pageObj).find(".g023_mapall").click(function() { // static button press maybe
                     if (!pageShown) return;
                     console.log("Map them! clicked!");
                     console.log(restaListModel.getData());
@@ -821,7 +790,7 @@ function g023(userid, htmlId) {
         _views: [], // its view objects
         _model: null, // for the use of navigationController
         _pageWrapper: null, // jQuery Object for page wrapper
-//        _timer: null,
+        //        _timer: null,
         addView: function(view) {
             this._views.push(view);
         },
@@ -830,8 +799,8 @@ function g023(userid, htmlId) {
             var counter = 0;
             this._model = model;
             this._pageWrapper = $(templates.restaOfferingsWrapperHtml);
-//            console.log("pageWrapper:");
-//            console.log(this._pageWrapper);
+            //            console.log("pageWrapper:");
+            //            console.log(this._pageWrapper);
             myDiv.append(this._pageWrapper); // init superview
             var that = this;
             for (var i = 0; i < this._views.length; ++i) {
@@ -869,9 +838,9 @@ function g023(userid, htmlId) {
             this._pageWrapper.remove();
             this._model.clear();
             this._views = [];
-            // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
+        // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
         }
-        
+    
     }
     
     var restaOfferingsView = {
@@ -887,32 +856,32 @@ function g023(userid, htmlId) {
             var rand = (Math.random()*12-6);
             var offeringItem = null;
             if (type === "no_lunch" || type === "no_dinner") {
-                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note stickyGray')
-                                .css('transform', 'rotate('+rand+'deg)')
-                                .css('-moz-transform', 'rotate('+rand+'deg)')
-                                .css('-webkit-transform', 'rotate('+rand+'deg)')
-                                .append($('<div>').attr('class', 'pin'))
-                                .append($('<div>').attr('class', 'g023_offering')
-                                    .append($('<span class="no_meal">').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name + " does not provide "+ (type==="no_lunch"?"lunch":"dinner") +" on " + this._menuOfDay.day))
-                                );
+                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper g023_note g023_stickyGray')
+                .css('transform', 'rotate('+rand+'deg)')
+                .css('-moz-transform', 'rotate('+rand+'deg)')
+                .css('-webkit-transform', 'rotate('+rand+'deg)')
+                .append($('<div>').attr('class', 'g023_pin'))
+                .append($('<div>').attr('class', 'g023_offering')
+                    .append($('<span class="g023_no_meal">').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name + " does not provide "+ (type==="no_lunch"?"lunch":"dinner") +" on " + this._menuOfDay.day))
+                    );
             } else if (type === "lunch_no_detail" || type === "dinner_no_detail") {
-                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note stickyBlue')
-                                .css('transform', 'rotate('+rand+'deg)')
-                                .css('-moz-transform', 'rotate('+rand+'deg)')
-                                .css('-webkit-transform', 'rotate('+rand+'deg)')
-                                .append($('<div>').attr('class', 'pin'))
-                                .append($('<div>').attr('class', 'g023_offering')
-                                    .append($('<span class="meal_no_detail">').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name + " provides "+ (type==="lunch_no_detail"?"lunch":"dinner") +" on " + this._menuOfDay.day + ". Go check it out!"))
-                                );
+                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper g023_note g023_stickyBlue')
+                .css('transform', 'rotate('+rand+'deg)')
+                .css('-moz-transform', 'rotate('+rand+'deg)')
+                .css('-webkit-transform', 'rotate('+rand+'deg)')
+                .append($('<div>').attr('class', 'g023_pin'))
+                .append($('<div>').attr('class', 'g023_offering')
+                    .append($('<span class="g023_meal_no_detail">').text(restaOfferingsModel.getData().currentRestaMenu.outlet_name + " provides "+ (type==="lunch_no_detail"?"lunch":"dinner") +" on " + this._menuOfDay.day + ". Go check it out!"))
+                    );
             } else {
-                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper note sticky' + (i%6))
-                                .css('transform', 'rotate('+rand+'deg)')
-                                .css('-moz-transform', 'rotate('+rand+'deg)')
-                                .css('-webkit-transform', 'rotate('+rand+'deg)')
-                                .append($('<div>').attr('class', 'pin'))
-                                .append($('<div>').attr('class', 'g023_offering')
-                                    .append($('<span class="normal">').text(item.product_name))
-                                );
+                offeringItem = $('<div>').attr('class', 'g023_offeringItemWrapper g023_note g023_sticky' + (i%6))
+                .css('transform', 'rotate('+rand+'deg)')
+                .css('-moz-transform', 'rotate('+rand+'deg)')
+                .css('-webkit-transform', 'rotate('+rand+'deg)')
+                .append($('<div>').attr('class', 'g023_pin'))
+                .append($('<div>').attr('class', 'g023_offering')
+                    .append($('<span class="g023_normal">').text(item.product_name))
+                    );
             }
             var that = this;
             offeringItem.bind('click', function() {
@@ -929,7 +898,7 @@ function g023(userid, htmlId) {
                     } else {
                         // degrade
                         console.log("this product does not have details!!!");
-                        utils.showAlert(that._pageObj, "Notice", "Ingredients and Value Facts for "+item.product_name+" is not available.", "OK");
+                        utils.showAlert(that._pageObj, "Notice", "Ingredients and Value Facts for \""+item.product_name+"\" is not available.", "OK");
                     }
                 }
             });
@@ -943,35 +912,35 @@ function g023(userid, htmlId) {
             console.log(this._menuOfDay);
             if (!restaOfferingsModel.getData().currentRestaInfo.has_lunch) {
                 var noLunch = this._generateOfferingItem(null, "no_lunch");
-                $(this._pageObj).find('.g023_sectionContent#lunch').append(noLunch);
+                $(this._pageObj).find('.g023_sectionContent#g023_lunch').append(noLunch);
             } else {
                 for (var i = 0; i < this._menuOfDay.meals.lunch.length; ++i) {
                     var lunchOffering = this._generateOfferingItem(this._menuOfDay.meals.lunch[i], "lunch", i);
-    //                console.log("myDiv");
-    //                console.log($('#g023').find('#g023_restaListContent'));
-                    $(this._pageObj).find('.g023_sectionContent#lunch').append(lunchOffering);
+                    //                console.log("myDiv");
+                    //                console.log($('#g023').find('#g023_restaListContent'));
+                    $(this._pageObj).find('.g023_sectionContent#g023_lunch').append(lunchOffering);
                 }
                 if (this._menuOfDay.meals.lunch.length === 0) {
                     var noDetail = this._generateOfferingItem(null, "lunch_no_detail");
-                    $(this._pageObj).find('.g023_sectionContent#lunch').append(noDetail);
+                    $(this._pageObj).find('.g023_sectionContent#g023_lunch').append(noDetail);
                 }
             }
             if (!restaOfferingsModel.getData().currentRestaInfo.has_dinner) {
                 var noDinner = this._generateOfferingItem(null, "no_dinner");
-                $(this._pageObj).find('.g023_sectionContent#dinner').append(noDinner);
+                $(this._pageObj).find('.g023_sectionContent#g023_dinner').append(noDinner);
             } else {
                 for (var i = 0; i < this._menuOfDay.meals.dinner.length; ++i) {
                     var dinnerOffering = this._generateOfferingItem(this._menuOfDay.meals.dinner[i], "dinner", i);
-    //                console.log("myDiv");
-    //                console.log($('#g023').find('#g023_restaListContent'));
-                    $(this._pageObj).find('.g023_sectionContent#dinner').append(dinnerOffering);
+                    //                console.log("myDiv");
+                    //                console.log($('#g023').find('#g023_restaListContent'));
+                    $(this._pageObj).find('.g023_sectionContent#g023_dinner').append(dinnerOffering);
                 }
                 if (this._menuOfDay.meals.dinner.length === 0) {
                     var noDetail = this._generateOfferingItem(null, "dinner_no_detail");
-                    $(this._pageObj).find('.g023_sectionContent#dinner').append(noDetail);
+                    $(this._pageObj).find('.g023_sectionContent#g023_dinner').append(noDetail);
                 }
             }
-              
+        
         },
         
         _clearMenu: function() {
@@ -991,7 +960,7 @@ function g023(userid, htmlId) {
         },
         
         _setWeekdayArray: function(menu) {
-//            this._weekdayArray.clear();
+            //            this._weekdayArray.clear();
             var len = this._weekdayArray.length;
             this._weekdayArray.splice(0,len);
             for (var i = 0; i < menu.length; ++i) {
@@ -1010,7 +979,7 @@ function g023(userid, htmlId) {
             var end = (new Date(restaListModel.getData().restaMenusDateInfo.end)).getTimeWithCurrentTimezone() + 24*60*60*1000;
             
             if (t >= start && t < end) {
-                console.log("today is still within current week"); // TODO: show "This week"
+                console.log("today is still within current week"); 
                 for (var i = 0; i < currentRestaMenu.menu.length; ++i) { // auto select menu of today
                     this._menuOfDay = currentRestaMenu.menu[i];
                     if (this._menuOfDay.day.toLowerCase() === this._selectedDay) {
@@ -1018,10 +987,9 @@ function g023(userid, htmlId) {
                         break;
                     }
                 }
-//                this._selectedDay = this._menuOfDay.day.toLowerCase();
                 return true;
             } else { // this week has passed, the menu shows next week or later dates
-                console.log("this week has passed, showing menu of later dates"); // TODO: show "Upcoming week" or ("MM/DD - MM/DD" if more than 1 week later)
+                console.log("this week has passed, showing menu of later dates"); 
                 this._selectedDay = currentRestaMenu.menu[0].day.toLowerCase();
                 this._menuOfDay = currentRestaMenu.menu[0]; // auto select menu of first day of provided range
                 this._selectedDayIndex = 0;
@@ -1031,7 +999,7 @@ function g023(userid, htmlId) {
             return false;
         },
         
-        updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
+        updateView: function(msg) {
             if (msg === "error") {
                 t = templates.restaOfferingsError;
             } else {
@@ -1051,16 +1019,16 @@ function g023(userid, htmlId) {
                 restaOfferingsView._generateOfferingList();
                 
                 restaOfferingsView.toggle = false;
-                restaOfferingsView.height = $(restaOfferingsView._pageObj).find('.g023_info.note').height();
+                restaOfferingsView.height = $(restaOfferingsView._pageObj).find('.g023_info.g023_note').height();
                 $(restaOfferingsView._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+restaOfferingsView.height));
-                
-            }
             
+            }
+        
         },
         
         _toggleArrowButton: function(leftArrow, rightArrow, scrollView) {
-//            console.log(scrollView.scrollLeft);
-//            console.log(scrollView.scrollLeftMax);
+            //            console.log(scrollView.scrollLeft);
+            //            console.log(scrollView.scrollLeftMax);
             if (scrollView.scrollLeft === 0) { // hide left arrow button
                 if (leftArrow) $(leftArrow).addClass('g023_arrow_disabled');
             } else {
@@ -1072,8 +1040,8 @@ function g023(userid, htmlId) {
                 if (rightArrow) $(rightArrow).removeClass('g023_arrow_disabled');
             }
         },
-
-
+        
+        
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
@@ -1110,7 +1078,7 @@ function g023(userid, htmlId) {
                     that._toggleArrowButton(upperLeftArrowButton, upperRightArrowButton, scrollView1[0]);
                 });
             });
-
+            
             lowerLeftArrowButton.bind('click', function() {
                 if (!pageShown) return;
                 scrollView2.animate({
@@ -1128,16 +1096,12 @@ function g023(userid, htmlId) {
                     that._toggleArrowButton(lowerLeftArrowButton, lowerRightArrowButton, scrollView2[0]);
                 });
             });
-                /*
-  		 * Set the controller for the "Go" button.
-  		 * Get the subject and catalog from the input fields and
-  		 * then tell the model to get the corresponding course.
-  		 */
-            $(this._pageObj).find(".g023_selector_arrows#right").click(function() { // static button press maybe
+            
+            $(this._pageObj).find(".g023_selector_arrows#g023_right").click(function() { // static button press maybe
                 if (!pageShown) return;
                 that._handleDayChange(true);
             });
-            $(this._pageObj).find(".g023_selector_arrows#left").click(function() { // static button press maybe
+            $(this._pageObj).find(".g023_selector_arrows#g023_left").click(function() { // static button press maybe
                 if (!pageShown) return;
                 that._handleDayChange(false);
             });
@@ -1161,7 +1125,6 @@ function g023(userid, htmlId) {
                 }
             });
             
-            // TODO: dynamically append all restaurants
             restaOfferingsModel.addViewUpdater(this.updateView); // register view updater
             restaOfferingsModel.loadOfferingDetailData(function() { // called before updateView is called and after data are ready
                 console.log("callfront");
@@ -1199,11 +1162,11 @@ function g023(userid, htmlId) {
                     $(that._pageObj).find('.g023_info_content').find('.g023_dates_closed').hide();
                 }
                 setTimeout(function() {
-                    that.height = $(that._pageObj).find('.g023_info.note').height();
+                    that.height = $(that._pageObj).find('.g023_info.g023_note').height();
                     $(that._pageObj).find('.g023_info_wrapper').css('top', 25 - (10+that.height));
                 });
                 
-                $(that._pageObj).find("#mapit").click(function() {
+                $(that._pageObj).find("#g023_mapit").click(function() {
                     if (!pageShown) return;
                     console.log("Map It! clicked!");
                     if (!gMapLoaded) {
@@ -1217,7 +1180,7 @@ function g023(userid, htmlId) {
                         navigationController.pushPage(restaMapViewController);
                     }); // construct viewController and init its views
                 });
-                
+            
             }, ajaxDoneCallback); // trigger retrieving data and update views
         }
     }
@@ -1228,7 +1191,7 @@ function g023(userid, htmlId) {
         _views: [], // its view objects
         _model: null, // for the use of navigationController
         _pageWrapper: null, // jQuery Object for page wrapper
-//        _timer: null,
+        //        _timer: null,
         addView: function(view) {
             this._views.push(view);
             console.log("offeringDetailViewController addView");
@@ -1281,8 +1244,8 @@ function g023(userid, htmlId) {
     var offeringDetailView = {
         _pageObj: null,
         
-        updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
-
+        updateView: function(msg) {
+            
             if (msg === "error") {
                 
             } else {
@@ -1308,10 +1271,10 @@ function g023(userid, htmlId) {
                 }
                 $(offeringDetailView._pageObj).find('#g023_restaProdContent').append(ingredientsHtml);
             }
-            
+        
         },
-
-
+        
+        
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
@@ -1323,22 +1286,17 @@ function g023(userid, htmlId) {
             
             var that = this;
             
-            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
-                if (!pageShown) return;
-            });
-            // TODO: dynamically append all restaurants
             offeringDetailModel.addViewUpdater(this.updateView); // register view updater
             offeringDetailModel.loadProdData(ajaxDoneCallback); // trigger retrieving data and update views
         }
     }
     
-    /************************/
     
     var restaMapViewController = {
         _views: [], // its view objects
         _model: null, // for the use of navigationController
         _pageWrapper: null, // jQuery Object for page wrapper
-//        _timer: null,
+        //        _timer: null,
         addView: function(view) {
             this._views.push(view);
         },
@@ -1347,7 +1305,7 @@ function g023(userid, htmlId) {
             var counter = 0;
             this._model = model;
             this._pageWrapper = $(templates.restaMapWrapperHtml);
-//            console.log("pageWrapper:");
+            //            console.log("pageWrapper:");
             myDiv.append(this._pageWrapper); // init superview
             var that = this;
             for (var i = 0; i < this._views.length; ++i) {
@@ -1384,15 +1342,13 @@ function g023(userid, htmlId) {
             this._pageWrapper.remove();
             this._model.clear();
             this._views = [];
-//            this._model.stopRefresh();
-            // clean up work, e.g., this._model.stopRefresh() in which there is a clearTimeout(...), etc
         }
     }
     
     var restaMapView = {
         _pageObj: null,
         
-        updateView: function(msg) { // TODO: first remove all restaurants, then add all resta and bind events.
+        updateView: function(msg) {
             
             if (msg === "error") {
                 
@@ -1407,9 +1363,6 @@ function g023(userid, htmlId) {
                 var iterator = 0;
                 console.log("restaMapModel Data");
                 console.log(restaMapModel.getData());
-                
-//                centeredDest = new google.maps.LatLng(43.471324, -80.545186);
-                
                 
                 var currentRestaInfoArray = restaMapModel.getData().currentRestaInfoArray;
                 
@@ -1436,7 +1389,7 @@ function g023(userid, htmlId) {
                 
                 $('#g023_mapCanvas').css('height', 460).css('width', 876);
                 map = new google.maps.Map(document.getElementById('g023_mapCanvas'), mapOptions);
-                             
+                
                 
                 for (var i = 0; i < destArr.length; ++i) {
                     setTimeout(function() {
@@ -1444,7 +1397,7 @@ function g023(userid, htmlId) {
                     }, i * 200);
                 }
                 
-
+                
                 function addMarker() {
                     
                     console.log("destarr");
@@ -1457,15 +1410,15 @@ function g023(userid, htmlId) {
                     });
                     markers.push(marker);
                     
-                    var contentString = '<div id="content">'+
-                                        '<div id="siteNotice">'+
-                                        '</div>'+
-                                        '<h3 id="firstHeading" class="firstHeading">'+ currentRestaInfoArray[iterator].outlet_name +'</h1>'+
-                                        '<div id="bodyContent">'+
-                                        '<img src="'+currentRestaInfoArray[iterator].logo+'" style="display:inline-block; float:left;"/>'+
-                                        '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + (currentRestaInfoArray[iterator].description?currentRestaInfoArray[iterator].description:'') + '</p>'
-                                        '</div>'+
-                                        '</div>';
+                    var contentString = '<div id="g023_gmap_content">'+
+                    '<div id="g023_gmap_siteNotice">'+
+                    '</div>'+
+                    '<h3 id="g023_gmap_firstHeading" class="g023_gmap_firstHeading">'+ currentRestaInfoArray[iterator].outlet_name +'</h1>'+
+                    '<div id="g023_gmap_bodyContent">'+
+                    '<img src="'+currentRestaInfoArray[iterator].logo+'" style="display:inline-block; float:left;"/>'+
+                    '<p style="float:right;display: inline-block; margin-left: 30px; max-width: 444px;">' + (currentRestaInfoArray[iterator].description?currentRestaInfoArray[iterator].description:'') + '</p>'
+                    '</div>'+
+                    '</div>';
                     google.maps.event.addListener(marker, 'click', function() {
                         if (infowindow) {
                             infowindow.close();
@@ -1478,7 +1431,7 @@ function g023(userid, htmlId) {
                     });
                     iterator++;
                 }
-
+                
                 setTimeout(function() {
                     google.maps.event.trigger(map, 'resize');
                     map.setCenter(centeredDest);
@@ -1490,10 +1443,10 @@ function g023(userid, htmlId) {
                     }
                 });
             }
-            
+        
         },
-
-
+        
+        
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
@@ -1505,26 +1458,17 @@ function g023(userid, htmlId) {
             
             var that = this;
             
-            /*
-  		 * Set the controller for the "Go" button.
-  		 * Get the subject and catalog from the input fields and
-  		 * then tell the model to get the corresponding course.
-  		 */
-            $(this._pageObj).find("#someButton").click(function() { // static button press maybe
-                if (!pageShown) return;
-            });
-            // TODO: dynamically append all restaurants
             restaMapModel.addViewUpdater(this.updateView); // register view updater
             restaMapModel.loadMapData(ajaxDoneCallback); // trigger retrieving data and update views
         }
     }
-
+    
     console.log("Initializing sample(" + userid + ", " + htmlId + ")");
     portal.loadTemplates("widgets/g023/templates.json", 
         function(t) {
             templates = t;
             myDiv.append(templates.foodServicesHeaderHtml);
-            $('#g023').find('.back').bind('click', function() {
+            $('#g023').find('.g023_back').bind('click', function() {
                 if (!pageShown) return;
                 navigationController.popPage();
             });
@@ -1556,5 +1500,5 @@ function g023(userid, htmlId) {
             return this.getTime() + this.getTimezoneOffset()*60*1000;
         }
     }
-    
+
 }
