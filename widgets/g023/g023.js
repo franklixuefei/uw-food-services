@@ -8,6 +8,9 @@ function g023(userid, htmlId) {
     window.g023_gMapInitialize = function() {
         gMapLoaded = true;
     }
+    var key = {
+        "key": "d47fe3afb19f506f5a95e89e99527595"
+    };
     
     var utils = {
         getWeekdayString: function() {
@@ -75,7 +78,7 @@ function g023(userid, htmlId) {
         },
         
         _parseData: function(outletsObj, locationObj, menuObj, callback, that) {
-                        
+            $('#g023').find('.g023_mask.outer').remove();
             this._restaMenus = menuObj.outlets;
             this._restaMenusDateInfo = menuObj.date;
                         
@@ -140,12 +143,13 @@ function g023(userid, htmlId) {
         },
 
         loadOutletData: function(callback) { // call only once!!!!
+            
+            $('#g023').append(templates.loaderHtml);
+            
             var that = this;
             // getJSON can fail silently.  It may be better (and only slightly more work)
             // to use $.ajax -- or write your own version of getJSON that does not fail silently.
-            var key = {
-                "key": "d47fe3afb19f506f5a95e89e99527595"
-            };
+            
             var counter = 0;
             var MAX_COUNTER = 3;
             var locationAjaxSuccessObj = [];
@@ -306,11 +310,6 @@ function g023(userid, htmlId) {
 
         loadOfferingDetailData: function(callfront, callback) { // call only once!!!!
             var that = this;
-            // getJSON can fail silently.  It may be better (and only slightly more work)
-            // to use $.ajax -- or write your own version of getJSON that does not fail silently.
-            var data = {
-                "key": "d47fe3afb19f506f5a95e89e99527595" // TODO: also add outlet_id to data.
-            }
             
             var counter = 0;
             var MAX_COUNTER = 0;         
@@ -366,6 +365,7 @@ function g023(userid, htmlId) {
         },
         
         _parseData: function(productObj, callback, that) {
+            $('#g023').find('.g023_mask.outer').remove();
             for (var property in productObj) {
                 if (!productObj[property]) {
                     this._thisProdInfo[property] = 0;
@@ -381,12 +381,8 @@ function g023(userid, htmlId) {
         },
 
         loadProdData: function(callback) { // call only once!!!!
+            $('#g023').append(templates.loaderHtml);
             var that = this;
-            // getJSON can fail silently.  It may be better (and only slightly more work)
-            // to use $.ajax -- or write your own version of getJSON that does not fail silently.
-            var data = {
-                "key": "d47fe3afb19f506f5a95e89e99527595" // TODO: also add outlet_id to data.
-            }
             
             var productAjaxSuccessObj = {};
             
@@ -398,7 +394,7 @@ function g023(userid, htmlId) {
             $.ajax({
                 type :'GET',
                 url : wsServer + 'foodservices/products/'+ this._thisProdInfo.product_id +'.json',
-                data : data,
+                data : key,
                 dataType : 'json', 
                 timeout : 30000,
                 success : function(j) {
@@ -918,18 +914,23 @@ function g023(userid, htmlId) {
                                     .append($('<span class="normal">').text(item.product_name))
                                 );
             }
+            var that = this;
             offeringItem.bind('click', function() {
                 if (!pageShown) return;
                 console.log('product clicked:');
                 console.log(item);
-                if (item.product_id) {
-                    offeringDetailModel.initWithProdInfo(item);
-                    offeringDetailViewController.addView(offeringDetailView);
-                    offeringDetailViewController.initViews(offeringDetailModel, function() {
-                        navigationController.pushPage(offeringDetailViewController);
-                    }); 
-                } else {
-                    // degrade
+                if (item) {
+                    if (item.product_id) {
+                        offeringDetailModel.initWithProdInfo(item);
+                        offeringDetailViewController.addView(offeringDetailView);
+                        offeringDetailViewController.initViews(offeringDetailModel, function() {
+                            navigationController.pushPage(offeringDetailViewController);
+                        }); 
+                    } else {
+                        // degrade
+                        console.log("this product does not have details!!!");
+                        utils.showAlert(that._pageObj, "Notice", "Ingredients and Value Facts for "+item.product_name+" is not available.", "OK");
+                    }
                 }
             });
             return offeringItem;

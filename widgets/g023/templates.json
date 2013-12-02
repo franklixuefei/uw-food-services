@@ -1,5 +1,10 @@
 
 {
+        "loaderHtml": [
+            "<div class='g023_mask outer'>",
+                "<div class='g023_loader'></div>",
+            "</div>"
+        ],
         "alertHtml": [
             "<div class='g023_popup g023_alert'>",
                 "<div class='g023_popup_header g023_alert_header'></div>",

@@ -20,6 +20,7 @@ div#g023 {
     background-image: url("cork-board.png");
     background-size: 100% 100%;
     background-position: center;
+    position: relative;
 }
 
 div#g023 * {
@@ -578,6 +579,13 @@ div.g023_arrow.g023_right_arrow {
     top: -2px;
     width: 921px;
     z-index: 999;
+    position: absolute;
+}
+
+.g023_mask.outer {
+    height: 523px;
+    left: 35px;
+    top: 34px;
 }
 
 .g023_mask.g023_restaList {
@@ -867,4 +875,15 @@ border-width: 0;
     font-weight: bold;
     margin-top: 4px;
     text-decoration: underline;
+}
+
+.g023_loader {
+    background-image: url("loader.gif");
+    height: 64px;
+    left: 50%;
+    margin-left: -32px;
+    margin-top: -50px;
+    position: absolute;
+    top: 50%;
+    width: 64px;
 }

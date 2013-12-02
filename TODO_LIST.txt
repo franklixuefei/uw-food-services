@@ -1,9 +1,5 @@
 ************************************** TODO & FIXME *******************************************
 
-add a loader for ajax
-
-abstract data passed into ajax calls to a global scope
-
 ************************************** Notice *******************************************
 in updateView(), don't use "this", because this function pointer is passed into an array and will be executed by another function
 fix problem of disappearing images for firefox after reloading
@@ -29,6 +25,8 @@ indicate is_open_now for each restaurant at homepage and menu page [location API
 if is_closed is true for a restaurant, just show "today closed" at homepage hours, and hide is_open_now at homepage. [location API] -- done
 remove all generated items before appending items (resta list and offerings list) -- done for offerings view--done
 while fading in, freeze all interactions -- done
+add a loader for ajax -- done
+abstract data passed into ajax calls to a global scope -- done
 ************************************** TO SHOW **************************************
 
 vacation view
