@@ -704,7 +704,7 @@ function g023(userid, htmlId) {
         initView: function(pageObj, ajaxDoneCallback) {
             
             this._pageObj = pageObj;
-            
+
             console.log("Initializing restaListView");
             console.log($(templates.restaListBaseHtml));
             
@@ -758,6 +758,7 @@ function g023(userid, htmlId) {
             
             restaListModel.addViewUpdater(this.updateView); // register view updater
             restaListModel.loadOutletData(function() {
+                
                 $(that._pageObj).find(".g023_mapall").click(function() { // static button press maybe
                     if (!pageShown) return;
                     console.log("Map them! clicked!");
@@ -780,6 +781,13 @@ function g023(userid, htmlId) {
                     }); // construct viewController and init its views
                 });
                 ajaxDoneCallback();
+                            
+            
+                if (!/Firefox/i.test(navigator.userAgent) && !window.chrome) {
+                    console.log("unsupported broswer!");
+                    that._pageObj.children().remove();
+                    utils.showAlert(that._pageObj, "Error", "UW Food Services Widget currently only supports Chrome or Firefox.", "OK");   
+                }
             }); // trigger retrieving data and update views
         }
     }
@@ -1488,6 +1496,7 @@ function g023(userid, htmlId) {
             script.type = "text/javascript";
             script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDexCumNi0oj_HqehCixRwTfl-Ae2EIC8A&sensor=false&callback=g023_gMapInitialize";
             document.getElementById('g023').appendChild(script);
+            
         });
     if (!Date.prototype.getWeek) {
         Date.prototype.getWeek = function() {

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+    	<meta charset="utf-8"/>
+        <title>UW Food Services</title>
+
+        <script src="js/jquery-1.9.0.min.js" type="text/javascript"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" media="screen" href="css/bootstrap.css">
+        <link rel="stylesheet" media="screen" href="css/bootstrap-theme.css">
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        
+        <script src="js/mustache.js" type="text/javascript"></script>
+        <script src="js/portal.js" type="text/javascript"></script>
+        
+        <link rel="stylesheet" media="screen" href="widgets/g023/g023.css">
+        <link rel="stylesheet" media="screen" href="css/main.css">
+        <script src="widgets/g023/g023.js" type="text/javascript"></script>
+         <link rel="shortcut icon" type="image/png" href="images/favicon.png"> 
+    </head>
+    <body>
+    <div class="row">      
+        <div class="col-md-12 cell" >
+          <div id="g023"></div>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        g023("g023", "#g023");
+    });
+    </script>
+    </body>
+</html>
